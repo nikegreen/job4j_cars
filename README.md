@@ -49,7 +49,7 @@
 ```c:\job4j_car\>git clone https://github.com/nikegreen/job4j_car.git``` <br>
 
 ### 2. Создание базы данных:
-Запустите окно команд БД (ПУСК - Все программы - PostgreSQL 15 - SQL Shell(psql)).
+Запустите окно команд БД (ПУСК -> Все программы -> PostgreSQL 15 - SQL Shell(psql)).
 Введите пользователя и пароль б.д.
 Создайте б.д. командой: "create database car" <br>
 ```
