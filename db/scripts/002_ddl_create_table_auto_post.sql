@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS auto_post CASCADE;
 create table auto_post(
     id SERIAL PRIMARY KEY,
     _text text NOT NULL,
