@@ -103,7 +103,8 @@ public class UserRepository {
         try (Session session = sf.openSession()) {
             try {
                 session.beginTransaction();
-                Query<User> query = session.createQuery("from User as i where i.id = :fId", User.class)
+                Query<User> query = session.createQuery(
+                        "from User as i where i.id = :fId", User.class)
                         .setParameter("fId", id);
                 session.getTransaction().commit();
                 result = query.uniqueResultOptional();
@@ -126,7 +127,9 @@ public class UserRepository {
             try {
                 session.beginTransaction();
                 Query<User> query = session
-                        .createQuery("from User as i where i.login like :fKey order by id", User.class)
+                        .createQuery(
+                                "from User as i where i.login like :fKey order by id",
+                                User.class)
                         .setParameter("fKey", '%' + key + '%');
                 session.getTransaction().commit();
                 result = query.list();
@@ -146,7 +149,8 @@ public class UserRepository {
     public Optional<User> findByLogin(String login) {
         Optional<User> result = Optional.empty();
         try (Session session = sf.openSession()) {
-            Query<User> query = session.createQuery("from User as i where i.login = :fLogin", User.class)
+            Query<User> query = session.createQuery(
+                    "from User as i where i.login = :fLogin", User.class)
                     .setParameter("fLogin", login);
             result = query.uniqueResultOptional();
             session.close();

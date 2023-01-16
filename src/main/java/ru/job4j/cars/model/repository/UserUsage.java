@@ -43,6 +43,7 @@ public class UserUsage {
             userRepository.findAllOrderById()
                     .forEach(System.out::println);
             System.out.println("------------ final -------------");
+
         } finally {
             StandardServiceRegistryBuilder.destroy(registry);
         }
