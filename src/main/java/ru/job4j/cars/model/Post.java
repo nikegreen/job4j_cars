@@ -17,11 +17,9 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Include
     private int id;
-    //_text
     @Column(name = "_text")
     private String text;
     private LocalDateTime created;
-    //auto_user_id int NOT NULL REFERENCES auto_user(id),
     @ManyToOne
     @JoinColumn(name = "auto_user_id")
     private User user;
