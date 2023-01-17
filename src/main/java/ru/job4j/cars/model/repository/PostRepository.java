@@ -41,20 +41,5 @@ public class PostRepository {
      */
     public List<Post> findAllOrderById() {
         return repository.findAll(Post.class);
-        /*
-        List<User> result = new ArrayList<>();
-        try (Session session = sf.openSession()) {
-            try {
-                session.beginTransaction();
-                Query<User> query = session.createQuery("from User order by id", User.class);
-                session.getTransaction().commit();
-                result = query.list();
-            } catch (Exception e) {
-                session.getTransaction().rollback();
-            }
-            session.close();
-        }
-        return result;
-         */
     }
 }
