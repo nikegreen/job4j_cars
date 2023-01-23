@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.function.Function;
 
 @RequiredArgsConstructor
-public class TemplateRepository {
+public class CrudRepository {
     private final SessionFactory sf;
     public <T> T create(T model) {
         return tx(session -> {session.persist(model); return model; });
@@ -26,11 +26,18 @@ public class TemplateRepository {
         return tx(session -> (List<T>) session.createQuery("from " + cl.getClass()).list());
     }
 
+    public <T> List<T> findByLikeLogin(Class<T> cl, String key) {
+        List<T> result = tx(session -> (List<T>) session.createQuery("from " + cl.getClass()
+                        +  " i where i.login like :fKey order by id")
+                .setParameter("fKey", '%' + key + '%').list());
+        return result == null ? List.of() : result;
+    }
+
     public <T> T findById(Integer id, Class<T> cl) {
         return tx(session -> (T) session.get(cl.getClass(), id));
     }
 
-    private  <T> T tx(Function<Session,T> function) {
+    public <T> T tx(Function<Session,T> function) {
         T result = null;
         Transaction tx = null;
         try (Session session = sf.openSession()) {
