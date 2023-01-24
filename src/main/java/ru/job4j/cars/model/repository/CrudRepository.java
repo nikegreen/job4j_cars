@@ -27,10 +27,9 @@ public class CrudRepository {
     }
 
     public <T> List<T> findByLikeLogin(Class<T> cl, String key) {
-        List<T> result = tx(session -> (List<T>) session.createQuery("from " + cl.getClass()
+        return tx(session -> (List<T>) session.createQuery("from " + cl.getClass()
                         +  " i where i.login like :fKey order by id")
                 .setParameter("fKey", '%' + key + '%').list());
-        return result == null ? List.of() : result;
     }
 
     public <T> T findById(Integer id, Class<T> cl) {

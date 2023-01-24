@@ -6,6 +6,9 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import ru.job4j.cars.model.User;
 
+import java.util.List;
+import java.util.Optional;
+
 public class UserUsage {
     public static void main(String[] args) {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
@@ -22,7 +25,8 @@ public class UserUsage {
             userRepository.findAllOrderById()
                     .forEach(System.out::println);
             System.out.println("------------ findByLikeLogin() -------------");
-            userRepository.findByLikeLogin("e")
+            Optional.ofNullable(userRepository.findByLikeLogin("e"))
+                    .orElse(List.of())
                     .forEach(System.out::println);
             System.out.println("------------ findById() -------------");
             userRepository.findById(user.getId())

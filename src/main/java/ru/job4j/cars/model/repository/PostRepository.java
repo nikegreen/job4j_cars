@@ -62,10 +62,9 @@ public class PostRepository {
      * @return список объявлений.
      */
     public List<Post> findByLikeCarName(String key) {
-        List<Post> result = crudRepository.tx(session -> session.createQuery("from " + Post.class
+        return crudRepository.tx(session -> session.createQuery("from " + Post.class
                         +  " i where i.car.name like :fKey order by id")
                 .setParameter("fKey", '%' + key + '%').list());
-        return result == null ? List.of() : result;
     }
 
     /**
@@ -73,7 +72,7 @@ public class PostRepository {
      * @return список объявлений.
      */
     public List<Post> findAllToday() {
-        List<Post> result = crudRepository.tx(
+        return crudRepository.tx(
                 session -> session.createQuery(
                         "from " + Post.class
                         +  " i where i.created >= :fDay order by id")
@@ -82,7 +81,6 @@ public class PostRepository {
                         LocalDateTime.now().toLocalDate().atTime(0,0)
                 ).list()
         );
-        return result == null ? List.of() : result;
     }
 
     /**
@@ -90,11 +88,10 @@ public class PostRepository {
      * @return список объявлений.
      */
     public List<Post> findAllWithPhoto() {
-        List<Post> result = crudRepository.tx(
+        return crudRepository.tx(
                 session -> session.createQuery(
                         "SELECT DISTINCT p FROM Post p INNER JOIN Photo ON p.id = post_id"
-                        ).list()
+                ).list()
         );
-        return result == null ? List.of() : result;
     }
 }
