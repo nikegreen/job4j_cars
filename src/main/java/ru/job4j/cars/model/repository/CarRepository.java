@@ -46,7 +46,6 @@ public class CarRepository {
         return crudRepository.tx(session -> session.createQuery(
                 "from Car i join fetch i.owners order by i.id", Car.class)
                 .list());
-        //return crudRepository.findAll(Car.class);
     }
 
     /**
@@ -63,7 +62,6 @@ public class CarRepository {
                            .uniqueResult()
                 )
         );
-        //return Optional.ofNullable(crudRepository.findById(id, Car.class));
     }
 
     /**
