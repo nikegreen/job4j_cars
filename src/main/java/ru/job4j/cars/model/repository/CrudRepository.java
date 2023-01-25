@@ -23,35 +23,32 @@ public class CrudRepository {
     }
 
     public <T> List<T> findAll(Class<T> cl) {
-        return tx(session -> (List<T>) session.createQuery("from " + cl.getClass()).list());
+        return tx(session -> (List<T>) session.createQuery("from " + cl.getName(), cl).list());
     }
 
     public <T> List<T> findByLikeLogin(Class<T> cl, String key) {
-        return tx(session -> (List<T>) session.createQuery("from " + cl.getClass()
-                        +  " i where i.login like :fKey order by id")
+        return tx(session -> (List<T>) session.createQuery("from " + cl.getName()
+                        +  " i where i.login like :fKey order by id", cl)
                 .setParameter("fKey", '%' + key + '%').list());
     }
 
     public <T> T findById(Integer id, Class<T> cl) {
-        return tx(session -> (T) session.get(cl.getClass(), id));
+        return tx(session -> (T) session.get(cl, id));
     }
 
     public <T> T tx(Function<Session,T> function) {
         T result = null;
         Transaction tx = null;
-        try (Session session = sf.openSession()) {
-            try {
-                tx = session.beginTransaction();
-                result = function.apply(session);
-                tx.commit();
-            } catch (Exception e) {
-                if (tx == null) {
-                    tx = session.getTransaction();
-                }
-                if (tx.isActive()) {
-                    tx.rollback();
-                }
+        Session session = sf.openSession();
+        try {
+            tx = session.beginTransaction();
+            result = function.apply(session);
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
             }
+        } finally {
             session.close();
         }
         return result;

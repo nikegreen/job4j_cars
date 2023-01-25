@@ -18,9 +18,10 @@ public class UserUsage {
             var userRepository = new UserRepository(new CrudRepository(sf));
             System.out.println("------------ create user -------------");
             var user = new User();
-            user.setLogin("admin");
+            user.setLogin("admin-user");
             user.setPassword("admin");
             userRepository.create(user);
+            System.out.println("user=" + user);
             System.out.println("------------ findAllOrderById() -------------");
             userRepository.findAllOrderById()
                     .forEach(System.out::println);
@@ -32,12 +33,14 @@ public class UserUsage {
             userRepository.findById(user.getId())
                     .ifPresent(System.out::println);
             System.out.println("------------ findByLogin() -------------");
-            userRepository.findByLogin("admin")
+            userRepository.findByLogin("admin-user")
                     .ifPresent(System.out::println);
             System.out.println("------------ setPassword() -------------");
             user.setPassword("password");
+            System.out.println("user" + user);
             System.out.println("------------ update() -------------");
             userRepository.update(user);
+            System.out.println("user=" + user);
             System.out.println("------------ findById() -------------");
             userRepository.findById(user.getId())
                     .ifPresent(System.out::println);

@@ -43,7 +43,10 @@ public class CarRepository {
      * @return список автомобилей.
      */
     public List<Car> findAllOrderById() {
-        return crudRepository.findAll(Car.class);
+        return crudRepository.tx(session -> session.createQuery(
+                "from Car i join fetch i.owners order by i.id", Car.class)
+                .list());
+        //return crudRepository.findAll(Car.class);
     }
 
     /**
@@ -51,7 +54,16 @@ public class CarRepository {
      * @return автомобиль.
      */
     public Optional<Car> findById(int id) {
-        return Optional.ofNullable(crudRepository.findById(id, Car.class));
+        return Optional.ofNullable(
+                crudRepository.tx(session ->
+                   session.createQuery(
+                           "from Car i join fetch i.owners where i.id = :fId",
+                           Car.class)
+                           .setParameter("fId", id)
+                           .uniqueResult()
+                )
+        );
+        //return Optional.ofNullable(crudRepository.findById(id, Car.class));
     }
 
     /**
@@ -61,7 +73,7 @@ public class CarRepository {
      */
     public List<Car> findByLikeName(String key) {
         return crudRepository.tx(session -> session.createQuery(
-                        "from Car i where i.name like :fKey order by id", Car.class)
+                        "from Car i join fetch i.owners where i.name like :fKey order by id", Car.class)
                 .setParameter("fKey", '%' + key + '%').list());
     }
 }
