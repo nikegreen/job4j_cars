@@ -54,9 +54,7 @@ public class PhotoRepository {
      */
     public List<Photo> findAllWherePost(int postId) {
         return crudRepository.tx(session  -> session.createQuery(
-                "from "
-                   + Photo.class
-                   + " where post_id = :fId")
+                "from Photo where post_id = :fId")
                 .setParameter("fId", postId)
                 .list()
         );

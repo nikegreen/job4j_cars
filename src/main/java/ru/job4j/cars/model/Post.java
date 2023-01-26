@@ -4,6 +4,7 @@ import javax.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.EqualsAndHashCode.Include;
+import org.hibernate.annotations.BatchSize;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,7 +25,8 @@ public class Post {
     @JoinColumn(name = "auto_user_id")
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @BatchSize(size = 150)
     @JoinColumn(name = "auto_post_id")
     private List<PriceHistory> priceHistories;
 

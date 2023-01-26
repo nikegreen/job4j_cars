@@ -1,7 +1,9 @@
 package ru.job4j.cars.model.repository;
 
+import ru.job4j.cars.model.Car;
 import ru.job4j.cars.model.Post;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -45,7 +47,35 @@ public class PostRepository {
      * @return список объявлений.
      */
     public List<Post> findAllOrderById() {
-        return crudRepository.findAll(Post.class);
+        return crudRepository.tx(
+                session -> {
+                    List<Post> res = session.createQuery(
+                                "from Post i fetch all properties"
+//                "from Post i left join fetch i.car"
+////                        + " left join fetch h.priceHistories"
+////                        + " left join fetch i.participates i"
+////                        + " left join fetch i.car"
+////                        + " left join fetch i.photos"
+                        + " order by i.id", Post.class)
+                .list();
+                    List<Post> res1 = new ArrayList<>();
+                    res.forEach(
+                            post -> {
+                                Post post1 = new Post();
+                                post1.setId(post.getId());
+                                post1.setText(post.getText());
+                                post1.setCreated(post.getCreated());
+                                post1.setCar(post.getCar());
+                                post1.setUser(post.getUser());
+                                post1.setPhotos(post.getPhotos());
+                                post1.setParticipates(post.getParticipates());
+                                post1.setPriceHistories(post.getPriceHistories());
+                                res1.add(post1);
+                    });
+                    return res1;
+                }
+        );
+        //return crudRepository.findAll(Post.class);
     }
 
     /**
