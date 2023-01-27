@@ -42,7 +42,7 @@ public class Post {
     @JoinColumn(name = "car_id")
     private Car car;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "post_id")
     private List<Photo> photos;
 }

@@ -11,6 +11,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class DriverRepository {
     private final CrudRepository crudRepository;
+
     /**
      * Сохранить в базе водителей.
      * @param driver водитель.

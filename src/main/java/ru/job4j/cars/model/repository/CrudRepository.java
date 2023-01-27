@@ -10,16 +10,23 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class CrudRepository {
     private final SessionFactory sf;
+
     public <T> T create(T model) {
-        return tx(session -> {session.persist(model); return model; });
+        return tx(session -> {
+            session.persist(model); return model;
+        });
     }
 
     public <T> void update(T item) {
-        tx(session -> {session.update(item); return null;});
+        tx(session -> {
+            session.update(item); return null;
+        });
     }
 
     public <T> void delete(T item) {
-        tx(session -> {session.delete(item); return null;});
+        tx(session -> {
+            session.delete(item); return null;
+        });
     }
 
     public <T> List<T> findAll(Class<T> cl) {
@@ -36,7 +43,7 @@ public class CrudRepository {
         return tx(session -> (T) session.get(cl, id));
     }
 
-    public <T> T tx(Function<Session,T> function) {
+    public <T> T tx(Function<Session, T> function) {
         T result = null;
         Transaction tx = null;
         Session session = sf.openSession();

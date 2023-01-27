@@ -1,9 +1,7 @@
 package ru.job4j.cars.model.repository;
 
-import ru.job4j.cars.model.Car;
 import ru.job4j.cars.model.Post;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -37,9 +35,24 @@ public class PostRepository {
      * @param id ID объявления.
      */
     public void delete(int id) {
+        Post post1 = crudRepository.tx(session -> {
+            Post post = session.find(Post.class, id);
+            post.getPhotos().clear();
+            session.delete(post);
+            return post;
+        }
+        );
+/**
+        crudRepository.tx(
+                session -> session.createQuery(
+                "delete from Post where id = :fId", Post.class)
+                        .setParameter("fId", id)
+                        .executeUpdate()
+        );
         Post post = new Post();
         post.setId(id);
         crudRepository.delete(post);
+*/
     }
 
     /**
@@ -48,34 +61,29 @@ public class PostRepository {
      */
     public List<Post> findAllOrderById() {
         return crudRepository.tx(
-                session -> {
-                    List<Post> res = session.createQuery(
-                                "from Post i fetch all properties"
-//                "from Post i left join fetch i.car"
-////                        + " left join fetch h.priceHistories"
-////                        + " left join fetch i.participates i"
-////                        + " left join fetch i.car"
-////                        + " left join fetch i.photos"
-                        + " order by i.id", Post.class)
-                .list();
-                    List<Post> res1 = new ArrayList<>();
-                    res.forEach(
-                            post -> {
-                                Post post1 = new Post();
-                                post1.setId(post.getId());
-                                post1.setText(post.getText());
-                                post1.setCreated(post.getCreated());
-                                post1.setCar(post.getCar());
-                                post1.setUser(post.getUser());
-                                post1.setPhotos(post.getPhotos());
-                                post1.setParticipates(post.getParticipates());
-                                post1.setPriceHistories(post.getPriceHistories());
-                                res1.add(post1);
-                    });
-                    return res1;
-                }
+            session -> {
+                List<Post> posts = session.createQuery(
+                "select distinct i from Post i left join fetch i.car c"
+                    + " left join fetch c.owners"
+                    + " order by i.id", Post.class).list();
+                posts = session.createQuery(
+                        "select distinct i from Post i left join fetch i.priceHistories"
+                                + " where i in :fPosts order by i.id", Post.class)
+                        .setParameter("fPosts", posts)
+                        .list();
+                posts = session.createQuery(
+                                "select distinct i from Post i left join fetch i.participates"
+                                        + " where i in :fPosts order by i.id", Post.class)
+                        .setParameter("fPosts", posts)
+                        .list();
+                posts = session.createQuery(
+                                "select distinct i from Post i left join fetch i.photos"
+                                        + " where i in :fPosts order by i.id", Post.class)
+                        .setParameter("fPosts", posts)
+                        .list();
+                return posts;
+            }
         );
-        //return crudRepository.findAll(Post.class);
     }
 
     /**
@@ -83,7 +91,38 @@ public class PostRepository {
      * @return объявление.
      */
     public Optional<Post> findById(int id) {
-        return Optional.ofNullable(crudRepository.findById(id, Post.class));
+        return crudRepository.tx(
+//                                session -> session.find(Post.class, id)
+                session -> {
+                    List<Post> posts = session.createQuery(
+                                    "select distinct i from Post i left join fetch i.car c"
+                                            + " left join fetch c.owners"
+                                            + " where i.id = :fId", Post.class)
+                            .setParameter("fId", id)
+                            .list();
+                    if (posts.size() == 0) {
+                        return Optional.empty();
+                    }
+                    posts = session.createQuery(
+                                    "select distinct i from Post i left join fetch i.priceHistories"
+                                            + " where i in :fPosts order by i.id", Post.class)
+                            .setParameter("fPosts", posts)
+                            .list();
+                    posts = session.createQuery(
+                                    "select distinct i from Post i left join fetch i.participates"
+                                            + " where i in :fPosts order by i.id", Post.class)
+                            .setParameter("fPosts", posts)
+                            .list();
+                    posts = session.createQuery(
+                                    "select distinct i from Post i left join fetch i.photos"
+                                            + " where i in :fPosts order by i.id", Post.class)
+                            .setParameter("fPosts", posts)
+                            .list();
+                    return Optional.ofNullable(posts.get(0));
+                }
+//        )
+        );
+        //return Optional.ofNullable(crudRepository.findById(id, Post.class));
     }
 
     /**
@@ -92,9 +131,35 @@ public class PostRepository {
      * @return список объявлений.
      */
     public List<Post> findByLikeCarName(String key) {
-        return crudRepository.tx(session -> session.createQuery("from " + Post.class
-                        +  " i where i.car.name like :fKey order by id")
-                .setParameter("fKey", '%' + key + '%').list());
+        return crudRepository.tx(
+                session -> {
+                    List<Post> posts = session.createQuery(
+                            "select distinct i from Post i left join fetch i.car c"
+                                    + " left join fetch c.owners"
+                                    + " where c.name like :fKey order by i.id", Post.class)
+                            .setParameter("fKey", '%' + key + '%')
+                            .list();
+                    if (posts.size() == 0) {
+                        return posts;
+                    }
+                    posts = session.createQuery(
+                                    "select distinct i from Post i left join fetch i.priceHistories"
+                                            + " where i in :fPosts order by i.id", Post.class)
+                            .setParameter("fPosts", posts)
+                            .list();
+                    posts = session.createQuery(
+                                    "select distinct i from Post i left join fetch i.participates"
+                                            + " where i in :fPosts order by i.id", Post.class)
+                            .setParameter("fPosts", posts)
+                            .list();
+                    posts = session.createQuery(
+                                    "select distinct i from Post i left join fetch i.photos"
+                                            + " where i in :fPosts order by i.id", Post.class)
+                            .setParameter("fPosts", posts)
+                            .list();
+                    return posts;
+                }
+        );
     }
 
     /**
@@ -103,13 +168,33 @@ public class PostRepository {
      */
     public List<Post> findAllToday() {
         return crudRepository.tx(
-                session -> session.createQuery(
-                        "from " + Post.class
-                        +  " i where i.created >= :fDay order by id")
-                .setParameter(
-                        "fDay",
-                        LocalDateTime.now().toLocalDate().atTime(0,0)
-                ).list()
+                session -> {
+                    List<Post> posts = session.createQuery(
+                            "select distinct i from Post i left join fetch i.car c"
+                                    + " left join fetch c.owners"
+                                    + " where i.created >= :fDay order by i.id")
+                        .setParameter("fDay", LocalDateTime.now().toLocalDate().atTime(0, 0))
+                        .list();
+                    if (posts.size() == 0) {
+                        return posts;
+                    }
+                    posts = session.createQuery(
+                                    "select distinct i from Post i left join fetch i.priceHistories"
+                                            + " where i in :fPosts order by i.id", Post.class)
+                            .setParameter("fPosts", posts)
+                            .list();
+                    posts = session.createQuery(
+                                    "select distinct i from Post i left join fetch i.participates"
+                                            + " where i in :fPosts order by i.id", Post.class)
+                            .setParameter("fPosts", posts)
+                            .list();
+                    posts = session.createQuery(
+                                    "select distinct i from Post i left join fetch i.photos"
+                                            + " where i in :fPosts order by i.id", Post.class)
+                            .setParameter("fPosts", posts)
+                            .list();
+                    return posts;
+                }
         );
     }
 
@@ -119,9 +204,32 @@ public class PostRepository {
      */
     public List<Post> findAllWithPhoto() {
         return crudRepository.tx(
-                session -> session.createQuery(
-                        "SELECT DISTINCT p FROM Post p INNER JOIN Photo ON p.id = post_id"
-                ).list()
+                session -> {
+                    List<Post> posts = session.createQuery(
+                                    "from Post i left join fetch i.photos"
+                                            + " where i.photos.size>0", Post.class)
+                            .list();
+                    if (posts.size() == 0) {
+                        return posts;
+                    }
+                    posts = session.createQuery(
+                                    "select distinct i from Post i left join fetch i.car c"
+                                            + " left join fetch c.owners"
+                                            + " where i in :fPosts order by i.id", Post.class)
+                            .setParameter("fPosts", posts)
+                            .list();
+                    posts = session.createQuery(
+                                    "select distinct i from Post i left join fetch i.priceHistories"
+                                            + " where i in :fPosts order by i.id", Post.class)
+                            .setParameter("fPosts", posts)
+                            .list();
+                    posts = session.createQuery(
+                                    "select distinct i from Post i left join fetch i.participates"
+                                            + " where i in :fPosts order by i.id", Post.class)
+                            .setParameter("fPosts", posts)
+                            .list();
+                    return posts;
+                }
         );
     }
 }

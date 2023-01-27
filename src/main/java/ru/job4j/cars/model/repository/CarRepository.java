@@ -11,6 +11,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class CarRepository {
     private final CrudRepository crudRepository;
+
     /**
      * Сохранить в базе.
      * @param car автомобиль.
@@ -71,7 +72,8 @@ public class CarRepository {
      */
     public List<Car> findByLikeName(String key) {
         return crudRepository.tx(session -> session.createQuery(
-                        "from Car i join fetch i.owners where i.name like :fKey order by i.id", Car.class)
+                        "from Car i join fetch i.owners where i.name like :fKey order by i.id",
+                        Car.class)
                 .setParameter("fKey", '%' + key + '%').list());
     }
 }

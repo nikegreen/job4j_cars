@@ -7,7 +7,6 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.junit.jupiter.api.Test;
 import ru.job4j.cars.model.Driver;
 import ru.job4j.cars.model.User;
-
 import java.util.List;
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
