@@ -11,7 +11,7 @@ import java.util.List;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity
+@Entity(name = "Post")
 @Table(name = "auto_post")
 public class Post {
     @Id
@@ -45,4 +45,22 @@ public class Post {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "post_id")
     private List<Photo> photos;
+
+    @Override
+    public String toString() {
+        return "Post{"
+                + "id=" + id
+                + ", text='" + text + '\''
+                + ", created=" + created
+                + ", user=" + user.toString()
+//                    + user==null ?
+//                    "null" :
+//                    "{id=" + user.getId() + ", login=" + user.getLogin()
+//                    + ", password=" + user.getPassword() + "}"
+                + ", priceHistories=" + priceHistories.toString()
+                + ", participates=" + participates
+                + ", car=" + car.toString()
+                + ", photos=" + photos
+        + '}';
+    }
 }

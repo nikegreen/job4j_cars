@@ -35,24 +35,28 @@ public class PostRepository {
      * @param id ID объявления.
      */
     public void delete(int id) {
-        Post post1 = crudRepository.tx(session -> {
+        crudRepository.tx(session -> {
             Post post = session.find(Post.class, id);
-            post.getPhotos().clear();
             session.delete(post);
-            return post;
-        }
-        );
-/**
-        crudRepository.tx(
-                session -> session.createQuery(
-                "delete from Post where id = :fId", Post.class)
-                        .setParameter("fId", id)
-                        .executeUpdate()
-        );
-        Post post = new Post();
-        post.setId(id);
-        crudRepository.delete(post);
-*/
+            return true;
+        });
+
+//        List<Photo> photos = post1.getPhotos();
+//        photos.forEach(photo -> {
+//            post1.getPhotos().remove(photo);
+//            photo.setPost(null);
+//            return null;
+//        });
+//        var res = crudRepository.tx(session -> { session.delete(id); return 0;} );
+//        crudRepository.tx(
+//                session -> session.createQuery(
+//                "delete from Post where id = :fId", Post.class)
+//                        .setParameter("fId", id)
+//                        .executeUpdate()
+//        );
+//        Post post = new Post();
+//        post.setId(id);
+//        crudRepository.delete(post);
     }
 
     /**

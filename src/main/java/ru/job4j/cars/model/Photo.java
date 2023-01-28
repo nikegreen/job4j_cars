@@ -17,6 +17,48 @@ public class Photo {
     private String name;
     @Column(name = "file_name")
     private String fileName;
-    @Column(name = "post_id")
-    private int postId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
+    private Post post;
+
+    private String photosToString() {
+        StringBuilder res = new StringBuilder();
+        String separator = "";
+        for (Photo photo: post.getPhotos()) {
+            res.append(separator)
+                    .append("{id=")
+                    .append(photo.getId())
+                    .append(", name=")
+                    .append(photo.getName())
+                    .append(", fileName=")
+                    .append(photo.getFileName())
+                    .append(", ")
+                    .append(photo.getPost().getId())
+                    .append("}");
+            separator = ", ";
+        }
+        return res.toString();
+    }
+
+    @Override
+    public String toString() {
+        return "Photo{"
+                + "id=" + id
+                + ", name='" + name + '\''
+                + ", fileName='" + fileName + '\''
+                + ", post={"
+                    + "id=" + post.getId()
+                    + ", text='" + post.getText() + '\''
+                    + ", created=" + post.getCreated()
+                    + ", user=" + post.getUser().toString()
+//                    + user==null ?
+//                    "null" :
+//                    "{id=" + user.getId() + ", login=" + user.getLogin()
+//                    + ", password=" + user.getPassword() + "}"
+                    + ", priceHistories=" + post.getPriceHistories().toString()
+                    + ", participates=" + post.getParticipates()
+                    + ", car=" + post.getCar().toString()
+                    + ", photos=[" + photosToString() + "]}"
+                + '}';
+    }
 }

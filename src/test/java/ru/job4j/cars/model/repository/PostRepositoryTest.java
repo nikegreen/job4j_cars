@@ -295,13 +295,13 @@ class PostRepositoryTest {
             assertThat(photo).isNotNull();
             photo.setName("new photo name");
             photo.setFileName("new_photo.jpg");
-            photo.setPostId(post.getId());
+            photo.setPost(post);
             photo = photoRepository.create(photo);
             assertThat(photo).isNotNull();
             assertThat(photo.getId()).isNotEqualTo(0);
             assertThat(photo.getName()).isEqualTo("new photo name");
             assertThat(photo.getFileName()).isEqualTo("new_photo.jpg");
-            assertThat(photo.getPostId()).isEqualTo(post.getId());
+            assertThat(photo.getPost().getId()).isEqualTo(post.getId());
 
             posts = postRepository.findAllWithPhoto();
             assertThat(posts).isNotNull();
@@ -319,12 +319,13 @@ class PostRepositoryTest {
             assertThat(post1.getPhotos().get(0).getId()).isNotEqualTo(0);
             assertThat(post1.getPhotos().get(0).getName()).isEqualTo(photo.getName());
             assertThat(post1.getPhotos().get(0).getFileName()).isEqualTo(photo.getFileName());
-            assertThat(post1.getPhotos().get(0).getPostId()).isEqualTo(post.getId());
+            assertThat(post1.getPhotos().get(0).getPost().getId()).isEqualTo(post.getId());
 
             assertThat(post1.getParticipates()).isNotNull();
             assertThat(post1.getParticipates().size()).isEqualTo(0);
             assertThat(post1.getPriceHistories()).isNotNull();
             assertThat(post1.getPriceHistories().size()).isEqualTo(0);
+            post1.getPhotos().forEach(thePhoto -> photoRepository.delete(thePhoto.getId()));
             postRepository.delete(post1.getId());
             posts = postRepository.findAllWithPhoto();
             assertThat(posts).isNotNull();
@@ -397,6 +398,7 @@ class PostRepositoryTest {
             assertThat(post1.getParticipates().size()).isEqualTo(0);
             assertThat(post1.getPriceHistories()).isNotNull();
             assertThat(post1.getPriceHistories().size()).isEqualTo(0);
+
             postRepository.delete(post1.getId());
             Post post2 = postRepository.findById(post.getId()).orElse(null);
             assertThat(post2).isNull();
