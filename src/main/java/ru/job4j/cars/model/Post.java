@@ -52,11 +52,9 @@ public class Post {
                 + "id=" + id
                 + ", text='" + text + '\''
                 + ", created=" + created
-                + ", user=" + user.toString()
-//                    + user==null ?
-//                    "null" :
-//                    "{id=" + user.getId() + ", login=" + user.getLogin()
-//                    + ", password=" + user.getPassword() + "}"
+                + ", user="
+                    + "{id=" + user.getId() + ", login=" + user.getLogin()
+                    + ", password=" + user.getPassword() + "}"
                 + ", priceHistories=" + priceHistories.toString()
                 + ", participates=" + participates
                 + ", car=" + car.toString()

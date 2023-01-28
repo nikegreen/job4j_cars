@@ -40,23 +40,6 @@ public class PostRepository {
             session.delete(post);
             return true;
         });
-
-//        List<Photo> photos = post1.getPhotos();
-//        photos.forEach(photo -> {
-//            post1.getPhotos().remove(photo);
-//            photo.setPost(null);
-//            return null;
-//        });
-//        var res = crudRepository.tx(session -> { session.delete(id); return 0;} );
-//        crudRepository.tx(
-//                session -> session.createQuery(
-//                "delete from Post where id = :fId", Post.class)
-//                        .setParameter("fId", id)
-//                        .executeUpdate()
-//        );
-//        Post post = new Post();
-//        post.setId(id);
-//        crudRepository.delete(post);
     }
 
     /**
@@ -96,7 +79,6 @@ public class PostRepository {
      */
     public Optional<Post> findById(int id) {
         return crudRepository.tx(
-//                                session -> session.find(Post.class, id)
                 session -> {
                     List<Post> posts = session.createQuery(
                                     "select distinct i from Post i left join fetch i.car c"
@@ -124,9 +106,7 @@ public class PostRepository {
                             .list();
                     return Optional.ofNullable(posts.get(0));
                 }
-//        )
         );
-        //return Optional.ofNullable(crudRepository.findById(id, Post.class));
     }
 
     /**
@@ -176,7 +156,7 @@ public class PostRepository {
                     List<Post> posts = session.createQuery(
                             "select distinct i from Post i left join fetch i.car c"
                                     + " left join fetch c.owners"
-                                    + " where i.created >= :fDay order by i.id")
+                                    + " where i.created >= :fDay order by i.id", Post.class)
                         .setParameter("fDay", LocalDateTime.now().toLocalDate().atTime(0, 0))
                         .list();
                     if (posts.size() == 0) {

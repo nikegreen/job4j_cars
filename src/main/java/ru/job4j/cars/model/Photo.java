@@ -50,11 +50,10 @@ public class Photo {
                     + "id=" + post.getId()
                     + ", text='" + post.getText() + '\''
                     + ", created=" + post.getCreated()
-                    + ", user=" + post.getUser().toString()
-//                    + user==null ?
-//                    "null" :
-//                    "{id=" + user.getId() + ", login=" + user.getLogin()
-//                    + ", password=" + user.getPassword() + "}"
+                    + ", user="
+                    + "{id=" + post.getUser().getId()
+                    + ", login=" + post.getUser().getLogin()
+                    + ", password=" + post.getUser().getPassword() + "}"
                     + ", priceHistories=" + post.getPriceHistories().toString()
                     + ", participates=" + post.getParticipates()
                     + ", car=" + post.getCar().toString()
