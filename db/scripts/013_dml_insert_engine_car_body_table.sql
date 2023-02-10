@@ -1,0 +1,24 @@
+update engine set name = 'бензин' where name = '4g64';
+update engine set name = 'дизель' where name = '4g63';
+update engine set name = 'гибрид' where name = '4g63t';
+insert into engine (name) values ('газ');
+insert into engine (name) values ('электро');
+insert into engine (name) values ('газ-бензин');
+insert into engine (name) values ('газ-дизель');
+
+insert into car_body (name) values ('седан');
+insert into car_body (name) values ('хэтчбек 3 дверей');
+insert into car_body (name) values ('хэтчбек 5 дверей');
+insert into car_body (name) values ('лифтбек');
+insert into car_body (name) values ('внедорожник 3 двери');
+insert into car_body (name) values ('внедорожник 5 двери');
+insert into car_body (name) values ('универсал');
+insert into car_body (name) values ('купе');
+insert into car_body (name) values ('минивен');
+insert into car_body (name) values ('пикап');
+insert into car_body (name) values ('лимузин');
+insert into car_body (name) values ('фургон');
+insert into car_body (name) values ('кабриолет');
+insert into car_body (name) values ('багги');
+insert into car_body (name) values ('трицикл');
+insert into car_body (name) values ('мотоцикл');

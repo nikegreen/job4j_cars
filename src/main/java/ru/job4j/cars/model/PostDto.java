@@ -22,6 +22,8 @@ public class PostDto {
 
     private List<Photo> photos;
 
+    private int statusId;
+
     @Override
     public String toString() {
         return "Post{"

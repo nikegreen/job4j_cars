@@ -3,6 +3,8 @@ package ru.job4j.cars.model.repository;
 import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.CarModel;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -1346,6 +1348,47 @@ public class CarModelMemRepository implements  CarModelAbstractRepository {
         new CarModel(counter++, "Zelas", marcs.indexOf("Toyota"), bodyNames.indexOf("седан"))
         );
         models1.forEach(model -> models.putIfAbsent(model.getId(), model));
+
+//        try(FileWriter writer1 = new FileWriter("c:\\projects\\job4j_cars\\db\\014_dml_insert_car_marc.sql", false))
+//        {
+//            marcs.forEach(
+//                    marc -> {
+//                        String text = "insert into car_marc (name) values ('" + marc + "');";
+//                        try {
+//                            writer1.write(text);
+//                            writer1.append('\n');
+//                        } catch (IOException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                    }
+//            );
+//            writer1.flush();
+//        }
+//        catch(IOException ex){
+//
+//            System.out.println(ex.getMessage());
+//        }
+//        try(FileWriter writer2 = new FileWriter("c:\\projects\\job4j_cars\\db\\015_dml_insert_car_model.sql", false))
+//        {
+//            models1.forEach(
+//                    model -> {
+//                        String text = "insert into car_model (name, marc_id, body_id) values ('"
+//                                + model.getName() + "', (select id from car_marc where name = '"
+//                                + marcs.get(model.getMarcId()) + "'), (select id from car_body where name ='"
+//                                + bodyNames.get(model.getBodyId()) + "'));";
+//                        try {
+//                            writer2.write(text);
+//                            writer2.append(System.lineSeparator());
+//                        } catch (IOException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                    });
+//            // запись всей строки
+//            writer2.flush();
+//        }
+//        catch(IOException ex){
+//            System.out.println(ex.getMessage());
+//        }
     }
 
     /**

@@ -21,7 +21,11 @@ public class PostDtoMemRepository implements PostDtoAbstractRepository {
     public List<PostDto> findAll() {
         List<PostDto> result = new ArrayList<>();
         posts.findAllOrderById().forEach(
-                post -> result.add(PostDto.fromPost(post))
+                post -> {
+                    PostDto postDto = PostDto.fromPost(post);
+                    postDto.setStatusId(1);
+                    result.add(postDto);
+                }
         );
         return result;
     }

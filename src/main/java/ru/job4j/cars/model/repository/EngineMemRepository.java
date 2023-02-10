@@ -3,6 +3,7 @@ package ru.job4j.cars.model.repository;
 import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.Engine;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -73,9 +74,9 @@ public class EngineMemRepository implements EngineAbstractRepository {
     @Override
     public List<Engine> findAllOrderById() {
         return engines.values().stream()
-                .sorted((a, b) -> a.getId() - b.getId())
+                .sorted(Comparator.comparingInt(Engine::getId))
                 .toList();
-    };
+    }
 
     /**
      * Найти двигатель по ID
@@ -85,7 +86,7 @@ public class EngineMemRepository implements EngineAbstractRepository {
     @Override
     public Optional<Engine> findById(int id) {
         return Optional.ofNullable(engines.getOrDefault(id, null));
-    };
+    }
 
     /**
      * Список двигателей по имени LIKE %key%
@@ -94,5 +95,5 @@ public class EngineMemRepository implements EngineAbstractRepository {
      */
     public List<Engine> findByLikeName(String key) {
         return engines.values().stream().filter(engine -> engine.getName().contains(key)).toList();
-    };
+    }
 }

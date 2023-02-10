@@ -16,9 +16,10 @@ comment on column car_body.name is 'тип кузова автомобиля';
 
 create table if not exists car_model(
     id SERIAL PRIMARY KEY,
-    name text UNIQUE,
+    name text,
     marc_id integer REFERENCES car_marc (id),
-    body_id integer REFERENCES car_body (id)
+    body_id integer REFERENCES car_body (id),
+    CONSTRAINT marc_model_unique UNIQUE (name, marc_id)
 );
 comment on table car_model is 'список моделей авто марки с marc_id';
 comment on column car_model.id is 'идентификатор модели в списке';
