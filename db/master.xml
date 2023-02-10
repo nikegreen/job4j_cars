@@ -16,4 +16,5 @@
     <include file="scripts/009_ddl_create_table_photo.sql" relativeToChangelogFile="true"/>
     <include file="scripts/010_ddl_edit_column_startAt_in_table_history_owner.sql" relativeToChangelogFile="true"/>
     <include file="scripts/011_dml_insert_driver_post_photo.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/012_ddl_create_car_model_marc_body_table.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

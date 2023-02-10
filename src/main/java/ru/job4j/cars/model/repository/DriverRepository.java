@@ -1,6 +1,7 @@
 package ru.job4j.cars.model.repository;
 
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.Driver;
 import java.util.List;
 import java.util.Optional;
@@ -8,6 +9,7 @@ import java.util.Optional;
 /**
  * Хранилище с информацией об водителях
  */
+@Repository
 @AllArgsConstructor
 public class DriverRepository {
     private final CrudRepository crudRepository;

@@ -1,6 +1,7 @@
 package ru.job4j.cars.model.repository;
 
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.Car;
 import java.util.List;
 import java.util.Optional;
@@ -8,8 +9,9 @@ import java.util.Optional;
 /**
  * Хранилище с информацией об автомобилях
  */
+@Repository
 @AllArgsConstructor
-public class CarRepository {
+public class CarRepository implements  CarAbstractRepository {
     private final CrudRepository crudRepository;
 
     /**
@@ -17,6 +19,7 @@ public class CarRepository {
      * @param car автомобиль.
      * @return автомобиль с id.
      */
+    @Override
     public Car create(Car car) {
         return  crudRepository.create(car);
     }
@@ -25,6 +28,7 @@ public class CarRepository {
      * Обновить в базе автомобиль.
      * @param car автомобиль.
      */
+    @Override
     public void update(Car car) {
         crudRepository.update(car);
     }
@@ -33,6 +37,7 @@ public class CarRepository {
      * Удалить автомобиль по id.
      * @param id ID
      */
+    @Override
     public void delete(int id) {
         Car car = new Car();
         car.setId(id);
@@ -43,6 +48,7 @@ public class CarRepository {
      * Список автомобилей отсортированных по id.
      * @return список автомобилей.
      */
+    @Override
     public List<Car> findAllOrderById() {
         return crudRepository.tx(session -> session.createQuery(
                 "from Car i left join fetch i.owners order by i.id", Car.class)
@@ -53,6 +59,7 @@ public class CarRepository {
      * Найти автомобиль по ID
      * @return автомобиль.
      */
+    @Override
     public Optional<Car> findById(int id) {
         return Optional.ofNullable(
                 crudRepository.tx(session ->
@@ -70,6 +77,7 @@ public class CarRepository {
      * @param key ключевая строка
      * @return список автомобилей.
      */
+    @Override
     public List<Car> findByLikeName(String key) {
         return crudRepository.tx(session -> session.createQuery(
                         "from Car i join fetch i.owners where i.name like :fKey order by i.id",

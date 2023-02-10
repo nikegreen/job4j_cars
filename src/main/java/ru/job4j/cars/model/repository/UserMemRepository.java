@@ -1,16 +1,28 @@
 package ru.job4j.cars.model.repository;
 
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.User;
+
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
-@AllArgsConstructor
-public class UserRepository implements UserAbstractRepository {
-    private final CrudRepository crudRepository;
-
+public class UserMemRepository implements UserAbstractRepository{
+    private final Map<Integer, User> users = new ConcurrentHashMap<>();
+    private final AtomicInteger count = new AtomicInteger();
+    public UserMemRepository(){
+        User admin = new User();
+        admin.setLogin("admin");
+        admin.setPassword("1");
+        User user = new User();
+        user.setLogin("user");
+        user.setPassword("1");
+        create(admin);
+        create(user);
+    }
     /**
      * Сохранить в базе.
      * @param user пользователь.
@@ -18,7 +30,9 @@ public class UserRepository implements UserAbstractRepository {
      */
     @Override
     public User create(User user) {
-        return  crudRepository.create(user);
+        user.setId(count.incrementAndGet());
+        users.putIfAbsent(user.getId(), user);
+        return  user;
     }
 
     /**
@@ -27,7 +41,7 @@ public class UserRepository implements UserAbstractRepository {
      */
     @Override
     public void update(User user) {
-        crudRepository.update(user);
+        users.replace(user.getId(), user);
     }
 
     /**
@@ -36,9 +50,9 @@ public class UserRepository implements UserAbstractRepository {
      */
     @Override
     public void delete(int userId) {
-        User user = new User();
-        user.setId(userId);
-        crudRepository.delete(user);
+        if (users.remove(userId) != null) {
+            count.decrementAndGet();
+        }
     }
 
     /**
@@ -47,7 +61,7 @@ public class UserRepository implements UserAbstractRepository {
      */
     @Override
     public List<User> findAllOrderById() {
-        return crudRepository.findAll(User.class);
+        return users.values().stream().sorted((a, b) -> a.getId() - b.getId()).toList();
     }
 
     /**
@@ -56,7 +70,7 @@ public class UserRepository implements UserAbstractRepository {
      */
     @Override
     public Optional<User> findById(int id) {
-        return Optional.ofNullable(crudRepository.findById(id, User.class));
+        return Optional.ofNullable(users.getOrDefault(id, null));
     }
 
     /**
@@ -66,7 +80,7 @@ public class UserRepository implements UserAbstractRepository {
      */
     @Override
     public List<User> findByLikeLogin(String key) {
-        return crudRepository.findByLikeLogin(User.class, key);
+        return users.values().stream().filter(user -> user.getLogin().contains(key)).toList();
     }
 
     /**
@@ -76,8 +90,6 @@ public class UserRepository implements UserAbstractRepository {
      */
     @Override
     public Optional<User> findByLogin(String login) {
-        return Optional.ofNullable(crudRepository.tx(session -> session.createQuery(
-                        "from User as i where i.login = :fLogin order by id", User.class)
-                .setParameter("fLogin", login).uniqueResult()));
+        return users.values().stream().filter(user -> user.getLogin().equals(login)).findFirst();
     }
 }

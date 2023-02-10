@@ -1,5 +1,6 @@
 package ru.job4j.cars.model.repository;
 
+import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.Post;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -9,6 +10,7 @@ import lombok.AllArgsConstructor;
 /**
  * Хранилище с информацией об объявлениях
  */
+@Repository
 @AllArgsConstructor
 public class PostRepository {
     private final CrudRepository crudRepository;
