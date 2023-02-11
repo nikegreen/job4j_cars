@@ -11,6 +11,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CarBodyCrudService implements  CarBodyAbstractService {
     private final CarBodyCrudRepository bodies;
+
     /**
      * Список  отсортированных по id.
      * @return список типов корпусов автомобилей.

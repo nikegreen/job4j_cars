@@ -3,6 +3,7 @@ package ru.job4j.cars.model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 
 @Data
@@ -37,6 +38,12 @@ public class PostDto {
                 + ", photos=" + photos
                 + '}';
     }
+
+    /**
+     * Конвертация типа Post в PostDto
+     * @param post тип Post
+     * @return объект типа PostDto с данными из {@param post}
+     */
     public static PostDto fromPost(Post post) {
         if (post == null) {
             return null;
@@ -47,9 +54,9 @@ public class PostDto {
         postDto.setCreated(post.getCreated());
         postDto.setCar(post.getCar());
         postDto.setPrice(
-                (int)post.getPriceHistories()
+                (int) post.getPriceHistories()
                         .stream()
-                        .sorted((a,b)->a.getCreated().compareTo(b.getCreated()))
+                        .sorted(Comparator.comparing(PriceHistory::getCreated))
                         .findFirst().get().getAfter()
         );
         postDto.setUser(new UserDto(post.getUser()));

@@ -11,6 +11,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PostMemService implements PostAbstractService {
     private final PostMemRepository posts;
+
     /**
      * Сохранить в базе объявление.
      * @param post объявление.

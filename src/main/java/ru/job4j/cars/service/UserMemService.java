@@ -12,6 +12,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserMemService {
     private final UserMemRepository users;
+
     /**
      * Сохранить в базе.
      * @param user пользователь.

@@ -3,6 +3,7 @@ package ru.job4j.cars.model.repository;
 import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.User;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -10,10 +11,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
-public class UserMemRepository implements UserAbstractRepository{
+public class UserMemRepository implements UserAbstractRepository {
     private final Map<Integer, User> users = new ConcurrentHashMap<>();
     private final AtomicInteger count = new AtomicInteger();
-    public UserMemRepository(){
+
+    public UserMemRepository() {
         User admin = new User();
         admin.setLogin("admin");
         admin.setPassword("1");
@@ -23,6 +25,7 @@ public class UserMemRepository implements UserAbstractRepository{
         create(admin);
         create(user);
     }
+
     /**
      * Сохранить в базе.
      * @param user пользователь.
@@ -61,7 +64,7 @@ public class UserMemRepository implements UserAbstractRepository{
      */
     @Override
     public List<User> findAllOrderById() {
-        return users.values().stream().sorted((a, b) -> a.getId() - b.getId()).toList();
+        return users.values().stream().sorted(Comparator.comparingInt(User::getId)).toList();
     }
 
     /**

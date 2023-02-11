@@ -139,37 +139,46 @@
     <!-- фото на странице -->
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-12 col-md-6 col-lg-3">
+            <!-- post Карусель -->
+            <div class="col-sm-12 col-md-6 col-lg-3" th:each="post1, statPost: ${posts}">
                 <!-- Карусель -->
-                <div id="carouselCarIndicators1" class="carousel slide" data-bs-touche="carousel">
+                <div th:id="'carouselCarIndicators'+${statPost.count}" class="carousel slide" data-bs-touche="carousel">
                     <div class="carousel-indicators">
-                        <button type="button" data-bs-target="#carouselCarIndicators1" data-bs-slide-to="0"
-                                class="active" aria-current="true" aria-label="Slide 1"></button>
-                        <button type="button" data-bs-target="#carouselCarIndicators1" data-bs-slide-to="1"
-                                aria-label="Slide 2"></button>
-                        <button type="button" data-bs-target="#carouselCarIndicators1" data-bs-slide-to="2"
-                                aria-label="Slide 3"></button>
+                        <button type="button" th:data-bs-target="'#carouselCarIndicators'+${statPost.count}" data-bs-slide-to="0"
+                                aria-label="Slide 1" class="active" aria-current="true" th:if="${post1.photos==null || #lists.isEmpty(post1.photos)}"></button>
+                        <button th:unless="${post1.photos==null || #lists.isEmpty(post1.photos)}" th:each="photo1, statPhoto: ${post1.photos}"
+                                type="button" th:data-bs-target="'#carouselCarIndicators'+${statPost.count}" th:data-bs-slide-to="${statPhoto.index}"
+                                th:aria-label="${'Slide '+statPhoto.count}" th:class="${(statPhoto.first==true) ? 'active':''}" th:aria-current="${statPhoto.first}"></button>
+<!--                        <button type="button" th:data-bs-target="'#carouselCarIndicators'+${statPost.count}" data-bs-slide-to="1"-->
+<!--                                aria-label="Slide 2"></button>-->
+<!--                        <button type="button" th:data-bs-target="'#carouselCarIndicators'+${statPost.count}" data-bs-slide-to="2"-->
+<!--                                aria-label="Slide 3"></button>-->
                     </div>
                     <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <img src="https://avatars.mds.yandex.net/get-autoru-vos/2074421/91c2cd54adb2cbf0ec0304457545950c/1200x900n"
+                        <div class="carousel-item active" th:if="${post1.photos==null || #lists.isEmpty(post1.photos)}">
+                            <img src="/images/null.png"
                                  class="d-block w-100" alt="...">
                         </div>
-                        <div class="carousel-item">
-                            <img src="https://avatars.mds.yandex.net/get-autoru-vos/2078183/3a8fa7ccd2c6a1bccebbed2df0c67bca/1200x900n"
+
+                        <div th:class="'carousel-item '+${(statPhoto.first)?'active':''}" th:unless="${post1.photos==null || #lists.isEmpty(post1.photos)}" th:each="photo1, statPhoto: ${post1.photos}">
+                            <img th:src="'/images/'+${photo1.fileName}"
                                  class="d-block w-100" alt="...">
                         </div>
-                        <div class="carousel-item">
-                            <img src="https://avatars.mds.yandex.net/get-autoru-vos/1964973/71a3ef551185ce8e2ebce490fe0b99fc/1200x900n"
-                                 class="d-block w-100" alt="...">
-                        </div>
+<!--                        <div class="carousel-item">-->
+<!--                            <img src="https://avatars.mds.yandex.net/get-autoru-vos/2078183/3a8fa7ccd2c6a1bccebbed2df0c67bca/1200x900n"-->
+<!--                                 class="d-block w-100" alt="...">-->
+<!--                        </div>-->
+<!--                        <div class="carousel-item">-->
+<!--                            <img src="https://avatars.mds.yandex.net/get-autoru-vos/1964973/71a3ef551185ce8e2ebce490fe0b99fc/1200x900n"-->
+<!--                                 class="d-block w-100" alt="...">-->
+<!--                        </div>-->
                     </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselCarIndicators1"
+                    <button class="carousel-control-prev" type="button" th:data-bs-target="'#carouselCarIndicators'+${statPost.count}"
                             data-bs-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Назад</span>
                     </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselCarIndicators1"
+                    <button class="carousel-control-next" type="button" th:data-bs-target="'#carouselCarIndicators'+${statPost.count}"
                             data-bs-slide="next">
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Вперед</span>
@@ -179,122 +188,122 @@
                 <div class="title">Ford Focus</div>
             </div>
             <!-- Карусель -->
-            <div class="col-sm-12 col-md-6 col-lg-3">
-                <div id="carouselCarIndicators2" class="carousel slide" data-bs-touche="carousel">
-                    <div class="carousel-indicators">
-                        <button type="button" data-bs-target="#carouselCarIndicators2" data-bs-slide-to="0"
-                                class="active" aria-current="true" aria-label="Slide 1"></button>
-                        <button type="button" data-bs-target="#carouselCarIndicators2" data-bs-slide-to="1"
-                                aria-label="Slide 2"></button>
-                        <button type="button" data-bs-target="#carouselCarIndicators2" data-bs-slide-to="2"
-                                aria-label="Slide 3"></button>
-                    </div>
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <img src="https://avatars.mds.yandex.net/get-autoru-vos/2074421/91c2cd54adb2cbf0ec0304457545950c/1200x900n"
-                                 class="d-block w-100" alt="...">
-                        </div>
-                        <div class="carousel-item">
-                            <img src="https://avatars.mds.yandex.net/get-autoru-vos/2078183/3a8fa7ccd2c6a1bccebbed2df0c67bca/1200x900n"
-                                 class="d-block w-100" alt="...">
-                        </div>
-                        <div class="carousel-item">
-                            <img src="https://avatars.mds.yandex.net/get-autoru-vos/1964973/71a3ef551185ce8e2ebce490fe0b99fc/1200x900n"
-                                 class="d-block w-100" alt="...">
-                        </div>
-                    </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselCarIndicators2"
-                            data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselCarIndicators2"
-                            data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
-                <!-- Описание -->
-                <div class="title">Ford Focus</div>
-            </div>
-            <!-- Карусель -->
-            <div class="col-sm-12 col-md-6 col-lg-3">
-                <div id="carouselCarIndicators3" class="carousel slide" data-bs-touche="carousel">
-                    <div class="carousel-indicators">
-                        <button type="button" data-bs-target="#carouselCarIndicators3" data-bs-slide-to="0"
-                                class="active" aria-current="true" aria-label="Slide 1"></button>
-                        <button type="button" data-bs-target="#carouselCarIndicators3" data-bs-slide-to="1"
-                                aria-label="Slide 2"></button>
-                        <button type="button" data-bs-target="#carouselCarIndicators3" data-bs-slide-to="2"
-                                aria-label="Slide 3"></button>
-                    </div>
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <img src="https://avatars.mds.yandex.net/get-autoru-vos/2074421/91c2cd54adb2cbf0ec0304457545950c/1200x900n"
-                                 class="d-block w-100" alt="...">
-                        </div>
-                        <div class="carousel-item">
-                            <img src="https://avatars.mds.yandex.net/get-autoru-vos/2078183/3a8fa7ccd2c6a1bccebbed2df0c67bca/1200x900n"
-                                 class="d-block w-100" alt="...">
-                        </div>
-                        <div class="carousel-item">
-                            <img src="https://avatars.mds.yandex.net/get-autoru-vos/1964973/71a3ef551185ce8e2ebce490fe0b99fc/1200x900n"
-                                 class="d-block w-100" alt="...">
-                        </div>
-                    </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselCarIndicators3"
-                            data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselCarIndicators3"
-                            data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
-                <!-- Описание -->
-                <div class="title">Ford Focus</div>
-            </div>
-            <!-- Карусель -->
-            <div class="col-sm-12 col-md-6 col-lg-3">
-                <div id="carouselCarIndicators4" class="carousel slide" data-bs-touche="carousel">
-                    <div class="carousel-indicators">
-                        <button type="button" data-bs-target="#carouselCarIndicators4" data-bs-slide-to="0"
-                                class="active" aria-current="true" aria-label="Slide 1"></button>
-                        <button type="button" data-bs-target="#carouselCarIndicators4" data-bs-slide-to="1"
-                                aria-label="Slide 2"></button>
-                        <button type="button" data-bs-target="carouselCarIndicators4" data-bs-slide-to="2"
-                                aria-label="Slide 3"></button>
-                    </div>
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <img src="https://avatars.mds.yandex.net/get-autoru-vos/2074421/91c2cd54adb2cbf0ec0304457545950c/1200x900n"
-                                 class="d-block w-100" alt="...">
-                        </div>
-                        <div class="carousel-item">
-                            <img src="https://avatars.mds.yandex.net/get-autoru-vos/2078183/3a8fa7ccd2c6a1bccebbed2df0c67bca/1200x900n"
-                                 class="d-block w-100" alt="...">
-                        </div>
-                        <div class="carousel-item">
-                            <img src="https://avatars.mds.yandex.net/get-autoru-vos/1964973/71a3ef551185ce8e2ebce490fe0b99fc/1200x900n"
-                                 class="d-block w-100" alt="...">
-                        </div>
-                    </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselCarIndicators4"
-                            data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselCarIndicators4"
-                            data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
-                <!-- Описание -->
-                <div class="title">Ford Focus</div>
-            </div>
+<!--            <div class="col-sm-12 col-md-6 col-lg-3">-->
+<!--                <div id="carouselCarIndicators2" class="carousel slide" data-bs-touche="carousel">-->
+<!--                    <div class="carousel-indicators">-->
+<!--                        <button type="button" data-bs-target="#carouselCarIndicators2" data-bs-slide-to="0"-->
+<!--                                class="active" aria-current="true" aria-label="Slide 1"></button>-->
+<!--                        <button type="button" data-bs-target="#carouselCarIndicators2" data-bs-slide-to="1"-->
+<!--                                aria-label="Slide 2"></button>-->
+<!--                        <button type="button" data-bs-target="#carouselCarIndicators2" data-bs-slide-to="2"-->
+<!--                                aria-label="Slide 3"></button>-->
+<!--                    </div>-->
+<!--                    <div class="carousel-inner">-->
+<!--                        <div class="carousel-item active">-->
+<!--                            <img src="https://avatars.mds.yandex.net/get-autoru-vos/2074421/91c2cd54adb2cbf0ec0304457545950c/1200x900n"-->
+<!--                                 class="d-block w-100" alt="...">-->
+<!--                        </div>-->
+<!--                        <div class="carousel-item">-->
+<!--                            <img src="https://avatars.mds.yandex.net/get-autoru-vos/2078183/3a8fa7ccd2c6a1bccebbed2df0c67bca/1200x900n"-->
+<!--                                 class="d-block w-100" alt="...">-->
+<!--                        </div>-->
+<!--                        <div class="carousel-item">-->
+<!--                            <img src="https://avatars.mds.yandex.net/get-autoru-vos/1964973/71a3ef551185ce8e2ebce490fe0b99fc/1200x900n"-->
+<!--                                 class="d-block w-100" alt="...">-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselCarIndicators2"-->
+<!--                            data-bs-slide="prev">-->
+<!--                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>-->
+<!--                        <span class="visually-hidden">Previous</span>-->
+<!--                    </button>-->
+<!--                    <button class="carousel-control-next" type="button" data-bs-target="#carouselCarIndicators2"-->
+<!--                            data-bs-slide="next">-->
+<!--                        <span class="carousel-control-next-icon" aria-hidden="true"></span>-->
+<!--                        <span class="visually-hidden">Next</span>-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; Описание &ndash;&gt;-->
+<!--                <div class="title">Ford Focus</div>-->
+<!--            </div>-->
+<!--            &lt;!&ndash; Карусель &ndash;&gt;-->
+<!--            <div class="col-sm-12 col-md-6 col-lg-3">-->
+<!--                <div id="carouselCarIndicators3" class="carousel slide" data-bs-touche="carousel">-->
+<!--                    <div class="carousel-indicators">-->
+<!--                        <button type="button" data-bs-target="#carouselCarIndicators3" data-bs-slide-to="0"-->
+<!--                                class="active" aria-current="true" aria-label="Slide 1"></button>-->
+<!--                        <button type="button" data-bs-target="#carouselCarIndicators3" data-bs-slide-to="1"-->
+<!--                                aria-label="Slide 2"></button>-->
+<!--                        <button type="button" data-bs-target="#carouselCarIndicators3" data-bs-slide-to="2"-->
+<!--                                aria-label="Slide 3"></button>-->
+<!--                    </div>-->
+<!--                    <div class="carousel-inner">-->
+<!--                        <div class="carousel-item active">-->
+<!--                            <img src="https://avatars.mds.yandex.net/get-autoru-vos/2074421/91c2cd54adb2cbf0ec0304457545950c/1200x900n"-->
+<!--                                 class="d-block w-100" alt="...">-->
+<!--                        </div>-->
+<!--                        <div class="carousel-item">-->
+<!--                            <img src="https://avatars.mds.yandex.net/get-autoru-vos/2078183/3a8fa7ccd2c6a1bccebbed2df0c67bca/1200x900n"-->
+<!--                                 class="d-block w-100" alt="...">-->
+<!--                        </div>-->
+<!--                        <div class="carousel-item">-->
+<!--                            <img src="https://avatars.mds.yandex.net/get-autoru-vos/1964973/71a3ef551185ce8e2ebce490fe0b99fc/1200x900n"-->
+<!--                                 class="d-block w-100" alt="...">-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselCarIndicators3"-->
+<!--                            data-bs-slide="prev">-->
+<!--                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>-->
+<!--                        <span class="visually-hidden">Previous</span>-->
+<!--                    </button>-->
+<!--                    <button class="carousel-control-next" type="button" data-bs-target="#carouselCarIndicators3"-->
+<!--                            data-bs-slide="next">-->
+<!--                        <span class="carousel-control-next-icon" aria-hidden="true"></span>-->
+<!--                        <span class="visually-hidden">Next</span>-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; Описание &ndash;&gt;-->
+<!--                <div class="title">Ford Focus</div>-->
+<!--            </div>-->
+<!--            &lt;!&ndash; Карусель &ndash;&gt;-->
+<!--            <div class="col-sm-12 col-md-6 col-lg-3">-->
+<!--                <div id="carouselCarIndicators4" class="carousel slide" data-bs-touche="carousel">-->
+<!--                    <div class="carousel-indicators">-->
+<!--                        <button type="button" data-bs-target="#carouselCarIndicators4" data-bs-slide-to="0"-->
+<!--                                class="active" aria-current="true" aria-label="Slide 1"></button>-->
+<!--                        <button type="button" data-bs-target="#carouselCarIndicators4" data-bs-slide-to="1"-->
+<!--                                aria-label="Slide 2"></button>-->
+<!--                        <button type="button" data-bs-target="carouselCarIndicators4" data-bs-slide-to="2"-->
+<!--                                aria-label="Slide 3"></button>-->
+<!--                    </div>-->
+<!--                    <div class="carousel-inner">-->
+<!--                        <div class="carousel-item active">-->
+<!--                            <img src="https://avatars.mds.yandex.net/get-autoru-vos/2074421/91c2cd54adb2cbf0ec0304457545950c/1200x900n"-->
+<!--                                 class="d-block w-100" alt="...">-->
+<!--                        </div>-->
+<!--                        <div class="carousel-item">-->
+<!--                            <img src="https://avatars.mds.yandex.net/get-autoru-vos/2078183/3a8fa7ccd2c6a1bccebbed2df0c67bca/1200x900n"-->
+<!--                                 class="d-block w-100" alt="...">-->
+<!--                        </div>-->
+<!--                        <div class="carousel-item">-->
+<!--                            <img src="https://avatars.mds.yandex.net/get-autoru-vos/1964973/71a3ef551185ce8e2ebce490fe0b99fc/1200x900n"-->
+<!--                                 class="d-block w-100" alt="...">-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselCarIndicators4"-->
+<!--                            data-bs-slide="prev">-->
+<!--                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>-->
+<!--                        <span class="visually-hidden">Previous</span>-->
+<!--                    </button>-->
+<!--                    <button class="carousel-control-next" type="button" data-bs-target="#carouselCarIndicators4"-->
+<!--                            data-bs-slide="next">-->
+<!--                        <span class="carousel-control-next-icon" aria-hidden="true"></span>-->
+<!--                        <span class="visually-hidden">Next</span>-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; Описание &ndash;&gt;-->
+<!--                <div class="title">Ford Focus</div>-->
+<!--            </div>-->
         </div>
     </div>
 

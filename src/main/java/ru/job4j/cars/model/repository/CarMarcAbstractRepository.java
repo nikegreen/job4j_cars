@@ -17,4 +17,11 @@ public interface CarMarcAbstractRepository {
      * @return авто марка.
      */
     Optional<CarMarc> findById(int id);
+
+    /**
+     * Найти авто марку по имени
+     * @param name имя авто марки
+     * @return ID авто марки, 0 если нет такого имени.
+     */
+    int findIdByName(String name);
 }

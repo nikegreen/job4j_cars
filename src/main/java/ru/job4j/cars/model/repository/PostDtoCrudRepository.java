@@ -69,18 +69,18 @@ public class PostDtoCrudRepository implements PostDtoAbstractRepository {
                                 return Optional.empty();
                             }
                             posts = session.createQuery(
-                                            "select distinct i from Post i left join fetch i.priceHistories"
-                                                    + " where i in :fPosts order by i.id", Post.class)
+                                  "select distinct i from Post i left join fetch i.priceHistories"
+                                      + " where i in :fPosts order by i.id", Post.class)
                                     .setParameter("fPosts", posts)
                                     .list();
                             posts = session.createQuery(
-                                            "select distinct i from Post i left join fetch i.participates"
-                                                    + " where i in :fPosts order by i.id", Post.class)
+                                    "select distinct i from Post i left join fetch i.participates"
+                                       + " where i in :fPosts order by i.id", Post.class)
                                     .setParameter("fPosts", posts)
                                     .list();
                             posts = session.createQuery(
-                                            "select distinct i from Post i left join fetch i.photos"
-                                                    + " where i in :fPosts order by i.id", Post.class)
+                                    "select distinct i from Post i left join fetch i.photos"
+                                       + " where i in :fPosts order by i.id", Post.class)
                                     .setParameter("fPosts", posts)
                                     .list();
                             return Optional.ofNullable(

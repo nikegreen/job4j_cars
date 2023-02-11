@@ -9,7 +9,7 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class CarModelCrudRepository implements  CarModelAbstractRepository {
-    CrudRepository crudRepository;
+    private final CrudRepository crudRepository;
 
     /**
      * Список  отсортированных по id.

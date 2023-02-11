@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class CarBodyCrudRepository implements CarBodyAbstractRepository{
+public class CarBodyCrudRepository implements CarBodyAbstractRepository {
     private final CrudRepository crudRepository;
 
     /**

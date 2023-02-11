@@ -9,14 +9,11 @@ import javax.persistence.*;
 @Table(name = "car_model")
 @AllArgsConstructor
 public class CarModel {
-    public CarModel() {
-
-    }
+    @Getter
+    @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    @Getter
-    @Setter
     private int id;
     @Getter
     @Setter
@@ -30,4 +27,8 @@ public class CarModel {
     @Setter
     @Column(name = "body_id")
     private int bodyId;
+
+    public CarModel() {
+
+    }
 }

@@ -5,9 +5,31 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @Component
 public class AuthFilter implements Filter {
+    private final List<String> pages = List.of(
+            "index",
+            "login",
+            "logout",
+            "error",
+            "reg",
+            "bootstrap/css/bootstrap.min.css",
+            "bootstrap/css/bootstrap.rtl.min.css",
+            "bootstrap/css/bootstrap-grid.min.css",
+            "bootstrap/css/bootstrap-reboot.min.css",
+            "bootstrap/css/bootstrap-utilities.min.css",
+            "bootstrap/css/bootstrap.min.css.map",
+            "bootstrap/css/bootstrap.rtl.min.css.map",
+            "bootstrap/css/bootstrap-grid.min.css.map",
+            "bootstrap/css/bootstrap-reboot.min.css.map",
+            "bootstrap/css/bootstrap-utilities.min.css.map",
+            "bootstrap/js/bootstrap.bundle.min.js",
+            "bootstrap/js/bootstrap.bundle.min.js.map",
+            "css/signin.css",
+            "css/style.css"
+    );
 
     @Override
     public void doFilter(
@@ -17,26 +39,7 @@ public class AuthFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
         String uri = req.getRequestURI();
-        if (uri.endsWith("index")
-                || uri.endsWith("login")
-                || uri.endsWith("logout")
-                || uri.endsWith("error")
-                || uri.endsWith("reg")
-                || uri.endsWith("bootstrap/css/bootstrap.min.css")
-                || uri.endsWith("bootstrap/css/bootstrap.rtl.min.css")
-                || uri.endsWith("bootstrap/css/bootstrap-grid.min.css")
-                || uri.endsWith("bootstrap/css/bootstrap-reboot.min.css")
-                || uri.endsWith("bootstrap/css/bootstrap-utilities.min.css")
-                || uri.endsWith("bootstrap/css/bootstrap.min.css.map")
-                || uri.endsWith("bootstrap/css/bootstrap.rtl.min.css.map")
-                || uri.endsWith("bootstrap/css/bootstrap-grid.min.css.map")
-                || uri.endsWith("bootstrap/css/bootstrap-reboot.min.css.map")
-                || uri.endsWith("bootstrap/css/bootstrap-utilities.min.css.map")
-                || uri.endsWith("bootstrap/js/bootstrap.bundle.min.js")
-                || uri.endsWith("bootstrap/js/bootstrap.bundle.min.js.map")
-                || uri.endsWith("css/signin.css")
-                || uri.endsWith("css/style.css")
-        ) {
+        if (grantedPages(uri) || images(uri)) {
             chain.doFilter(req, res);
             return;
         }
@@ -45,5 +48,36 @@ public class AuthFilter implements Filter {
             return;
         }
         chain.doFilter(req, res);
+    }
+
+    private boolean grantedPages(String uri) {
+        boolean result = false;
+        try {
+            for (String page: pages) {
+                if (uri.endsWith(page)) {
+                    result = true;
+                    break;
+                }
+            }
+        } finally {
+            return result;
+        }
+    }
+
+    private boolean images(String uri) {
+        boolean result = false;
+        try {
+            if (uri.endsWith(".png") || uri.endsWith(".jpg")) {
+                String s = uri.substring(0, uri.length() - 4);
+                int i = s.lastIndexOf("/");
+                if (i < 6) {
+                    return false;
+                }
+                s = s.substring(0, i);
+                result = s.endsWith("images");
+            }
+        } finally {
+            return result;
+        }
     }
 }

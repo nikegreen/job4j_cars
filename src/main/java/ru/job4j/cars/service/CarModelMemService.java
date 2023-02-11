@@ -4,14 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.job4j.cars.model.CarModel;
 import ru.job4j.cars.model.repository.CarModelMemRepository;
-
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CarModelMemService implements CarModelAbstractService{
+public class CarModelMemService implements CarModelAbstractService {
     private final CarModelMemRepository models;
+
     /**
      * Список моделей отсортированных по id.
      * @return список моделей авто марки.

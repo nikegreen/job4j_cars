@@ -10,8 +10,9 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CarMarcMemService implements CarMarcAbstractService{
+public class CarMarcMemService implements CarMarcAbstractService {
     private final CarMarcMemRepository marcs;
+
     /**
      * Список авто марок отсортированных по id.
      * @return список авто марок.

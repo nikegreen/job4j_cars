@@ -24,6 +24,7 @@ public interface PhotoAbstractRepository {
      * @param id ID фотографии.
      */
     void delete(int id);
+
     /**
      * Список фотографий отсортированных по id.
      * @return {@link java.util.List<ru.job4j.cars.model.Photo>} список фотографий.
@@ -42,5 +43,4 @@ public interface PhotoAbstractRepository {
      * @return фотографию.
      */
     Optional<Photo> findById(int id);
-
 }

@@ -5,17 +5,14 @@ import lombok.Getter;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class UserDto {
+    @Getter
+    private final int id;
 
-//    public UserDto() {}
+    @Getter
+    private final String login;
 
     public UserDto(User user) {
         id = user.getId();
         login = user.getLogin();
     }
-
-    @Getter
-    private int id;
-
-    @Getter
-    private String login;
 }

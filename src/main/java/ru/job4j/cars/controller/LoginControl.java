@@ -20,6 +20,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class LoginControl {
     private final UserMemService users;
+
     @GetMapping("/login")
     public String loginPage(@RequestParam(value = "error", required = false) String error,
                             @RequestParam(value = "logout", required = false) String logout,
@@ -49,7 +50,6 @@ public class LoginControl {
         model.addAttribute("user", user1.get().getLogin());
         return "redirect:/index";
     }
-
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logoutPage(
