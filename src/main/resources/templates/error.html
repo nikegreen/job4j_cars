@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!--    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Cars - автомагазин.">
+  <meta name="author" content="Nike Z.">
+  <meta name="generator" content="Nike Z.">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap-grid.min.css">
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap-reboot.min.css">
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap-utilities.min.css">
+  <title>Автобарахолка</title>
+</head>
+<body>
+  <main>
+    <div class="container">
+      <div class="card text-bg-danger">
+        <div class="card-header">
+          Ошибка!
+        </div>
+        <div class="card-body" th:text="${error}" th:if="${error!=null}">
+        </div>
+        <div class="card-body" th:if="${error==null}">
+          Ошибка на сайте!
+        </div>
+        <div class="card-footer">
+          <form method="get" th:action="${link}" th:if="${link!=null}">
+            <input type="submit" class="card-button">
+          </form>
+          <form method="get" th:action="/index" th:if="${link==null}">
+            <input type="submit" class="card-button">
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

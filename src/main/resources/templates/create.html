@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!--    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Cars - автомагазин.">
+  <meta name="author" content="Nike Z.">
+  <meta name="generator" content="Nike Z.">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap-grid.min.css">
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap-reboot.min.css">
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap-utilities.min.css">
+  <title>Автобарахолка</title>
+</head>
+
+<body>
+
+<!-- Form (form поставила перед header, т.к. надо было сохранить уже сложившуюся конструкцию внешнего вида шапки, а Form поставила перед header. Все кнопки Войти/Регистрация, Статус/Модель/Марка/Кузов/Двигатель/Цена/Применить - передают данные)-->
+<form action="#" method="get">
+  <header class="p-3 bg-dark text-white">
+    <div class="container-fluid">
+      <!-- Меню -->
+      <div class="navbar navbar-dark row bg-dark">
+        <div
+                class="col-md-6 d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+          <!-- Иконка Машинка -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor"
+               class="bi bi-car-front" viewBox="0 0 16 16">
+            <path
+                    d="M4 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm10 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6 8a1 1 0 0 0 0 2h4a1 1 0 1 0 0-2H6ZM4.862 4.276 3.906 6.19a.51.51 0 0 0 .497.731c.91-.073 2.35-.17 3.597-.17 1.247 0 2.688.097 3.597.17a.51.51 0 0 0 .497-.731l-.956-1.913A.5.5 0 0 0 10.691 4H5.309a.5.5 0 0 0-.447.276Z" />
+            <path
+                    d="M2.52 3.515A2.5 2.5 0 0 1 4.82 2h6.362c1 0 1.904.596 2.298 1.515l.792 1.848c.075.175.21.319.38.404.5.25.855.715.965 1.262l.335 1.679c.033.161.049.325.049.49v.413c0 .814-.39 1.543-1 1.997V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.338c-1.292.048-2.745.088-4 .088s-2.708-.04-4-.088V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.892c-.61-.454-1-1.183-1-1.997v-.413a2.5 2.5 0 0 1 .049-.49l.335-1.68c.11-.546.465-1.012.964-1.261a.807.807 0 0 0 .381-.404l.792-1.848ZM4.82 3a1.5 1.5 0 0 0-1.379.91l-.792 1.847a1.8 1.8 0 0 1-.853.904.807.807 0 0 0-.43.564L1.03 8.904a1.5 1.5 0 0 0-.03.294v.413c0 .796.62 1.448 1.408 1.484 1.555.07 3.786.155 5.592.155 1.806 0 4.037-.084 5.592-.155A1.479 1.479 0 0 0 15 9.611v-.413c0-.099-.01-.197-.03-.294l-.335-1.68a.807.807 0 0 0-.43-.563 1.807 1.807 0 0 1-.853-.904l-.792-1.848A1.5 1.5 0 0 0 11.18 3H4.82Z" />
+          </svg>АВТОБАРАХОЛКА
+          <!-- Гость -->
+          <ul class="nav col-12 col-md-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+            <li class="nav-link px-2 text-secondary" th:if="${user!=null}" th:text="${user}"></li>
+            <li class="nav-link px-2 text-secondary" th:if="${user==null}">Гость</li>
+          </ul>
+        </div>
+        <!-- Кнопки Войти/Регистрация -->
+        <div th:if="${user==null}" class="col-md-6 d-flex flex-wrap align-items-center justify-content-center justify-content-lg-end">
+          <div class="text-end d-flex flex-wrap align-items-center justify-content-center">
+            <button type="submit" class="btn btn-outline-light me-2" formaction="/login">Войти</button>
+            <button type="submit" class="btn btn-outline-light" formaction="/reg">Регистрация</button>
+          </div>
+          <!-- Кнопка Toggler -->
+          <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="false"
+                  aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+        <!-- Кнопки Выйти/Новое объявление -->
+        <div th:if="${user!=null}" class="col-md-6 d-flex flex-wrap align-items-center justify-content-center justify-content-lg-end">
+          <div class="text-end d-flex flex-wrap align-items-center justify-content-center">
+            <button type="submit" class="btn btn-outline-light me-2" formaction="/logout">Выйти</button>
+            <button type="submit" class="btn btn-outline-light" formaction="/create">Новое объявление</button>
+          </div>
+          <!-- Кнопка Toggler -->
+          <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="false"
+                  aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+      </div>
+      <!-- Скрытая часть меню -->
+      <div class="collapse navbar-collapse mt-4" id="navbarsExample01">
+        <!-- Form (form переименовала в div, т.к. надо было сохранить уже сложившуюся конструкцию внешнего вида шапки, а Form поставила перед header. Все кнопки Войти/Регистрация, Статус/Модель/Марка/Кузов/Двигатель/Цена/Применить - передают данные)-->
+        <div class="form form-control-sm" action="#" method="post">
+          <div class="form-group row g-1 align-items-center">
+            <!-- Статус -->
+            <label class="form-label col-md-1 text-white text-center">Статус:</label>
+            <select class="form-select-sm col-md-3" name="status" id="id1">
+              <option selected>Статус</option>
+              <option value="1">В наличии</option>
+              <option value="2">Продано</option>
+            </select>
+            <!-- Марка -->
+            <label class="form-label col-md-1 text-white text-center">Марка:</label>
+            <select class="form-select-sm col-md-3" name="marc" id="id2">
+              <!-- <option selected>Марка</option> -->
+              <option th:each="marc1: ${marcs}"  th:value="${marc1.id}" th:text="${marc1.name}"></option>
+            </select>
+            <!-- Модель -->
+            <label class="form-label col-md-1 text-white text-center">Модель:</label>
+            <select class="form-select-sm col-md-3" name="model" id="id3">
+              <option th:if="${models!=null}" value="0" selected disabled>выберите модель</option>
+              <option th:if="${models!=null}" th:each="model1: ${models}" th:value="${model1.id}" th:text="${model1.name}"></option>
+              <option th:if="${models==null}" value="0" selected disabled>нет данных</option>
+            </select>
+            <!-- Кузов -->
+            <label class="form-label col-md-1 text-white text-center">Кузов:</label>
+            <select class="form-select-sm col-md-3" name="body" id="id4">
+              <option th:each="body1: ${bodies}" th:value="${body1.id}" th:text="${body1.name}"></option>
+            </select>
+            <!-- Двигатель -->
+            <label class="form-label col-md-1 text-white text-center">Двигатель:</label>
+            <select class="form-select-sm col-md-3" name="engine" id="id5">
+              <!-- <option th:value="0" th:text="Двигатель"selected></option>
+              <option th:value="1" th:text="Внедорожник 5дв."></option>
+              <option th:value="2" th:text="Two"></option>
+              <option th:value="3" th:text="Three"></option> -->
+              <option th:each="engine1: ${engines}" th:value="${engine1.id}" th:text="${engine1.name}"></option>
+            </select>
+            <!-- Цена -->
+            <label class="form-label col-md-1 text-white text-center">Цена до:</label>
+            <input type="number" class="form-input form-control-sm col-md-3" name="price" id="id6">
+            <!-- Кнопка Применить -->
+            <div class="form-btn mt-2 text-end">
+              <button type="submit" class="btn btn-primary" formaction="/index">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-all me-1" viewBox="0 0 16 16">
+                  <path
+                          d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z" />
+                  <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
+                </svg>Применить</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+</form>
+
+<main>
+  <div class="container">
+    <!-- Карточка -->
+    <div class="card">
+      <div class="card-header text-center text-muted">
+        <h5>Новое объявление</h5>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <!-- Колонка с фотографией -->
+          <div class="col-md-6 col-lg-8">
+            <!-- Карусель (отключено автоперемещение) -->
+            <div id="carouselCarIndicators1" class="carousel slide" data-bs-touche="carousel">
+              <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselCarIndicators1" data-bs-slide-to="0"
+                        class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselCarIndicators1" data-bs-slide-to="1"
+                        aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselCarIndicators1" data-bs-slide-to="2"
+                        aria-label="Slide 3"></button>
+              </div>
+              <div class="carousel-inner" id="carousel-inner">
+                <div class="carousel-item active">
+                  <img src="https://avatars.mds.yandex.net/get-autoru-vos/2074421/91c2cd54adb2cbf0ec0304457545950c/1200x900n"
+                       class="d-block w-100" alt="..." name="carouselImg" id="carouselImg0">
+                </div>
+                <div class="carousel-item">
+                  <img src="https://avatars.mds.yandex.net/get-autoru-vos/2078183/3a8fa7ccd2c6a1bccebbed2df0c67bca/1200x900n"
+                       class="d-block w-100" alt="..." name="carouselImg" id="carouselImg1">
+                </div>
+                <div class="carousel-item">
+                  <img src="https://avatars.mds.yandex.net/get-autoru-vos/1964973/71a3ef551185ce8e2ebce490fe0b99fc/1200x900n"
+                       class="d-block w-100" alt="..." name="carouselImg" id="carouselImg2">
+                </div>
+              </div>
+              <button class="carousel-control-prev" type="button"
+                      data-bs-target="#carouselCarIndicators1" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Назад</span>
+              </button>
+              <button class="carousel-control-next" type="button"
+                      data-bs-target="#carouselCarIndicators1" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Вперед</span>
+              </button>
+            </div>
+          </div>
+          <!-- Колонка с описанием товара-->
+          <div class="col-md-6 col-lg-4">
+            <!-- Form -->
+            <form class="form" action="#" method="post">
+              <!-- Статус -->
+              <div class="form-group row">
+                <label class="form-label col-md-4 text-muted">Статус:</label>
+                <select class="form-select col-md-8" name="status" id="id1">
+                  <option value="0" disabled selected>Статус</option>
+                  <option value="1">В наличии</option>
+                  <option value="2">Продано</option>
+                </select>
+              </div>
+              <!-- Марка -->
+              <div class="form-group row">
+                <label class="form-label col-md-4 text-muted">Марка:</label>
+                <select class="form-select col-md-8" name="marc.id" id="id2">
+                  <option th:if="${marcs!=null}" th:each="marc, statMarc: ${marcs}" th:selected="${statMarc.first}"
+                          th:value="${marc.id}" th:text="${marc.name}">Марка</option>
+                  <option th:if="${marcs!=null}" selected disabled value="0">Марка</option>
+                </select>
+              </div>
+              <!-- Модель -->
+              <div class="form-group row">
+                <label class="form-label col-md-4 text-muted">Модель:</label>
+                <select class="form-select col-md-8" name="model.id" id="id3">
+                  <option selected>Модель</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </select>
+              </div>
+              <!-- Кузов -->
+              <div class="form-group row">
+                <label class="form-label col-md-4 text-muted">Кузов:</label>
+                <select class="form-select col-md-8" name="body.id" id="id4">
+                  <option selected>Кузов</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </select>
+              </div>
+              <!-- Двигатель -->
+              <div class="form-group row">
+                <label class="form-label col-md-4 text-muted">Двигатель:</label>
+                <select class="form-select col-md-8" name="engine.id" id="id5">
+                  <option selected>Двигатель</option>
+                  <option value="1">Внедорожник 5дв.</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </select>
+              </div>
+              <!-- Цена -->
+              <div class="form-group row">
+                <label class="form-label col-sm-4 col-md-4 text-muted">Цена:</label>
+                <input type="number" class="form-input col-sm-4 col-md-8" name="price" id="id6">
+              </div>
+              <!-- Кнопка Фотографии -->
+              <div class="form-btn row m-2">
+                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
+                        data-bs-target="#photoModal"><svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                          height="16" fill="currentColor" class="bi bi-camera-fill me-2"
+                                                          viewBox="0 0 16 16">
+                  <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
+                  <path
+                          d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2zm.5 2a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z" />
+                </svg>Фотографии</button>
+              </div>
+              <!-- Modal -->
+              <div class="modal fade" id="photoModal" tabindex="-1" aria-labelledby="photoModalLabel"
+                   aria-hidden="true">
+                <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
+                  <div class="modal-content">
+                    <!-- modal-header -->
+                    <div class="modal-header">
+                      <h6 class="modal-title" id="photoModalLabel"></h6>
+                      <!-- Input Выбрать файл -->
+                      <div class="row mb-0">
+                        <label for="formFileMultiple" class="col-sm-3 col-form-label">
+                          Фотки:
+                        </label>
+                        <input class="form-control col-9" type="file" id="formFileMultiple"
+                               multiple>
+                      </div>
+                      <!-- Кнопка Крестик (закрыть окно) -->
+                      <button type="button" class="btn-close" data-bs-dismiss="modal"
+                              aria-label="Close"></button>
+                    </div>
+                    <!-- modal-body -->
+                    <div class="modal-body">
+                      <!-- Фото №1 -->
+                      <div class="row mb-1">
+                        <div class="col-11 p-0">
+                          <img src="https://avatars.mds.yandex.net/get-autoru-vos/2074421/91c2cd54adb2cbf0ec0304457545950c/1200x900n"
+                               alt="" name="editImg" id="editImg0">
+                        </div>
+                        <!-- Кнопки -->
+                        <div
+                                class="col-1 d-flex flex-column justify-content-around align-items-center">
+                          <!-- Стрелка вверх -->
+                          <button type="button"
+                                  class="btn btm-sm btn-outline-secondar"><svg
+                                  xmlns="http://www.w3.org/2000/svg" width="16"
+                                  height="16" fill="currentColor" class="bi bi-caret-up"
+                                  viewBox="0 0 16 16">
+                            <path
+                                    d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
+                          </svg></button>
+                          <!-- Крестик (удалить фото) -->
+                          <button type="button"
+                                  class="btn btm-sm btn-outline-secondar"><svg
+                                  xmlns="http://www.w3.org/2000/svg" width="16"
+                                  height="16" fill="currentColor" class="bi bi-x-lg"
+                                  viewBox="0 0 16 16">
+                            <path
+                                    d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+                          </svg></button>
+                          <!-- Стрелка вниз -->
+                          <button type="button"
+                                  class="btn btm-sm btn-outline-secondar"><svg
+                                  xmlns="http://www.w3.org/2000/svg" width="16"
+                                  height="16" fill="currentColor" class="bi bi-caret-down"
+                                  viewBox="0 0 16 16">
+                            <path
+                                    d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
+                          </svg></button>
+                        </div>
+                      </div>
+                      <!-- Фото №2 -->
+                      <div class="row mb-1">
+                        <div class="col-11 p-0">
+                          <img src="https://avatars.mds.yandex.net/get-autoru-vos/2078183/3a8fa7ccd2c6a1bccebbed2df0c67bca/1200x900n"
+                               alt="" name="editImg" id="editImg1">
+                        </div>
+                        <!-- Кнопки -->
+                        <div
+                                class="col-1 d-flex flex-column justify-content-around align-items-center">
+                          <!-- Стрелка вверх -->
+                          <button type="button"
+                                  class="btn btm-sm btn-outline-secondar"><svg
+                                  xmlns="http://www.w3.org/2000/svg" width="16"
+                                  height="16" fill="currentColor" class="bi bi-caret-up"
+                                  viewBox="0 0 16 16">
+                            <path
+                                    d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
+                          </svg></button>
+                          <!-- Крестик (удалить фото) -->
+                          <button type="button"
+                                  class="btn btm-sm btn-outline-secondar"><svg
+                                  xmlns="http://www.w3.org/2000/svg" width="16"
+                                  height="16" fill="currentColor" class="bi bi-x-lg"
+                                  viewBox="0 0 16 16">
+                            <path
+                                    d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+                          </svg></button>
+                          <!-- Стрелка вниз -->
+                          <button type="button"
+                                  class="btn btm-sm btn-outline-secondar"><svg
+                                  xmlns="http://www.w3.org/2000/svg" width="16"
+                                  height="16" fill="currentColor" class="bi bi-caret-down"
+                                  viewBox="0 0 16 16">
+                            <path
+                                    d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
+                          </svg></button>
+                        </div>
+                      </div>
+                      <!-- Фото №3 -->
+                      <div class="row mb-1">
+                        <div class="col-11 p-0">
+                          <img src="https://avatars.mds.yandex.net/get-autoru-vos/1964973/71a3ef551185ce8e2ebce490fe0b99fc/1200x900n"
+                               alt="" name="editImg" id="editImg2">
+                        </div>
+                        <!-- Кнопки -->
+                        <div
+                                class="col-1 d-flex flex-column justify-content-around align-items-center">
+                          <!-- Стрелка вверх -->
+                          <button type="button"
+                                  class="btn btm-sm btn-outline-secondar"><svg
+                                  xmlns="http://www.w3.org/2000/svg" width="16"
+                                  height="16" fill="currentColor" class="bi bi-caret-up"
+                                  viewBox="0 0 16 16">
+                            <path
+                                    d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
+                          </svg></button>
+                          <!-- Крестик (удалить фото) -->
+                          <button type="button"
+                                  class="btn btm-sm btn-outline-secondar"><svg
+                                  xmlns="http://www.w3.org/2000/svg" width="16"
+                                  height="16" fill="currentColor" class="bi bi-x-lg"
+                                  viewBox="0 0 16 16">
+                            <path
+                                    d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+                          </svg></button>
+                          <!-- Стрелка вниз -->
+                          <button type="button"
+                                  class="btn btm-sm btn-outline-secondar"><svg
+                                  xmlns="http://www.w3.org/2000/svg" width="16"
+                                  height="16" fill="currentColor" class="bi bi-caret-down"
+                                  viewBox="0 0 16 16">
+                            <path
+                                    d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
+                          </svg></button>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- modal-footer -->
+                    <!-- Кнопка Закрыть -->
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary"
+                              data-bs-dismiss="modal"><svg xmlns="http://www.w3.org/2000/svg"
+                                                           width="16" height="16" fill="currentColor"
+                                                           class="bi bi-x-lg me-1" viewBox="0 0 16 16">
+                        <path
+                                d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+                      </svg>Закрыть</button>
+                      <!-- Кнопка Сохранить -->
+                      <button type="button" class="btn btn-primary"><svg
+                              xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                              fill="currentColor" class="bi bi-check2-all me-1"
+                              viewBox="0 0 16 16">
+                        <path
+                                d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z" />
+                        <path
+                                d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
+                      </svg>Сохранить
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Кпопка Отмена -->
+              <div class="form-btn row m-2">
+                <button type="button" class="btn btn-primary"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        fill="currentColor" class="bi bi-x-lg me-1" viewBox="0 0 16 16">
+                  <path
+                          d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+                </svg>Отмена</button>
+              </div>
+              <!-- Кнопка Сохранить -->
+              <div class="form-btn row m-2">
+                <button type="button" class="btn btn-primary"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        fill="currentColor" class="bi bi-check2-all me-1" viewBox="0 0 16 16">
+                  <path
+                          d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z" />
+                  <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
+                </svg>Сохранить</button>
+              </div>
+          </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</main>
+
+<footer class="container-fluid">
+  <!-- Подвал -->
+  <div class="d-flex justify-content-between py-3 my-4 text-muted">
+    <!-- Start подвала -->
+    <div class="col-md-4 d-flex align-items-center ms-4">
+      <!-- Иконка машинка -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+           class="bi bi-car-front" viewBox="0 0 16 16">
+        <path
+                d="M4 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm10 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6 8a1 1 0 0 0 0 2h4a1 1 0 1 0 0-2H6ZM4.862 4.276 3.906 6.19a.51.51 0 0 0 .497.731c.91-.073 2.35-.17 3.597-.17 1.247 0 2.688.097 3.597.17a.51.51 0 0 0 .497-.731l-.956-1.913A.5.5 0 0 0 10.691 4H5.309a.5.5 0 0 0-.447.276Z">
+        </path>
+        <path
+                d="M2.52 3.515A2.5 2.5 0 0 1 4.82 2h6.362c1 0 1.904.596 2.298 1.515l.792 1.848c.075.175.21.319.38.404.5.25.855.715.965 1.262l.335 1.679c.033.161.049.325.049.49v.413c0 .814-.39 1.543-1 1.997V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.338c-1.292.048-2.745.088-4 .088s-2.708-.04-4-.088V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.892c-.61-.454-1-1.183-1-1.997v-.413a2.5 2.5 0 0 1 .049-.49l.335-1.68c.11-.546.465-1.012.964-1.261a.807.807 0 0 0 .381-.404l.792-1.848ZM4.82 3a1.5 1.5 0 0 0-1.379.91l-.792 1.847a1.8 1.8 0 0 1-.853.904.807.807 0 0 0-.43.564L1.03 8.904a1.5 1.5 0 0 0-.03.294v.413c0 .796.62 1.448 1.408 1.484 1.555.07 3.786.155 5.592.155 1.806 0 4.037-.084 5.592-.155A1.479 1.479 0 0 0 15 9.611v-.413c0-.099-.01-.197-.03-.294l-.335-1.68a.807.807 0 0 0-.43-.563 1.807 1.807 0 0 1-.853-.904l-.792-1.848A1.5 1.5 0 0 0 11.18 3H4.82Z">
+        </path>
+      </svg>
+      <pre> </pre>
+      <span>© 2023,</span>
+      <pre> </pre>
+      <a class="text-muted" href="https://ekaterinburg.hh.ru/resume/a9f5ffddff01375f8a0039ed1f544d49736b74"
+         target="_blank">Nike Green</a>
+    </div>
+    <!-- End подвала -->
+    <div class="col-md-4 d-flex justify-content-end">
+      <!-- Ссылка Назад -->
+      <a class="text-muted me-4" href="#top"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                  fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+        <path fill-rule="evenodd"
+              d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
+      </svg>Назад</a>
+      <!-- Ссылка Наверх -->
+      <a class="text-muted me-4" href="#top"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                  fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
+        <path fill-rule="evenodd"
+              d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z" />
+      </svg>Наверх</a>
+    </div>
+
+  </div>
+</footer>
+
+<!-- Скрипт! -->
+  <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
