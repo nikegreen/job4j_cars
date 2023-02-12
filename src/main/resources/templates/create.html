@@ -77,19 +77,28 @@
             <!-- Статус -->
             <label class="form-label col-md-1 text-white text-center">Статус:</label>
             <select class="form-select-sm col-md-3" name="status" id="id1">
-              <option selected>Статус</option>
+              <option selected disabled>Статус</option>
               <option value="1">В наличии</option>
               <option value="2">Продано</option>
             </select>
             <!-- Марка -->
             <label class="form-label col-md-1 text-white text-center">Марка:</label>
             <select class="form-select-sm col-md-3" name="marc" id="id2">
-              <!-- <option selected>Марка</option> -->
-              <option th:each="marc1: ${marcs}"  th:value="${marc1.id}" th:text="${marc1.name}"></option>
+              <!-- <option th:value="0" th:text="Марка"selected></option>
+              <option th:value="1" th:text="One"></option>
+              <option th:value="2" th:text="Two"></option>
+              <option th:value="3" th:text="Three"></option> -->
+              <option th:if="${marcs!=null}" value="0" selected disabled>выберите марку</option>
+              <option th:if="${marcs!=null}" th:each="marc1: ${marcs}"  th:value="${marc1.id}" th:text="${marc1.name}"></option>
+              <option th:if="${marcs==null}" value="0" selected disabled>нет данных</option>
             </select>
             <!-- Модель -->
             <label class="form-label col-md-1 text-white text-center">Модель:</label>
             <select class="form-select-sm col-md-3" name="model" id="id3">
+              <!-- <option th:value="0" th:text="Модель"selected></option>
+              <option th:value="1" th:text="One"></option>
+              <option th:value="2" th:text="Two"></option>
+              <option th:value="3" th:text="Three"></option> -->
               <option th:if="${models!=null}" value="0" selected disabled>выберите модель</option>
               <option th:if="${models!=null}" th:each="model1: ${models}" th:value="${model1.id}" th:text="${model1.name}"></option>
               <option th:if="${models==null}" value="0" selected disabled>нет данных</option>
@@ -97,16 +106,24 @@
             <!-- Кузов -->
             <label class="form-label col-md-1 text-white text-center">Кузов:</label>
             <select class="form-select-sm col-md-3" name="body" id="id4">
-              <option th:each="body1: ${bodies}" th:value="${body1.id}" th:text="${body1.name}"></option>
+              <!-- <option th:value="0" th:text="Кузов"selected></option>
+              <option th:value="1" th:text="One"></option>
+              <option th:value="2" th:text="Two"></option>
+              <option th:value="3" th:text="Three"></option> -->
+              <option th:if="${bodies!=null}" value="0" selected disabled>выберите кузов</option>
+              <option th:if="${bodies!=null}" th:each="body1: ${bodies}" th:value="${body1.id}" th:text="${body1.name}"></option>
+              <option th:if="${bodies==null}" value="0" selected disabled>нет данных</option>
             </select>
             <!-- Двигатель -->
             <label class="form-label col-md-1 text-white text-center">Двигатель:</label>
             <select class="form-select-sm col-md-3" name="engine" id="id5">
               <!-- <option th:value="0" th:text="Двигатель"selected></option>
-              <option th:value="1" th:text="Внедорожник 5дв."></option>
+              <option th:value="1" th:text="One"></option>
               <option th:value="2" th:text="Two"></option>
               <option th:value="3" th:text="Three"></option> -->
-              <option th:each="engine1: ${engines}" th:value="${engine1.id}" th:text="${engine1.name}"></option>
+              <option th:if="${engines!=null}" value="0" selected disabled>выберите кузов</option>
+              <option th:if="${engines!=null}" th:each="engine1: ${engines}" th:value="${engine1.id}" th:text="${engine1.name}"></option>
+              <option th:if="${engines==null}" value="0" selected disabled>нет данных</option>
             </select>
             <!-- Цена -->
             <label class="form-label col-md-1 text-white text-center">Цена до:</label>
@@ -128,6 +145,32 @@
 </form>
 
 <main>
+  <script>
+    function upButtonClick(number) {
+      let modalPhotoDivs = document.getElementsByName('modalPhotoDiv');
+      if (number>0) {
+        let modalPhotoPrev = document.getElementById('modalImg'+(number-1));
+        let modalPhotoCurr = document.getElementById('modalImg'+number);
+        let src = modalPhotoCurr.src;
+        modalPhotoCurr.src = modalPhotoPrev.src;
+        modalPhotoPrev.src = src;
+      }
+    }
+    function downButtonClick(number) {
+      let modalPhotoDivs = document.getElementsByName('modalPhotoDiv');
+      if (number<modalPhotoDivs.length-1) {
+        let modalPhotoNext = document.getElementById('modalImg'+(number+1));
+        let modalPhotoCurr = document.getElementById('modalImg'+number);
+        let src = modalPhotoCurr.src;
+        modalPhotoCurr.src = modalPhotoNext.src;
+        modalPhotoNext.src = src;
+      }
+    }
+    function delButtonClick(number) {
+      let div = document.getElementById('modalPhotoDiv'+number);
+      div.remove();
+    }
+  </script>
   <div class="container">
     <!-- Карточка -->
     <div class="card">
@@ -191,39 +234,52 @@
               <div class="form-group row">
                 <label class="form-label col-md-4 text-muted">Марка:</label>
                 <select class="form-select col-md-8" name="marc.id" id="id2">
+                  <option th:if="${marcs!=null}" selected disabled value="0">Марка</option>
                   <option th:if="${marcs!=null}" th:each="marc, statMarc: ${marcs}" th:selected="${statMarc.first}"
                           th:value="${marc.id}" th:text="${marc.name}">Марка</option>
-                  <option th:if="${marcs!=null}" selected disabled value="0">Марка</option>
+<!--                     <option selected>Марка</option>-->
+<!--                     <option value="1">One</option>-->
+<!--                     <option value="2">Two</option>-->
+<!--                     <option value="3">Three</option>-->
                 </select>
               </div>
               <!-- Модель -->
               <div class="form-group row">
                 <label class="form-label col-md-4 text-muted">Модель:</label>
                 <select class="form-select col-md-8" name="model.id" id="id3">
-                  <option selected>Модель</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
+                  <option th:if="${models!=null}" selected disabled value="0">Модель</option>
+                  <option th:if="${models!=null}" th:each="model, statModel: ${models}" th:selected="${statModel.first}"
+                          th:value="${model.id}" th:text="${model.name}">Модель</option>
+<!--                  <option selected>Модель</option>-->
+<!--                  <option value="1">One</option>-->
+<!--                  <option value="2">Two</option>-->
+<!--                  <option value="3">Three</option>-->
                 </select>
               </div>
               <!-- Кузов -->
               <div class="form-group row">
                 <label class="form-label col-md-4 text-muted">Кузов:</label>
                 <select class="form-select col-md-8" name="body.id" id="id4">
-                  <option selected>Кузов</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
+                  <option th:if="${bodies!=null}" selected disabled value="0">Кузов</option>
+                  <option th:if="${bodies!=null}" th:each="body, statBody: ${bodies}" th:selected="${statBody.first}"
+                          th:value="${body.id}" th:text="${body.name}">Кузов</option>
+<!--                  <option selected>Кузов</option>-->
+<!--                  <option value="1">One</option>-->
+<!--                  <option value="2">Two</option>-->
+<!--                  <option value="3">Three</option>-->
                 </select>
               </div>
               <!-- Двигатель -->
               <div class="form-group row">
                 <label class="form-label col-md-4 text-muted">Двигатель:</label>
                 <select class="form-select col-md-8" name="engine.id" id="id5">
-                  <option selected>Двигатель</option>
-                  <option value="1">Внедорожник 5дв.</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
+                  <option th:if="${engines!=null}" selected disabled value="0">Двигатель</option>
+                  <option th:if="${engines!=null}" th:each="engine, statEngine: ${engines}" th:selected="${statEngine.first}"
+                          th:value="${engine.id}" th:text="${engine.name}">Двигатель</option>
+<!--                  <option selected>Двигатель</option>-->
+<!--                  <option value="1">One</option>-->
+<!--                  <option value="2">Two</option>-->
+<!--                  <option value="3">Three</option>-->
                 </select>
               </div>
               <!-- Цена -->
@@ -262,32 +318,35 @@
                       <button type="button" class="btn-close" data-bs-dismiss="modal"
                               aria-label="Close"></button>
                     </div>
+
+
                     <!-- modal-body -->
-                    <div class="modal-body">
+                    <div class="modal-body" id="modalPhotoDivs">
                       <!-- Фото №1 -->
-                      <div class="row mb-1">
+                      <div class="row mb-1" name="modalPhotoDiv" id="modalPhotoDiv0">
                         <div class="col-11 p-0">
                           <img src="https://avatars.mds.yandex.net/get-autoru-vos/2074421/91c2cd54adb2cbf0ec0304457545950c/1200x900n"
-                               alt="" name="editImg" id="editImg0">
+                               alt="" name="modalImg" id="modalImg0">
                         </div>
                         <!-- Кнопки -->
-                        <div
-                                class="col-1 d-flex flex-column justify-content-around align-items-center">
+                        <div class="col-1 d-flex flex-column justify-content-around align-items-center">
                           <!-- Стрелка вверх -->
                           <button type="button"
                                   class="btn btm-sm btn-outline-secondar"><svg
                                   xmlns="http://www.w3.org/2000/svg" width="16"
                                   height="16" fill="currentColor" class="bi bi-caret-up"
-                                  viewBox="0 0 16 16">
-                            <path
-                                    d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
+                                  viewBox="0 0 16 16"
+                                  id="modalUpButton0"
+                                  onclick="upButtonClick(0)">
+                            <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
                           </svg></button>
                           <!-- Крестик (удалить фото) -->
                           <button type="button"
                                   class="btn btm-sm btn-outline-secondar"><svg
                                   xmlns="http://www.w3.org/2000/svg" width="16"
                                   height="16" fill="currentColor" class="bi bi-x-lg"
-                                  viewBox="0 0 16 16">
+                                  viewBox="0 0 16 16"
+                                  onclick="delButtonClick(0)">
                             <path
                                     d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
                           </svg></button>
@@ -296,27 +355,30 @@
                                   class="btn btm-sm btn-outline-secondar"><svg
                                   xmlns="http://www.w3.org/2000/svg" width="16"
                                   height="16" fill="currentColor" class="bi bi-caret-down"
-                                  viewBox="0 0 16 16">
+                                  viewBox="0 0 16 16"
+                                  id="modalDownButton0"
+                                  onclick="downButtonClick(0)">
                             <path
                                     d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
                           </svg></button>
                         </div>
                       </div>
                       <!-- Фото №2 -->
-                      <div class="row mb-1">
+                      <div class="row mb-1" name="modalPhotoDiv" id="modalPhotoDiv1">
                         <div class="col-11 p-0">
                           <img src="https://avatars.mds.yandex.net/get-autoru-vos/2078183/3a8fa7ccd2c6a1bccebbed2df0c67bca/1200x900n"
-                               alt="" name="editImg" id="editImg1">
+                               alt="" name="modalImg" id="modalImg1">
                         </div>
                         <!-- Кнопки -->
-                        <div
-                                class="col-1 d-flex flex-column justify-content-around align-items-center">
+                        <div class="col-1 d-flex flex-column justify-content-around align-items-center">
                           <!-- Стрелка вверх -->
                           <button type="button"
                                   class="btn btm-sm btn-outline-secondar"><svg
                                   xmlns="http://www.w3.org/2000/svg" width="16"
                                   height="16" fill="currentColor" class="bi bi-caret-up"
-                                  viewBox="0 0 16 16">
+                                  viewBox="0 0 16 16"
+                                  id="modalUpButton1"
+                                  onclick="upButtonClick(1)">
                             <path
                                     d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
                           </svg></button>
@@ -325,7 +387,8 @@
                                   class="btn btm-sm btn-outline-secondar"><svg
                                   xmlns="http://www.w3.org/2000/svg" width="16"
                                   height="16" fill="currentColor" class="bi bi-x-lg"
-                                  viewBox="0 0 16 16">
+                                  viewBox="0 0 16 16"
+                                  onclick="delButtonClick(1)">
                             <path
                                     d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
                           </svg></button>
@@ -334,27 +397,30 @@
                                   class="btn btm-sm btn-outline-secondar"><svg
                                   xmlns="http://www.w3.org/2000/svg" width="16"
                                   height="16" fill="currentColor" class="bi bi-caret-down"
-                                  viewBox="0 0 16 16">
+                                  viewBox="0 0 16 16"
+                                  id="modalDownButton1"
+                                  onclick="downButtonClick(1)">
                             <path
                                     d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
                           </svg></button>
                         </div>
                       </div>
                       <!-- Фото №3 -->
-                      <div class="row mb-1">
+                      <div class="row mb-1" name="modalPhotoDiv" id="modalPhotoDiv2">
                         <div class="col-11 p-0">
                           <img src="https://avatars.mds.yandex.net/get-autoru-vos/1964973/71a3ef551185ce8e2ebce490fe0b99fc/1200x900n"
-                               alt="" name="editImg" id="editImg2">
+                               alt="" name="modalImg" id="modalImg2">
                         </div>
                         <!-- Кнопки -->
-                        <div
-                                class="col-1 d-flex flex-column justify-content-around align-items-center">
+                        <div class="col-1 d-flex flex-column justify-content-around align-items-center">
                           <!-- Стрелка вверх -->
                           <button type="button"
                                   class="btn btm-sm btn-outline-secondar"><svg
                                   xmlns="http://www.w3.org/2000/svg" width="16"
                                   height="16" fill="currentColor" class="bi bi-caret-up"
-                                  viewBox="0 0 16 16">
+                                  viewBox="0 0 16 16"
+                                  id="modalUpButton2"
+                                  onclick="upButtonClick(2)">
                             <path
                                     d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
                           </svg></button>
@@ -363,7 +429,8 @@
                                   class="btn btm-sm btn-outline-secondar"><svg
                                   xmlns="http://www.w3.org/2000/svg" width="16"
                                   height="16" fill="currentColor" class="bi bi-x-lg"
-                                  viewBox="0 0 16 16">
+                                  viewBox="0 0 16 16"
+                                  onclick="delButtonClick(2)">
                             <path
                                     d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
                           </svg></button>
@@ -372,7 +439,9 @@
                                   class="btn btm-sm btn-outline-secondar"><svg
                                   xmlns="http://www.w3.org/2000/svg" width="16"
                                   height="16" fill="currentColor" class="bi bi-caret-down"
-                                  viewBox="0 0 16 16">
+                                  viewBox="0 0 16 16"
+                                  id="modalDownButton2"
+                                  onclick="downButtonClick(2)">
                             <path
                                     d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
                           </svg></button>
@@ -475,6 +544,78 @@
 
 <!-- Скрипт! -->
   <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function handleFileSelectMulti(evt) {
+    var files = evt.target.files; // FileList object
+    //document.getElementById('modalPhotoDivs').innerHTML = "";
+    for (var i = 0, f; f = files[i]; i++) {
+
+      // Only process image files.
+      if (!f.type.match('image.*')) {
+        alert("Только изображения....");
+      }
+
+      var reader = new FileReader();
+
+      // Closure to capture the file information.
+      reader.onload = (function(theFile) {
+        return function(e) {
+          let photoDivs = document.getElementsByName('modalPhotoDiv');
+          let modalPhotoDivSize = photoDivs.length;
+          // Render thumbnail.
+          let div = document.createElement('div');
+          div.className = 'row mb-1';
+          div.setAttribute('name', 'modalPhotoDiv');
+          //div.name = 'modalPhotoDiv';
+          div.id = 'modalPhotoDiv'+modalPhotoDivSize;
+          div.innerHTML = ['<div class="col-11 p-0">',
+                          '<img src="', e.target.result, '" alt="" name="modalImg" id="modalImg', modalPhotoDivSize, '">',
+                        '</div>',
+                        '<!-- Кнопки -->',
+                        '<div class="col-1 d-flex flex-column justify-content-around align-items-center">',
+                          '<!-- Стрелка вверх -->',
+                          '<button type="button"',
+                                  'class="btn btm-sm btn-outline-secondar">',
+                                  '<svg xmlns="http://www.w3.org/2000/svg" width="16" ',
+                                  'height="16" fill="currentColor" class="bi bi-caret-up" ',
+                                  'viewBox="0 0 16 16" ',
+                                  'id="modalUpButton', modalPhotoDivSize, '" ',
+                                  'onclick="upButtonClick(', modalPhotoDivSize, ')">',
+                            '<path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />',
+                          '</svg></button>',
+                          '<!-- Крестик (удалить фото) -->',
+                          '<button type="button" class="btn btm-sm btn-outline-secondar">',
+                                  '<svg xmlns="http://www.w3.org/2000/svg" width="16" ',
+                                  'height="16" fill="currentColor" class="bi bi-x-lg" ',
+                                  'viewBox="0 0 16 16" ',
+                                  'onclick="delButtonClick(', modalPhotoDivSize, ')">',
+                            '<path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />',
+                          '</svg></button>',
+                          '<!-- Стрелка вниз -->',
+                          '<button type="button" class="btn btm-sm btn-outline-secondar">',
+                          '<svg xmlns="http://www.w3.org/2000/svg" width="16" ',
+                                  'height="16" fill="currentColor" class="bi bi-caret-down" ',
+                                  'viewBox="0 0 16 16" ',
+                                  'id="modalDownButton', modalPhotoDivSize, '" ',
+                                  'onclick="downButtonClick(', modalPhotoDivSize, ')">',
+                            '<path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />',
+                          '</svg></button>',
+                        '</div>'].join('');
+
+//['<img class="img-thumbnail" src="', e.target.result, '" title="', escape(theFile.name), '"/>'].join('');
+
+          document.getElementById('modalPhotoDivs').insertBefore(div, null);
+        };
+      })(f);
+
+      // Read in the image file as a data URL.
+      reader.readAsDataURL(f);
+    }
+  }
+
+    document.getElementById('formFileMultiple').addEventListener('change', handleFileSelectMulti, false);
+  </script>
+
 </body>
 
 </html>

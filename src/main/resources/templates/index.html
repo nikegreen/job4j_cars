@@ -76,19 +76,28 @@
                         <!-- Статус -->
                         <label class="form-label col-md-1 text-white text-center">Статус:</label>
                         <select class="form-select-sm col-md-3" name="status" id="id1">
-                            <option selected>Статус</option>
+                            <option selected disabled>статус</option>
                             <option value="1">В наличии</option>
                             <option value="2">Продано</option>
                         </select>
                         <!-- Марка -->
                         <label class="form-label col-md-1 text-white text-center">Марка:</label>
                         <select class="form-select-sm col-md-3" name="marc" id="id2">
-                            <!-- <option selected>Марка</option> -->
-                            <option th:each="marc1: ${marcs}"  th:value="${marc1.id}" th:text="${marc1.name}"></option>
+                            <!-- <option th:value="0" th:text="Марка"selected></option>
+                            <option th:value="1" th:text="One"></option>
+                            <option th:value="2" th:text="Two"></option>
+                            <option th:value="3" th:text="Three"></option> -->
+                            <option th:if="${marcs!=null}" value="0" selected disabled>выберите марку</option>
+                            <option th:if="${marcs!=null}" th:each="marc1: ${marcs}"  th:value="${marc1.id}" th:text="${marc1.name}"></option>
+                            <option th:if="${marcs==null}" value="0" selected disabled>нет данных</option>
                         </select>
                         <!-- Модель -->
                         <label class="form-label col-md-1 text-white text-center">Модель:</label>
                         <select class="form-select-sm col-md-3" name="model" id="id3">
+                            <!-- <option th:value="0" th:text="Модель"selected></option>
+                            <option th:value="1" th:text="One"></option>
+                            <option th:value="2" th:text="Two"></option>
+                            <option th:value="3" th:text="Three"></option> -->
                             <option th:if="${models!=null}" value="0" selected disabled>выберите модель</option>
                             <option th:if="${models!=null}" th:each="model1: ${models}" th:value="${model1.id}" th:text="${model1.name}"></option>
                             <option th:if="${models==null}" value="0" selected disabled>нет данных</option>
@@ -96,16 +105,24 @@
                         <!-- Кузов -->
                         <label class="form-label col-md-1 text-white text-center">Кузов:</label>
                         <select class="form-select-sm col-md-3" name="body" id="id4">
-                            <option th:each="body1: ${bodies}" th:value="${body1.id}" th:text="${body1.name}"></option>
+                            <!-- <option th:value="0" th:text="Кузов"selected></option>
+                            <option th:value="1" th:text="One"></option>
+                            <option th:value="2" th:text="Two"></option>
+                            <option th:value="3" th:text="Three"></option> -->
+                            <option th:if="${bodies!=null}" value="0" selected disabled>выберите кузов</option>
+                            <option th:if="${bodies!=null}" th:each="body1: ${bodies}" th:value="${body1.id}" th:text="${body1.name}"></option>
+                            <option th:if="${bodies==null}" value="0" selected disabled>нет данных</option>
                         </select>
                         <!-- Двигатель -->
                         <label class="form-label col-md-1 text-white text-center">Двигатель:</label>
                         <select class="form-select-sm col-md-3" name="engine" id="id5">
                             <!-- <option th:value="0" th:text="Двигатель"selected></option>
-                            <option th:value="1" th:text="Внедорожник 5дв."></option>
+                            <option th:value="1" th:text="One"></option>
                             <option th:value="2" th:text="Two"></option>
                             <option th:value="3" th:text="Three"></option> -->
-                            <option th:each="engine1: ${engines}" th:value="${engine1.id}" th:text="${engine1.name}"></option>
+                            <option th:if="${engines!=null}" value="0" selected disabled>выберите двигатель</option>
+                            <option th:if="${engines!=null}" th:each="engine1: ${engines}" th:value="${engine1.id}" th:text="${engine1.name}"></option>
+                            <option th:if="${engines==null}" value="0" selected disabled>нет данных</option>
                         </select>
                         <!-- Цена -->
                         <label class="form-label col-md-1 text-white text-center">Цена до:</label>
@@ -212,7 +229,7 @@
 
 <!-- Скрипт! -->
 <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!--<script src="/bootstrap/js/bootstrap.min.js">-->
+
 </body>
 
 </html>

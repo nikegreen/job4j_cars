@@ -22,7 +22,7 @@
     font-weight: 400;
     line-height: 1.5;
     color: var(--bs-body-color);
-    background-color: var(--bs-form-control-bg);
+    /* background-color: var(--bs-form-control-bg);  отключила черный фон */
     background-image: var(--bs-form-select-bg-img), var(--bs-form-select-bg-icon, none);
     background-repeat: no-repeat;
     background-position: right 0.75rem center;
@@ -52,3 +52,4 @@
 .modal-body img {
     width: 100%;
 }
+
