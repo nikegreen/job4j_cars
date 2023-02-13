@@ -28,7 +28,8 @@ public class AuthFilter implements Filter {
             "bootstrap/js/bootstrap.bundle.min.js",
             "bootstrap/js/bootstrap.bundle.min.js.map",
             "css/signin.css",
-            "css/style.css"
+            "css/style.css",
+            "js/form.js"
     );
 
     @Override

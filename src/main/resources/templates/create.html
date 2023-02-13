@@ -145,32 +145,7 @@
 </form>
 
 <main>
-  <script>
-    function upButtonClick(number) {
-      let modalPhotoDivs = document.getElementsByName('modalPhotoDiv');
-      if (number>0) {
-        let modalPhotoPrev = document.getElementById('modalImg'+(number-1));
-        let modalPhotoCurr = document.getElementById('modalImg'+number);
-        let src = modalPhotoCurr.src;
-        modalPhotoCurr.src = modalPhotoPrev.src;
-        modalPhotoPrev.src = src;
-      }
-    }
-    function downButtonClick(number) {
-      let modalPhotoDivs = document.getElementsByName('modalPhotoDiv');
-      if (number<modalPhotoDivs.length-1) {
-        let modalPhotoNext = document.getElementById('modalImg'+(number+1));
-        let modalPhotoCurr = document.getElementById('modalImg'+number);
-        let src = modalPhotoCurr.src;
-        modalPhotoCurr.src = modalPhotoNext.src;
-        modalPhotoNext.src = src;
-      }
-    }
-    function delButtonClick(number) {
-      let div = document.getElementById('modalPhotoDiv'+number);
-      div.remove();
-    }
-  </script>
+  <script src="/js/form.js"></script>
   <div class="container">
     <!-- Карточка -->
     <div class="card">
@@ -183,7 +158,7 @@
           <div class="col-md-6 col-lg-8">
             <!-- Карусель (отключено автоперемещение) -->
             <div id="carouselCarIndicators1" class="carousel slide" data-bs-touche="carousel">
-              <div class="carousel-indicators">
+              <div class="carousel-indicators" id="carouselIndicators">
                 <button type="button" data-bs-target="#carouselCarIndicators1" data-bs-slide-to="0"
                         class="active" aria-current="true" aria-label="Slide 1"></button>
                 <button type="button" data-bs-target="#carouselCarIndicators1" data-bs-slide-to="1"
@@ -451,23 +426,17 @@
                     <!-- modal-footer -->
                     <!-- Кнопка Закрыть -->
                     <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary"
-                              data-bs-dismiss="modal"><svg xmlns="http://www.w3.org/2000/svg"
-                                                           width="16" height="16" fill="currentColor"
-                                                           class="bi bi-x-lg me-1" viewBox="0 0 16 16">
-                        <path
-                                d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
-                      </svg>Закрыть</button>
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="modalCloseButton">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg me-1" viewBox="0 0 16 16">
+                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+                        </svg>Закрыть
+                      </button>
                       <!-- Кнопка Сохранить -->
-                      <button type="button" class="btn btn-primary"><svg
-                              xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                              fill="currentColor" class="bi bi-check2-all me-1"
-                              viewBox="0 0 16 16">
-                        <path
-                                d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z" />
-                        <path
-                                d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
-                      </svg>Сохранить
+                      <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="modalSaveButton">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-all me-1" viewBox="0 0 16 16">
+                        <path d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z" />
+                        <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
+                        </svg>Сохранить
                       </button>
                     </div>
                   </div>
@@ -478,19 +447,19 @@
                 <button type="button" class="btn btn-primary"><svg
                         xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                         fill="currentColor" class="bi bi-x-lg me-1" viewBox="0 0 16 16">
-                  <path
-                          d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
-                </svg>Отмена</button>
+                  <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+                  </svg>Отмена
+                </button>
               </div>
               <!-- Кнопка Сохранить -->
               <div class="form-btn row m-2">
-                <button type="button" class="btn btn-primary"><svg
-                        xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                <button type="button" class="btn btn-primary">
+                  <svg  xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                         fill="currentColor" class="bi bi-check2-all me-1" viewBox="0 0 16 16">
-                  <path
-                          d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z" />
+                  <path d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z" />
                   <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
-                </svg>Сохранить</button>
+                  </svg>Сохранить
+                </button>
               </div>
           </div>
           </form>
@@ -545,75 +514,9 @@
 <!-- Скрипт! -->
   <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script>
-    function handleFileSelectMulti(evt) {
-    var files = evt.target.files; // FileList object
-    //document.getElementById('modalPhotoDivs').innerHTML = "";
-    for (var i = 0, f; f = files[i]; i++) {
-
-      // Only process image files.
-      if (!f.type.match('image.*')) {
-        alert("Только изображения....");
-      }
-
-      var reader = new FileReader();
-
-      // Closure to capture the file information.
-      reader.onload = (function(theFile) {
-        return function(e) {
-          let photoDivs = document.getElementsByName('modalPhotoDiv');
-          let modalPhotoDivSize = photoDivs.length;
-          // Render thumbnail.
-          let div = document.createElement('div');
-          div.className = 'row mb-1';
-          div.setAttribute('name', 'modalPhotoDiv');
-          //div.name = 'modalPhotoDiv';
-          div.id = 'modalPhotoDiv'+modalPhotoDivSize;
-          div.innerHTML = ['<div class="col-11 p-0">',
-                          '<img src="', e.target.result, '" alt="" name="modalImg" id="modalImg', modalPhotoDivSize, '">',
-                        '</div>',
-                        '<!-- Кнопки -->',
-                        '<div class="col-1 d-flex flex-column justify-content-around align-items-center">',
-                          '<!-- Стрелка вверх -->',
-                          '<button type="button"',
-                                  'class="btn btm-sm btn-outline-secondar">',
-                                  '<svg xmlns="http://www.w3.org/2000/svg" width="16" ',
-                                  'height="16" fill="currentColor" class="bi bi-caret-up" ',
-                                  'viewBox="0 0 16 16" ',
-                                  'id="modalUpButton', modalPhotoDivSize, '" ',
-                                  'onclick="upButtonClick(', modalPhotoDivSize, ')">',
-                            '<path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />',
-                          '</svg></button>',
-                          '<!-- Крестик (удалить фото) -->',
-                          '<button type="button" class="btn btm-sm btn-outline-secondar">',
-                                  '<svg xmlns="http://www.w3.org/2000/svg" width="16" ',
-                                  'height="16" fill="currentColor" class="bi bi-x-lg" ',
-                                  'viewBox="0 0 16 16" ',
-                                  'onclick="delButtonClick(', modalPhotoDivSize, ')">',
-                            '<path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />',
-                          '</svg></button>',
-                          '<!-- Стрелка вниз -->',
-                          '<button type="button" class="btn btm-sm btn-outline-secondar">',
-                          '<svg xmlns="http://www.w3.org/2000/svg" width="16" ',
-                                  'height="16" fill="currentColor" class="bi bi-caret-down" ',
-                                  'viewBox="0 0 16 16" ',
-                                  'id="modalDownButton', modalPhotoDivSize, '" ',
-                                  'onclick="downButtonClick(', modalPhotoDivSize, ')">',
-                            '<path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />',
-                          '</svg></button>',
-                        '</div>'].join('');
-
-//['<img class="img-thumbnail" src="', e.target.result, '" title="', escape(theFile.name), '"/>'].join('');
-
-          document.getElementById('modalPhotoDivs').insertBefore(div, null);
-        };
-      })(f);
-
-      // Read in the image file as a data URL.
-      reader.readAsDataURL(f);
-    }
-  }
-
     document.getElementById('formFileMultiple').addEventListener('change', handleFileSelectMulti, false);
+    document.getElementById('modalSaveButton').addEventListener('click', modalSaveButtonClick, false);
+    document.getElementById('modalCloseButton').addEventListener('click', modalCloseButtonClick, false);
   </script>
 
 </body>
