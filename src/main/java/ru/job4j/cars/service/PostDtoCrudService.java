@@ -31,4 +31,19 @@ public class PostDtoCrudService implements PostDtoAbstractService {
     public Optional<PostDto> findById(int id) {
         return posts.findById(id);
     }
+
+    /**
+     * Список всех объявлений по фильтру (для отображения)
+     * @param filter - параметры фильтра тип: {@link ru.job4j.cars.model.UserDto}
+     *               filter.statusId     - фильтрация по статусу. Если = 0, то без фильтрации.
+     *               filter.car.marc.id  - фильтрация по марке. Если = 0, то без фильтрации.
+     *               filter.car.model.id - фильтрация по модели. Если = 0, то без фильтрации.
+     *               filter.car.bodyId   - фильтрация по модели. Если = 0, то без фильтрации.
+     *               filter.price        - фильтрация по цене (цена авто равна или ниже в фильтре).
+     * @return список всех отфильтрованных объявлений (для отображения).
+     */
+    @Override
+    public List<PostDto> findAllByFilter(PostDto filter) {
+        return posts.findAllByFilter(filter);
+    }
 }

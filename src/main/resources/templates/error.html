@@ -34,7 +34,7 @@
           <form method="get" th:action="${link}" th:if="${link!=null}">
             <input type="submit" class="card-button">
           </form>
-          <form method="get" th:action="/index" th:if="${link==null}">
+          <form method="get" action="/index" th:if="${link==null}">
             <input type="submit" class="card-button">
           </form>
         </div>

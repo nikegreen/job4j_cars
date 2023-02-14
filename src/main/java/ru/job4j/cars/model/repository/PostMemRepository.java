@@ -13,7 +13,7 @@ public class PostMemRepository implements  PostAbstractRepository {
     private final AtomicInteger size = new AtomicInteger();
     private final Map<Integer, Post> posts = new ConcurrentHashMap<>();
 
-    public PostMemRepository() {
+    public PostMemRepository(CarMarcMemRepository marcs) {
         Post post = new Post();
         post.setText("text1");
         post.setPhotos(List.of());
@@ -26,11 +26,9 @@ public class PostMemRepository implements  PostAbstractRepository {
         engine.setName("бензин");
         car.setEngine(engine);
         car.setName("name");
-        CarMarc carMarc = new CarMarc();
-        carMarc.setId(1);
-        carMarc.setName("marc1");
+        CarMarc carMarc =  marcs.findById(17).orElse(null);
         car.setMarc(carMarc);
-        CarModel carModel = new CarModel(1, "model_name1", 1, 1);
+        CarModel carModel = new CarModel(1, "model_name1", carMarc.getId(), 1);
         car.setModel(carModel);
         car.setBodyId(1);
         post.setCar(car);

@@ -19,6 +19,7 @@
 </head>
 
 <body>
+<script src="/js/form.js"></script>
 <!-- Form (form поставила перед header, т.к. надо было сохранить уже сложившуюся конструкцию внешнего вида шапки, а Form поставила перед header. Все кнопки Войти/Регистрация, Статус/Модель/Марка/Кузов/Двигатель/Цена/Применить - передают данные)-->
 <form action="#" method="get">
     <header class="p-3 bg-dark text-white">
@@ -75,64 +76,73 @@
                     <div class="form-group row g-1 align-items-center">
                         <!-- Статус -->
                         <label class="form-label col-md-1 text-white text-center">Статус:</label>
-                        <select class="form-select-sm col-md-3" name="status" id="id1">
-                            <option selected disabled>статус</option>
-                            <option value="1">В наличии</option>
-                            <option value="2">Продано</option>
+                        <select class="form-select-sm col-md-3" name="statusId" id="statusId">
+                            <option value="0" th:selected="${filter==null || filter.statusId==null || filter.statusId==0}">любой статус</option>
+                            <option value="1" th:selected="${filter!=null && filter.statusId==1}">В наличии</option>
+                            <option value="2" th:selected="${filter!=null && filter.statusId==2}">Продано</option>
                         </select>
                         <!-- Марка -->
                         <label class="form-label col-md-1 text-white text-center">Марка:</label>
-                        <select class="form-select-sm col-md-3" name="marc" id="id2">
+                        <select class="form-select-sm col-md-3" name="car.marc.id" id="marcId" onchange="setFilterModel('marcId', 'modelId', 'bodyId')">
                             <!-- <option th:value="0" th:text="Марка"selected></option>
                             <option th:value="1" th:text="One"></option>
                             <option th:value="2" th:text="Two"></option>
                             <option th:value="3" th:text="Three"></option> -->
-                            <option th:if="${marcs!=null}" value="0" selected disabled>выберите марку</option>
-                            <option th:if="${marcs!=null}" th:each="marc1: ${marcs}"  th:value="${marc1.id}" th:text="${marc1.name}"></option>
+                            <option th:if="${marcs!=null}" value="0"
+                                    th:selected="${filter==null || filter.car==null || filter.car.marc==null || filter.car.marc.id==0}">все марки</option>
+                            <option th:if="${marcs!=null}" th:each="marc1: ${marcs}"  th:value="${marc1.id}" th:text="${marc1.name}"
+                                    th:selected="${filter!=null && filter.car!=null && filter.car.marc!=null && filter.car.marc.id==marc1.id}"></option>
                             <option th:if="${marcs==null}" value="0" selected disabled>нет данных</option>
                         </select>
                         <!-- Модель -->
                         <label class="form-label col-md-1 text-white text-center">Модель:</label>
-                        <select class="form-select-sm col-md-3" name="model" id="id3">
+                        <select class="form-select-sm col-md-3" name="car.model.id" id="modelId" onchange="setFilterMarc('marcId', 'modelId', 'bodyId')">
                             <!-- <option th:value="0" th:text="Модель"selected></option>
                             <option th:value="1" th:text="One"></option>
                             <option th:value="2" th:text="Two"></option>
                             <option th:value="3" th:text="Three"></option> -->
-                            <option th:if="${models!=null}" value="0" selected disabled>выберите модель</option>
-                            <option th:if="${models!=null}" th:each="model1: ${models}" th:value="${model1.id}" th:text="${model1.name}"></option>
-                            <option th:if="${models==null}" value="0" selected disabled>нет данных</option>
+                            <option th:if="${models!=null}" value="0" marcid="0" bodyid="0"
+                                    th:selected="${filter==null || filter.car==null || filter.car.model==null || filter.car.model.id==0}">все модели</option>
+                            <option th:if="${models!=null}" th:each="model1: ${models}" th:value="${model1.id}" th:marcid="${model1.marcId}" th:bodyid="${model1.bodyId}"
+                                    th:selected="${filter!=null && filter.car!=null && filter.car.model!=null && filter.car.model.id==model1.id}" th:text="${model1.name}"></option>
+                            <option th:if="${models==null}" value="0" marcid="0" bodyid="0" selected disabled>нет данных</option>
                         </select>
                         <!-- Кузов -->
                         <label class="form-label col-md-1 text-white text-center">Кузов:</label>
-                        <select class="form-select-sm col-md-3" name="body" id="id4">
+                        <select class="form-select-sm col-md-3" name="car.bodyId" id="bodyId" onchange="setFilterModel('marcId', 'modelId', 'bodyId')">
                             <!-- <option th:value="0" th:text="Кузов"selected></option>
                             <option th:value="1" th:text="One"></option>
                             <option th:value="2" th:text="Two"></option>
                             <option th:value="3" th:text="Three"></option> -->
-                            <option th:if="${bodies!=null}" value="0" selected disabled>выберите кузов</option>
-                            <option th:if="${bodies!=null}" th:each="body1: ${bodies}" th:value="${body1.id}" th:text="${body1.name}"></option>
+                            <option th:if="${bodies!=null}" value="0"
+                                    th:selected="${filter==null || filter.car==null || filter.car.bodyId==0}">любой кузов</option>
+                            <option th:if="${bodies!=null}" th:each="body1: ${bodies}" th:value="${body1.id}"
+                                    th:selected="${filter!=null && filter.car!=null && filter.car.bodyId==body1.id}" th:text="${body1.name}"></option>
                             <option th:if="${bodies==null}" value="0" selected disabled>нет данных</option>
                         </select>
                         <!-- Двигатель -->
                         <label class="form-label col-md-1 text-white text-center">Двигатель:</label>
-                        <select class="form-select-sm col-md-3" name="engine" id="id5">
+                        <select class="form-select-sm col-md-3" name="car.engine.id" id="id5">
                             <!-- <option th:value="0" th:text="Двигатель"selected></option>
                             <option th:value="1" th:text="One"></option>
                             <option th:value="2" th:text="Two"></option>
                             <option th:value="3" th:text="Three"></option> -->
-                            <option th:if="${engines!=null}" value="0" selected disabled>выберите двигатель</option>
-                            <option th:if="${engines!=null}" th:each="engine1: ${engines}" th:value="${engine1.id}" th:text="${engine1.name}"></option>
+                            <option th:if="${engines!=null}" value="0"
+                                    th:selected="${filter==null || filter.car==null || filter.car.engine==null || filter.car.engine.id==0}">любой двигатель</option>
+                            <option th:if="${engines!=null}" th:each="engine1: ${engines}" th:value="${engine1.id}"
+                                    th:selected="${filter!=null && filter.car!=null && filter.car.engine!=null && filter.car.engine.id==engine1.id}" th:text="${engine1.name}"></option>
                             <option th:if="${engines==null}" value="0" selected disabled>нет данных</option>
                         </select>
                         <!-- Цена -->
                         <label class="form-label col-md-1 text-white text-center">Цена до:</label>
-                        <input type="number" class="form-input form-control-sm col-md-3" name="price" id="id6">
+                        <input type="number" class="form-input form-control-sm col-md-3" name="price" id="priceId"
+                               max="2147483647" min="0" step="any"
+                               th:value="${(filter!=null && filter.price!=null)?filter.price:'2147483647'}">
                         <!-- Кнопка Применить -->
                         <div class="form-btn mt-2 text-end">
-                            <button type="submit" class="btn btn-primary" formaction="/index">
+                            <button type="submit" class="btn btn-primary" formaction="/index" formmethod="post">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-all me-1" viewBox="0 0 16 16">
-                                <path
-                                        d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z" />
+                                <path d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z" />
                                 <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
                             </svg>Применить</button>
                         </div>
@@ -181,7 +191,9 @@
                     </button>
                 </div>
                 <!-- Название машины -->
-                <div class="title">Ford Focus</div>
+                <div class="title" th:text="${post1.car.marc.name}+' '+${post1.car.model.name}+' цена:'+${post1.price}+'руб'"
+                     th:if="${post1!=null && post1.price!=null}">Ford Focus</div>
+                <div class="title" th:if="${post1==null}">...</div>
             </div>
         </div>
     </div>

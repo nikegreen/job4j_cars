@@ -150,3 +150,46 @@
             modalPhotoAdd(caruselImages[i].src);
         }
     }
+
+    function setFilterModel(selectMarcId, selectModelId, selectBodyId){
+        let selMarc = document.getElementById(selectMarcId);
+        let selModel = document.getElementById(selectModelId);
+        let selBody = document.getElementById(selectBodyId);
+        let optionList = selModel.getElementsByTagName('option');
+        let marcId = selMarc.value;
+        let bodyId = selBody.value;
+        for (i = 0; i < optionList.length; i++) {
+            let optional1 = optionList[i];
+            if (optional1.value>0) {
+                let marcId2 = optional1.getAttribute('marcid');
+                if ((marcId == marcId2) || (marcId == 0)){
+                    let bodyId2 = optional1.getAttribute('bodyid');
+                    if ((bodyId == bodyId2) || (bodyId == 0)) {
+                         optional1.hidden = false;
+                    } else {
+                         optional1.hidden = true;
+                    }
+                } else {
+                    optional1.hidden = true;
+                }
+            }
+        }
+    }
+
+    function setFilterMarc(selectMarcId, selectModelId, selectBodyId){
+        let selMarc = document.getElementById(selectMarcId);
+        let selModel = document.getElementById(selectModelId);
+        let selBody = document.getElementById(selectBodyId);
+        let optionList = selModel.getElementsByTagName('option');
+        for (i = 0; i < optionList.length; i++) {
+            let optional1 = optionList[i];
+            if (optional1.selected) {
+                if (optional1.getAttribute('marcid') != selMarc.value) {
+                    selMarc.value = optional1.getAttribute('marcid');
+                }
+                if (optional1.getAttribute('bodyid') != selBody.value) {
+                    selBody.value = optional1.getAttribute('bodyid');
+                }
+            }
+        }
+    }

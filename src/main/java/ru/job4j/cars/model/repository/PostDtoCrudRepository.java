@@ -1,6 +1,7 @@
 package ru.job4j.cars.model.repository;
 
 import lombok.RequiredArgsConstructor;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.Post;
 import ru.job4j.cars.model.PostDto;
@@ -87,5 +88,87 @@ public class PostDtoCrudRepository implements PostDtoAbstractRepository {
                                     PostDto.fromPost(posts.size() > 0 ? posts.get(0) : null)
                             );
                 });
+    }
+
+    /**
+     * Список всех объявлений по фильтру (для отображения)
+     * @param filter - параметры фильтра тип: {@link ru.job4j.cars.model.UserDto}
+     *               filter.statusId     - фильтрация по статусу. Если = 0, то без фильтрации.
+     *               filter.car.marc.id  - фильтрация по марке. Если = 0, то без фильтрации.
+     *               filter.car.model.id - фильтрация по модели. Если = 0, то без фильтрации.
+     *               filter.car.bodyId   - фильтрация по модели. Если = 0, то без фильтрации.
+     *               filter.price        - фильтрация по цене (цена авто равна или ниже в фильтре).
+     * @return список всех отфильтрованных объявлений (для отображения).
+     */
+    @Override
+    public List<PostDto> findAllByFilter(PostDto filter) {
+        if (filter == null) {
+            return findAll();
+        }
+        return crudRepository.tx(
+                session -> {
+                    String sql = "select distinct i from Post i left join fetch i.car c"
+                            + " left join fetch c.owners"
+                            + " where (i.price < :fPrice)";
+                    if (filter.getCar() != null) {
+                        if (filter.getCar().getMarc() != null && filter.getCar().getMarc().getId() != 0) {
+                            sql += " and (c.marc.id=:fMarcId)";
+                        }
+                        if (filter.getCar().getModel() != null && filter.getCar().getModel().getId() != 0) {
+                            sql += " and (c.model.id=:fModelId)";
+                        }
+                        if (filter.getCar().getBodyId() != 0) {
+                            sql += " and (c.bodyId=:fBodyId)";
+                        }
+                        if (filter.getCar().getEngine() != null && filter.getCar().getEngine().getId() != 0) {
+                            sql += " and (c.engine.id=:fEngineId)";
+                        }
+                        if (filter.getStatusId() != 0) {
+                            sql += " and (i.statusId=:fStatusId)";
+                        }
+                    }
+                    sql += " order by i.id";
+                    Query<Post> query = session.createQuery(sql, Post.class)
+                            .setParameter("fPrice", filter.getPrice());
+                    if (filter.getCar() != null) {
+                        if (filter.getCar().getMarc() != null && filter.getCar().getMarc().getId() != 0) {
+                            query = query.setParameter("fMarcId", filter.getCar().getMarc().getId());
+                        }
+                        if (filter.getCar().getModel() != null && filter.getCar().getModel().getId() != 0) {
+                            query = query.setParameter("fModelId", filter.getCar().getModel().getId());
+                        }
+                        if (filter.getCar().getBodyId() != 0) {
+                            query = query.setParameter("fBodyId", filter.getCar().getBodyId());
+                        }
+                        if (filter.getCar().getEngine() != null && filter.getCar().getEngine().getId() != 0) {
+                            query = query.setParameter("fEngineId", filter.getCar().getEngine().getId());
+                        }
+                    }
+                    if (filter.getStatusId() != 0) {
+                        query = query.setParameter("fStatusId", filter.getStatusId());
+                    }
+                    List<Post> posts = query.list();
+                    posts = session.createQuery(
+                                    "select distinct i from Post i left join fetch i.priceHistories"
+                                            + " where i in :fPosts order by i.id", Post.class)
+                            .setParameter("fPosts", posts)
+                            .list();
+//                    posts = session.createQuery(
+//                                    "select distinct i from Post i left join fetch i.participates"
+//                                            + " where i in :fPosts order by i.id", Post.class)
+//                            .setParameter("fPosts", posts)
+//                            .list();
+                    posts = session.createQuery(
+                                    "select distinct i from Post i left join fetch i.photos"
+                                            + " where i in :fPosts order by i.id", Post.class)
+                            .setParameter("fPosts", posts)
+                            .list();
+                    List<PostDto> result = new ArrayList<>();
+                    posts.forEach(
+                            post -> result.add(PostDto.fromPost(post))
+                    );
+                    return result;
+                }
+        );
     }
 }
