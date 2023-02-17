@@ -29,4 +29,15 @@ public class CarBodyCrudRepository implements CarBodyAbstractRepository {
         return Optional.ofNullable(crudRepository.findById(id, CarBody.class));
     }
 
+    /**
+     * Найти тип корпуса автомобиля по имени
+     * @param bodyName имени типа корпуса
+     * @return тип корпуса автомобиля.
+     */
+    @Override
+    public Optional<CarBody>  findByName(String bodyName) {
+        return crudRepository.tx(session -> session.createQuery(
+                "from CarBody i where i.name :fName", CarBody.class)
+                .setParameter("fName", bodyName).uniqueResultOptional());
+    }
 }

@@ -17,4 +17,11 @@ public interface CarBodyAbstractRepository {
      * @return тип корпуса автомобиля.
      */
     Optional<CarBody> findById(int id);
+
+    /**
+     * Найти тип корпуса автомобиля по имени
+     * @param bodyName имени типа корпуса
+     * @return тип корпуса автомобиля.
+     */
+    Optional<CarBody>  findByName(String bodyName);
 }

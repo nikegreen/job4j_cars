@@ -1,6 +1,7 @@
 package ru.job4j.cars.model.repository;
 
 import org.springframework.stereotype.Repository;
+import ru.job4j.cars.model.CarBody;
 import ru.job4j.cars.model.CarMarc;
 import ru.job4j.cars.model.CarModel;
 
@@ -12,21 +13,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 @Repository
 public class CarModelMemRepository implements  CarModelAbstractRepository {
-    private static final List<String> BODY_NAMES = List.of(
-            "седан",
-            "хэтчбек 3 дверей",
-            "хэтчбек 5 дверей",
-            "лифтбек",
-            "внедорожник 3 двери",
-            "внедорожник 5 двери",
-            "универсал",
-            "купе",
-            "минивен",
-            "пикап",
-            "лимузин",
-            "фургон",
-            "кабриолет"
-    );
+    private final CarBodyMemRepository bodies;
     private final List<String> audiModels = List.of(
             "100",  "седан",
             "200",  "седан",
@@ -1054,7 +1041,8 @@ public class CarModelMemRepository implements  CarModelAbstractRepository {
     private final Map<Integer, CarModel> models = new ConcurrentHashMap<>();
     private final CarMarcMemRepository marcs;
 
-    public CarModelMemRepository(CarMarcMemRepository marcs) {
+    public CarModelMemRepository(CarBodyMemRepository bodies, CarMarcMemRepository marcs) {
+        this.bodies = bodies;
         this.marcs = marcs;
         int counter = 1;
         counter = addAudi(counter);
@@ -1143,12 +1131,13 @@ public class CarModelMemRepository implements  CarModelAbstractRepository {
      * @return новый счётчик для идентификатора модели
      */
     private int addModels(int marcId, int modelCounter, List<String> modelList) {
+        CarBody def = new CarBody();
         for (int i = 0; i < modelList.size();) {
             CarModel model = new CarModel(
                     modelCounter++,
                     modelList.get(i++),
                     marcId,
-                    BODY_NAMES.indexOf(modelList.get(i++))
+                    bodies.findByName(modelList.get(i++)).orElse(def).getId()
             );
             models.putIfAbsent(model.getId(), model);
         }
@@ -1288,6 +1277,8 @@ public class CarModelMemRepository implements  CarModelAbstractRepository {
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
+        CarBody def = bodies.findById(1).orElse(new CarBody());
+        def.setName(def.getName() == null ? "" : def.getName());
         try (FileWriter writer2 = new FileWriter(
                 "c:\\projects\\job4j_cars\\db\\015_dml_insert_car_model.sql",
                 false)) {
@@ -1298,7 +1289,7 @@ public class CarModelMemRepository implements  CarModelAbstractRepository {
                                 + marcs.findById(model.getMarcId())
                                 .orElse(new CarMarc()).getName()
                                 + "'), (select id from car_body where name ='"
-                                + BODY_NAMES.get(model.getBodyId()) + "'));";
+                                + bodies.findById(model.getBodyId()).orElse(def).getName() + "'));";
                         try {
                             writer2.write(text);
                             writer2.append(System.lineSeparator());

@@ -56,4 +56,17 @@ public class CarBodyMemRepository implements CarBodyAbstractRepository {
     public Optional<CarBody> findById(int id) {
         return Optional.ofNullable(bodies.getOrDefault(id, null));
     }
+
+    /**
+     * Найти тип корпуса автомобиля по имени
+     * @param bodyName имени типа корпуса
+     * @return тип корпуса автомобиля.
+     */
+    @Override
+    public Optional<CarBody>  findByName(String bodyName) {
+        return bodies.values()
+                .stream()
+                .filter(body -> body.getName() != null && body.getName().equals(bodyName))
+                .findFirst();
+    }
 }

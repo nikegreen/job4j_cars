@@ -111,16 +111,19 @@ public class PostDtoCrudRepository implements PostDtoAbstractRepository {
                             + " left join fetch c.owners"
                             + " where (i.price < :fPrice)";
                     if (filter.getCar() != null) {
-                        if (filter.getCar().getMarc() != null && filter.getCar().getMarc().getId() != 0) {
+                        if (filter.getCar().getMarc() != null
+                                && filter.getCar().getMarc().getId() != 0) {
                             sql += " and (c.marc.id=:fMarcId)";
                         }
-                        if (filter.getCar().getModel() != null && filter.getCar().getModel().getId() != 0) {
+                        if (filter.getCar().getModel() != null
+                                && filter.getCar().getModel().getId() != 0) {
                             sql += " and (c.model.id=:fModelId)";
                         }
                         if (filter.getCar().getBodyId() != 0) {
                             sql += " and (c.bodyId=:fBodyId)";
                         }
-                        if (filter.getCar().getEngine() != null && filter.getCar().getEngine().getId() != 0) {
+                        if (filter.getCar().getEngine() != null
+                                && filter.getCar().getEngine().getId() != 0) {
                             sql += " and (c.engine.id=:fEngineId)";
                         }
                         if (filter.getStatusId() != 0) {
@@ -131,17 +134,26 @@ public class PostDtoCrudRepository implements PostDtoAbstractRepository {
                     Query<Post> query = session.createQuery(sql, Post.class)
                             .setParameter("fPrice", filter.getPrice());
                     if (filter.getCar() != null) {
-                        if (filter.getCar().getMarc() != null && filter.getCar().getMarc().getId() != 0) {
-                            query = query.setParameter("fMarcId", filter.getCar().getMarc().getId());
+                        if (filter.getCar().getMarc() != null
+                                && filter.getCar().getMarc().getId() != 0) {
+                            query = query.setParameter(
+                                    "fMarcId", filter.getCar().getMarc().getId()
+                            );
                         }
-                        if (filter.getCar().getModel() != null && filter.getCar().getModel().getId() != 0) {
-                            query = query.setParameter("fModelId", filter.getCar().getModel().getId());
+                        if (filter.getCar().getModel() != null
+                                && filter.getCar().getModel().getId() != 0) {
+                            query = query.setParameter(
+                                    "fModelId", filter.getCar().getModel().getId()
+                            );
                         }
                         if (filter.getCar().getBodyId() != 0) {
                             query = query.setParameter("fBodyId", filter.getCar().getBodyId());
                         }
-                        if (filter.getCar().getEngine() != null && filter.getCar().getEngine().getId() != 0) {
-                            query = query.setParameter("fEngineId", filter.getCar().getEngine().getId());
+                        if (filter.getCar().getEngine() != null
+                                && filter.getCar().getEngine().getId() != 0) {
+                            query = query.setParameter(
+                                    "fEngineId", filter.getCar().getEngine().getId()
+                            );
                         }
                     }
                     if (filter.getStatusId() != 0) {
@@ -153,11 +165,6 @@ public class PostDtoCrudRepository implements PostDtoAbstractRepository {
                                             + " where i in :fPosts order by i.id", Post.class)
                             .setParameter("fPosts", posts)
                             .list();
-//                    posts = session.createQuery(
-//                                    "select distinct i from Post i left join fetch i.participates"
-//                                            + " where i in :fPosts order by i.id", Post.class)
-//                            .setParameter("fPosts", posts)
-//                            .list();
                     posts = session.createQuery(
                                     "select distinct i from Post i left join fetch i.photos"
                                             + " where i in :fPosts order by i.id", Post.class)

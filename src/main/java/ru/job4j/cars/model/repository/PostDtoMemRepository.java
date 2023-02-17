@@ -2,6 +2,7 @@ package ru.job4j.cars.model.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import ru.job4j.cars.model.Car;
 import ru.job4j.cars.model.PostDto;
 
 import java.util.ArrayList;
@@ -60,24 +61,27 @@ public class PostDtoMemRepository implements PostDtoAbstractRepository {
                 if (postDto.getPrice() > filter.getPrice()) {
                     return false;
                 }
-                if (filter.getCar() != null) {
-                    if (filter.getCar().getMarc() != null && filter.getCar().getMarc().getId() != 0) {
-                        if (postDto.getCar().getMarc().getId() != filter.getCar().getMarc().getId()) {
+                Car car = filter.getCar();
+                Car carDto = postDto.getCar();
+                if (car != null) {
+                    if (car.getMarc() != null
+                            && car.getMarc().getId() != 0) {
+                        if (carDto.getMarc().getId() != car.getMarc().getId()) {
                             return false;
                         }
                     }
-                    if (filter.getCar().getModel() != null && filter.getCar().getModel().getId() != 0) {
-                        if (postDto.getCar().getModel().getId() != filter.getCar().getModel().getId()) {
+                    if (car.getModel() != null && car.getModel().getId() != 0) {
+                        if (carDto.getModel().getId() != car.getModel().getId()) {
                             return false;
                         }
                     }
-                    if (filter.getCar().getBodyId() != 0) {
-                        if (postDto.getCar().getBodyId() != filter.getCar().getBodyId()) {
+                    if (car.getBodyId() != 0) {
+                        if (carDto.getBodyId() != car.getBodyId()) {
                             return false;
                         }
                     }
-                    if (filter.getCar().getEngine() != null && filter.getCar().getEngine().getId() != 0) {
-                        if (postDto.getCar().getEngine().getId() != filter.getCar().getEngine().getId()) {
+                    if (car.getEngine() != null && car.getEngine().getId() != 0) {
+                        if (carDto.getEngine().getId() != car.getEngine().getId()) {
                             return false;
                         }
                     }

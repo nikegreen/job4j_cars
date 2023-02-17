@@ -1,3 +1,4 @@
+
     function upButtonClick(number) {
       let modalPhotoDivs = document.getElementsByName('modalPhotoDiv');
       if (number>0) {
@@ -6,6 +7,16 @@
         let src = modalPhotoCurr.src;
         modalPhotoCurr.src = modalPhotoPrev.src;
         modalPhotoPrev.src = src;
+        let inpCurr = document.getElementById('modalPhotoId'+number);
+        let inpPrev = document.getElementById('modalPhotoId'+(number-1));
+        let tmpId = inpCurr.value;
+        inpCurr.value = inpPrev.value;
+        inpPrev.value = tmpId;
+//        let inpFileCurr = document.getElementById('modalPhotoFileName'+number);
+//        let inpFilePrev = document.getElementById('modalPhotoFileName'+(number-1));
+//        let file = inpFilePrev.file;
+//        inpFilePrev.file = inpFileCurr.file;
+//        inpFileCurr.file = file;
       }
     }
 
@@ -17,23 +28,33 @@
         let src = modalPhotoCurr.src;
         modalPhotoCurr.src = modalPhotoNext.src;
         modalPhotoNext.src = src;
+        let inpNext = document.getElementById('modalPhotoId'+(number+1));
+        let inpCurr = document.getElementById('modalPhotoId'+number);
+        let tmpId = inpCurr.value;
+        inpCurr.value = inpNext.value;
+        inpNext.value = tmpId;
       }
     }
 
     function delButtonClick(number) {
       let modalPhotoDivs = document.getElementsByName('modalPhotoDiv');
       let img = document.getElementById('modalImg'+number);
+      let inp = document.getElementById('modalPhotoId'+number);
       let last = modalPhotoDivs.length-1;
       while (number<last) {
         number=number+1;
         let imgNext = document.getElementById('modalImg'+number);
+        let inpNext = document.getElementById('modalPhotoId'+number);
         img.src = imgNext.src;
         img = imgNext;
+        inp.value = inpNext.value;
+        inp = inpNext;
       }
       document.getElementById('modalPhotoDiv'+last).remove();
     }
 
-    function modalPhotoAdd(src) {
+    // добавляет фото в модальном окне
+    function modalPhotoAdd(imgId, src, file) {
                 let photoDivs = document.getElementsByName('modalPhotoDiv');
                 let modalPhotoDivSize = photoDivs.length;
                 // Render thumbnail.
@@ -43,6 +64,8 @@
                 div.id = 'modalPhotoDiv'+modalPhotoDivSize;
                 div.innerHTML = ['<div class="col-11 p-0">',
                               '<img src="', src, '" alt="" name="modalImg" id="modalImg', modalPhotoDivSize, '">',
+                              '<input type="hidden" name="photos.id" id="modalPhotoId',modalPhotoDivSize,'" value="',imgId,'">',
+                              '<input type="hidden" name="photos_fileName" id="modalPhotoFileName',modalPhotoDivSize,'">',
                             '</div>',
                             '<!-- Кнопки -->',
                             '<div class="col-1 d-flex flex-column justify-content-around align-items-center">',
@@ -74,7 +97,9 @@
                                 '<path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />',
                               '</svg></button>',
                             '</div>'].join('');
+//                document.getElementById('modalPhotoFileName'+modalPhotoDivSize).setAttribute('hidden','true');
                 document.getElementById('modalPhotoDivs').insertBefore(div, null);
+                document.getElementById('modalPhotoFileName'+modalPhotoDivSize).file = file;
     }
 
     function handleFileSelectMulti(evt) {
@@ -90,14 +115,52 @@
         reader.onload = (function(theFile) {
           return function(e) {
             let src = e.target.result;
-            modalPhotoAdd(src);
+            modalPhotoAdd(0, src, theFile);
           };
         })(f);
         // Read in the image file as a data URL.
         reader.readAsDataURL(f);
       }
+      files.length = 0;
     }
+    function setFiles() {
+          let photoDivs = document.getElementsByName('modalPhotoDiv');
+          let modalPhotoDivSize = photoDivs.length;
+          let files = document.getElementById('formFileMultiple').files;
 
+          //const url = 'data:image/png;base6....';
+//          fetch(url)
+//            .then(res => res.blob())
+//            .then(blob => {
+//              const file = new File([blob], "File name",{ type: "image/png" })
+//            })
+//Base64 String -> Blob -> File.
+          //files.add()
+          // Создаем коллекцию файлов:
+          let dt = new DataTransfer();
+          for(let i = 0; i < modalPhotoDivSize; i++) {
+            // Создадим простой текстовый файл:
+            let data = document.getElementById('modalImg'+i).src;
+            let head = data.split(',');
+            if(head.length > 2) {
+                alert('Error! parts > 2 :' + head.length);
+            }
+            // separate out the mime component
+            let mimeString = head[0].split(':')[1].split(';')[0];
+            let ext = 'img';
+            if (mimeString === 'image/png') {
+                ext = 'png';
+            }
+            if (mimeString === 'image/jpeg') {
+                ext = 'jpg';
+            }
+            let file = new File([head[1]], 'tmp'+i+'.'+ext, {type: mimeString});
+            dt.items.add(file);
+          }
+          let file_list = dt.files;
+          // Вставим созданную коллекцию в реальное поле:
+          document.getElementById('formFileMultiple').files = file_list;
+    }
     function modalSaveButtonClick(){
       let photoDivs = document.getElementsByName('modalPhotoDiv');
       let modalPhotoDivSize = photoDivs.length;
@@ -117,7 +180,8 @@
 
         let div = document.createElement('div');
         div.className = 'carousel-item active';
-        div.innerHTML = ['<img src="/images/null.png" class="d-block w-100" alt="..." name="carouselImg" id="carouselImg0">'].join('');
+        div.innerHTML = ['<img src="/images/null.png" class="d-block w-100" alt="..." name="carouselImg" id="carouselImg0">',
+                         '<input type="hidden" name="carouselPhotoId" id="carouselPhotoId0" value="-1">'].join('');
         carouselInnerDiv.insertBefore(div, null);
       } else {
         for (let i = 0; i < modalPhotoDivSize; i++) {
@@ -136,19 +200,24 @@
           buttonIndicator.setAttribute('aria-label', 'нет фотографии');
           carouselIndicatorsDiv.insertBefore(buttonIndicator, null);
 
-          div.innerHTML = ['<img src="',document.getElementById('modalImg'+i).src,'" class="d-block w-100" alt="..." name="carouselImg" id="carouselImg', i, '">'].join('');
+          div.innerHTML = ['<img src="',document.getElementById('modalImg'+i).src,'" class="d-block w-100" alt="..." name="carouselImg" id="carouselImg', i, '">',
+          '<input type="hidden" name="carouselPhotoId" id="carouselPhotoId',i,'" value="', document.getElementById('modalPhotoId'+i).value,'">'].join('');
           carouselInnerDiv.insertBefore(div, null);
         }
       }
+      setFiles();
     }
 
     function modalCloseButtonClick(){
-          alert('close button click!');
         document.getElementById('modalPhotoDivs').innerHTML = "";
         let caruselImages = document.getElementsByName('carouselImg');
+        let firstPhotoId = document.getElementById('carouselPhotoId0');
         for(let i = 0; i < caruselImages.length; i++) {
-            modalPhotoAdd(caruselImages[i].src);
+            if (i>0 || firstPhotoId == null || firstPhotoId.value != '-1') {
+                 modalPhotoAdd(document.getElementById('carouselPhotoId'+i).value, caruselImages[i].src, caruselImages[i].file);
+            }
         }
+        setFiles();
     }
 
     function setFilterModel(selectMarcId, selectModelId, selectBodyId){
@@ -192,4 +261,78 @@
                 }
             }
         }
+    }
+
+    function setModel(selectMarcId, selectModelId, selectBodyId){
+        let selMarc = document.getElementById(selectMarcId+'.id');
+        let selModel = document.getElementById(selectModelId+'.id');
+        let selBody = document.getElementById(selectBodyId+'.id');
+        let optionList = selModel.getElementsByTagName('option');
+        let marcId = selMarc.value;
+        let bodyId = selBody.value;
+        for (i = 0; i < optionList.length; i++) {
+            let optional1 = optionList[i];
+            if (optional1.value>0) {
+                let marcId2 = optional1.getAttribute('marcid');
+                if ((marcId == marcId2) || (marcId == 0)){
+                    let bodyId2 = optional1.getAttribute('bodyid');
+                    if ((bodyId == bodyId2) || (bodyId == 0)) {
+                         optional1.hidden = false;
+                    } else {
+                         optional1.hidden = true;
+                    }
+                } else {
+                    optional1.hidden = true;
+                }
+            }
+        }
+        document.getElementById(selectMarcId+'.name').value = selMarc.options[selMarc.selectedIndex].text;
+        document.getElementById(selectBodyId+'.name').value = selBody.options[selBody.selectedIndex].text;
+    }
+
+    // set fields 'marc' & 'body'
+    function setMarc(selectMarcId, selectModelId, selectBodyId){
+        let selMarc = document.getElementById(selectMarcId+'.id');
+        let selModel = document.getElementById(selectModelId+'.id');
+        let selBody = document.getElementById(selectBodyId+'.id');
+        let optionList = selModel.getElementsByTagName('option');
+        let optional1 = optionList[selModel.selectedIndex];
+        if (optional1.selected) {
+            if (optional1.getAttribute('marcid') != selMarc.value) {
+                selMarc.value = optional1.getAttribute('marcid');
+                document.getElementById(selectMarcId+'.name').value = selMarc.options[selMarc.selectedIndex].text;
+            }
+            if (optional1.getAttribute('bodyid') != selBody.value) {
+                selBody.value = optional1.getAttribute('bodyid');
+                document.getElementById(selectBodyId+'.name').value = selBody.options[selBody.selectedIndex].text;
+            }
+            document.getElementById(selectModelId+'.name').value=optional1.text;
+            document.getElementById(selectModelId+'.marcId').value=optional1.getAttribute('marcid');
+            document.getElementById(selectModelId+'.bodyId').value=optional1.getAttribute('bodyid');
+        }
+    }
+
+    function setEngine(selectEngineId){
+        let selEngine = document.getElementById(selectEngineId+'.id');
+        let optional1 = selEngine.options[selEngine.selectedIndex];
+        if (optional1.selected) {
+            document.getElementById(selectEngineId+'.name').value=optional1.text;
+        }
+    }
+
+    function checkPrice() {
+        let selEngine = document.getElementById('price');
+        let cl = selEngine.className;
+        let isErr = selEngine.value === '';
+        let clErr = ' bg-danger';
+        if (cl.includes(clErr)) {
+            cl = cl.replace(clErr,'');
+        }
+        if (isErr===true) {
+            cl = cl + clErr;
+        }
+        if (cl !== selEngine.className) {
+            selEngine.className = cl;
+        }
+        document.getElementById('saveButton').disabled = isErr;
     }

@@ -2,13 +2,15 @@ package ru.job4j.cars.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class PostDto {
+public class PostDto implements Serializable {
     @EqualsAndHashCode.Include
     private int id;
 
@@ -56,8 +58,9 @@ public class PostDto {
         postDto.setPrice(
                 (int) post.getPriceHistories()
                         .stream()
-                        .sorted(Comparator.comparing(PriceHistory::getCreated))
-                        .findFirst().get().getAfter()
+                        .max(Comparator.comparing(PriceHistory::getCreated))
+                        .orElse(new PriceHistory())
+                        .getAfter()
         );
         postDto.setUser(new UserDto(post.getUser()));
         postDto.setPhotos(post.getPhotos());
