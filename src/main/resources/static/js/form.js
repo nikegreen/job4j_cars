@@ -12,11 +12,6 @@
         let tmpId = inpCurr.value;
         inpCurr.value = inpPrev.value;
         inpPrev.value = tmpId;
-//        let inpFileCurr = document.getElementById('modalPhotoFileName'+number);
-//        let inpFilePrev = document.getElementById('modalPhotoFileName'+(number-1));
-//        let file = inpFilePrev.file;
-//        inpFilePrev.file = inpFileCurr.file;
-//        inpFileCurr.file = file;
       }
     }
 
@@ -123,18 +118,11 @@
       }
       files.length = 0;
     }
+
     function setFiles() {
           let photoDivs = document.getElementsByName('modalPhotoDiv');
           let modalPhotoDivSize = photoDivs.length;
           let files = document.getElementById('formFileMultiple').files;
-
-          //const url = 'data:image/png;base6....';
-//          fetch(url)
-//            .then(res => res.blob())
-//            .then(blob => {
-//              const file = new File([blob], "File name",{ type: "image/png" })
-//            })
-//Base64 String -> Blob -> File.
           //files.add()
           // Создаем коллекцию файлов:
           let dt = new DataTransfer();
@@ -160,7 +148,13 @@
           let file_list = dt.files;
           // Вставим созданную коллекцию в реальное поле:
           document.getElementById('formFileMultiple').files = file_list;
+          checkFields();
     }
+
+    function buttonFotosClick() {
+        document.getElementById('buttonPhotoModal').click();
+    }
+
     function modalSaveButtonClick(){
       let photoDivs = document.getElementsByName('modalPhotoDiv');
       let modalPhotoDivSize = photoDivs.length;
@@ -180,7 +174,7 @@
 
         let div = document.createElement('div');
         div.className = 'carousel-item active';
-        div.innerHTML = ['<img src="/images/null.png" class="d-block w-100" alt="..." name="carouselImg" id="carouselImg0">',
+        div.innerHTML = ['<img src="/images/null.png" class="d-block w-100" alt="..." name="carouselImg" id="carouselImg0"  onclick="buttonFotosClick()">',
                          '<input type="hidden" name="carouselPhotoId" id="carouselPhotoId0" value="-1">'].join('');
         carouselInnerDiv.insertBefore(div, null);
       } else {
@@ -288,6 +282,7 @@
         }
         document.getElementById(selectMarcId+'.name').value = selMarc.options[selMarc.selectedIndex].text;
         document.getElementById(selectBodyId+'.name').value = selBody.options[selBody.selectedIndex].text;
+        checkFields();
     }
 
     // set fields 'marc' & 'body'
@@ -310,6 +305,7 @@
             document.getElementById(selectModelId+'.marcId').value=optional1.getAttribute('marcid');
             document.getElementById(selectModelId+'.bodyId').value=optional1.getAttribute('bodyid');
         }
+        checkFields();
     }
 
     function setEngine(selectEngineId){
@@ -318,21 +314,64 @@
         if (optional1.selected) {
             document.getElementById(selectEngineId+'.name').value=optional1.text;
         }
+        checkFields();
     }
 
-    function checkPrice() {
-        let selEngine = document.getElementById('price');
-        let cl = selEngine.className;
-        let isErr = selEngine.value === '';
-        let clErr = ' bg-danger';
-        if (cl.includes(clErr)) {
-            cl = cl.replace(clErr,'');
-        }
-        if (isErr===true) {
-            cl = cl + clErr;
-        }
-        if (cl !== selEngine.className) {
-            selEngine.className = cl;
-        }
-        document.getElementById('saveButton').disabled = isErr;
+    function checkFields() {
+        //check price
+        let selPrice = document.getElementById('price');
+        let isErrPrice = selPrice.value === '';
+        setupErrClass(selPrice, isErrPrice);
+        //check status
+        let selStatus = document.getElementById('status');
+        let isErrStatus = selStatus.value < 1;
+        setupErrClass(selStatus, isErrStatus);
+        //check marc
+        let selMarc = document.getElementById('car.marc.id');
+        let isErrMarc = selMarc.value < 1;
+        setupErrClass(selMarc, isErrMarc);
+        //check model
+        let selModel = document.getElementById('car.model.id');
+        let isErrModel = selModel.value < 1;
+        setupErrClass(selModel, isErrModel);
+        //check body
+        let selBody = document.getElementById('car.body.id');
+        let isErrBody = selBody.value < 1;
+        setupErrClass(selBody, isErrBody);
+        //check engine
+        let selEngine = document.getElementById('car.engine.id');
+        let isErrEngine = selEngine.value < 1;
+        setupErrClass(selEngine, isErrEngine);
+        //check photos
+        let isErrPhotos = document.getElementsByName('modalImg').length == 0;
+        document.getElementById('saveButton').disabled = isErrPrice || isErrStatus || isErrMarc || isErrModel || isErrBody || isErrEngine || isErrPhotos;
     }
+
+    function setupErrClass(sel, isErr) {
+            let cl = sel.className;
+            let clErr = ' bg-danger';
+            if (cl.includes(clErr)) {
+                cl = cl.replace(clErr,'');
+            }
+            if (isErr===true) {
+                cl = cl + clErr;
+            }
+            if (cl !== sel.className) {
+                sel.className = cl;
+            }
+    }
+/**
+ * Decode a string of base64 as text
+ *
+ * @param data The string of base64 encoded text
+ * @returns The decoded text.
+ */
+//function decodeBase64(data) {
+//    if (typeof atob === 'function') {
+//        return atob(data);
+//    } else if (typeof Buffer === 'function') {
+//        return Buffer.from(data, 'base64').toString('utf-8');
+//    } else {
+//        throw new Error('Failed to determine the platform specific decoder');
+//    }
+//}

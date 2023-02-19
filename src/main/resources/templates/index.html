@@ -191,9 +191,14 @@
                     </button>
                 </div>
                 <!-- Название машины -->
-                <div class="title" th:text="${post1.car.marc.name}+' '+${post1.car.model.name}+' цена:'+${post1.price}+'руб'"
-                     th:if="${post1!=null && post1.price!=null}">Ford Focus</div>
-                <div class="title" th:if="${post1==null}">...</div>
+                <a th:href="${user==post1.user.login?'/edit?post='+post1.id:'/view?post='+post1.id}">
+                    <div class="title" th:text="${post1.car.marc.name}+' '+${post1.car.model.name}"
+                         th:if="${post1!=null && post1.price!=null}">Ford Focus</div>
+                    <div class="title" th:text="'цена:'+${post1.price}+'руб'"
+                        th:if="${post1!=null && post1.price!=null}">цена 0 руб.</div>
+                    <div class="title" th:if="${post1==null}">...</div>
+                    <div class="title" th:if="${post1==null}">...</div>
+                </a>
             </div>
         </div>
     </div>

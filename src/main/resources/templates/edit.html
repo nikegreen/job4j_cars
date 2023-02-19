@@ -149,32 +149,74 @@
     <!-- Карточка -->
     <div class="card">
       <div class="card-header text-center text-muted">
-        <h5>Новое объявление</h5>
+        <h5>Исправить объявление</h5>
       </div>
       <div class="card-body">
         <div class="row g-3">
           <!-- Колонка с фотографией -->
           <div class="col-md-6 col-lg-8">
+            <!--                                      -->
+            <!-- Карусель (отключено автоперемещение) -->
+            <!--            <div id="carouselCarIndicators1" class="carousel slide" data-bs-touche="carousel">-->
+            <!--              <div class="carousel-indicators" id="carouselIndicators">-->
+            <!--                <button type="button" data-bs-target="#carouselCarIndicators1" data-bs-slide-to="0"-->
+            <!--                        aria-label="Slide 1" class="active" aria-current="true" th:if="${post1.photos==null || #lists.isEmpty(post1.photos)}"></button>-->
+            <!--                <button th:unless="${post1.photos==null || #lists.isEmpty(post1.photos)}" th:each="photo1, statPhoto: ${post1.photos}"-->
+            <!--                        type="button" data-bs-target="#carouselCarIndicators1" th:data-bs-slide-to="${statPhoto.index}"-->
+            <!--                        th:aria-label="${'Slide '+statPhoto.count}" th:class="${(statPhoto.first==true) ? 'active':''}" th:aria-current="${statPhoto.first}"></button>-->
+            <!--              </div>-->
+            <!--              <div class="carousel-inner" id="carousel-inner">-->
+            <!--                <div class="carousel-item active" th:if="${post1.photos==null || #lists.isEmpty(post1.photos)}">-->
+            <!--                  <img src="/images/null.png"-->
+            <!--                       class="d-block w-100" alt="..." name="carouselImg" id="carouselImg0">-->
+            <!--                  <input type="hidden" name="carouselPhotoId" id="carouselPhotoId0" value="-1">-->
+            <!--                </div>-->
+
+            <!--                <div th:class="'carousel-item '+${(statPhoto.first)?'active':''}" th:unless="${post1.photos==null || #lists.isEmpty(post1.photos)}" th:each="photo1, statPhoto: ${post1.photos}">-->
+            <!--                  <img th:src="'/images/'+${photo1.fileName}"-->
+            <!--                       class="d-block w-100" alt="..." name="carouselImg" th:id="'carouselImg'+${statPhoto.index}">-->
+            <!--                  <input type="hidden" name="carouselPhotoId" th:id="'carouselPhotoId'+${statPhoto.index}" th:value="${photo1.id}">-->
+            <!--                </div>-->
+            <!--              </div>-->
+            <!--              <button class="carousel-control-prev" type="button" data-bs-target="#carouselCarIndicators1"-->
+            <!--                      data-bs-slide="prev">-->
+            <!--                <span class="carousel-control-prev-icon" aria-hidden="true"></span>-->
+            <!--                <span class="visually-hidden">Назад</span>-->
+            <!--              </button>-->
+            <!--              <button class="carousel-control-next" type="button" data-bs-target="#carouselCarIndicators1"-->
+            <!--                      data-bs-slide="next">-->
+            <!--                <span class="carousel-control-next-icon" aria-hidden="true"></span>-->
+            <!--                <span class="visually-hidden">Вперед</span>-->
+            <!--              </button>-->
+            <!--            </div>-->
+
             <!-- Карусель (отключено автоперемещение) -->
             <div id="carouselCarIndicators1" class="carousel slide" data-bs-touche="carousel">
               <div class="carousel-indicators" id="carouselIndicators">
-                <button type="button" data-bs-target="#carouselCarIndicators1" data-bs-slide-to="0"
-                        class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button th:if="${post1.photos==null || #lists.isEmpty(post1.photos)}"
+                        type="button" data-bs-target="#carouselCarIndicators1" data-bs-slide-to="0"
+                        class="active" aria-current="true" aria-label="Slide 1">
+                </button>
+                <button th:unless="${post1.photos==null || #lists.isEmpty(post1.photos)}" th:each="photo1, statPhoto: ${post1.photos}"
+                        type="button" data-bs-target="#carouselCarIndicators1" th:data-bs-slide-to="${statPhoto.index}"
+                        th:class="${(statPhoto.first==true) ? 'active':''}" th:aria-current="${statPhoto.first}" th:aria-label="${'Slide '+statPhoto.count}">
+                </button>
               </div>
               <div class="carousel-inner" id="carousel-inner">
-                <div class="carousel-item active">
-                  <img src="/images/null.png"
-                       class="d-block w-100" alt="..." name="carouselImg" id="carouselImg0" onclick="buttonFotosClick()">
+                <div class="carousel-item active" th:if="${post1.photos==null || #lists.isEmpty(post1.photos)}">
+                  <img src="/images/null.png" class="d-block w-100" alt="..." name="carouselImg" id="carouselImg0" onclick="buttonFotosClick()">
                   <input type="hidden" name="carouselPhotoId" id="carouselPhotoId0" value="-1">
                 </div>
+                <div th:class="'carousel-item '+${(statPhoto.first)?'active':''}" th:unless="${post1.photos==null || #lists.isEmpty(post1.photos)}" th:each="photo1, statPhoto: ${post1.photos}">
+                  <img th:src="'/images/'+${photo1.fileName}" class="d-block w-100" alt="..." name="carouselImg" th:id="'carouselImg'+${statPhoto.index}">
+                  <input type="hidden" name="carouselPhotoId" th:id="'carouselPhotoId'+${statPhoto.index}" th:value="${photo1.id}">
+                </div>
               </div>
-              <button class="carousel-control-prev" type="button"
-                      data-bs-target="#carouselCarIndicators1" data-bs-slide="prev">
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselCarIndicators1" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Назад</span>
               </button>
-              <button class="carousel-control-next" type="button"
-                      data-bs-target="#carouselCarIndicators1" data-bs-slide="next">
+              <button class="carousel-control-next" type="button" data-bs-target="#carouselCarIndicators1" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Вперед</span>
               </button>
@@ -187,10 +229,10 @@
               <!-- Статус -->
               <div class="form-group row">
                 <label class="form-label col-md-4 text-muted">Статус:</label>
-                <select class="form-select col-md-8" name="status" id="status">
-                  <option value="0" disabled>Любой</option>
-                  <option value="1" selected>В наличии</option>
-                  <option value="2" disabled>Продано</option>
+                <select class="form-select col-md-8" name="status" id="status" readonly>
+                  <!--                                    <option value="0" disabled selected>Статус</option>-->
+                  <option value="1" th:selected="${statusId==1}">В наличии</option>
+                  <option value="2" th:selected="${statusId==2}">Продано</option>
                 </select>
               </div>
               <!-- Марка -->
@@ -198,82 +240,82 @@
                 <label class="form-label col-md-4 text-muted">Марка:</label>
                 <select class="form-select col-md-8" name="car.marc.id" id="car.marc.id"
                         onchange="setModel('car.marc', 'car.model', 'car.body')">
-                  <option th:if="${marcs!=null}" selected value="0">Любая марка</option>
-                  <option th:if="${marcs!=null}" th:each="marc, statMarc: ${marcs}" th:selected="${statMarc.first}"
+                  <option th:if="${marcs!=null}" hidden value="0">Любая марка</option>
+                  <option th:if="${marcs!=null}" th:each="marc, statMarc: ${marcs}" th:selected="${marc.id==post1.car.marc.id}"
                           th:value="${marc.id}" th:text="${marc.name}">Марка</option>
-<!--                     <option selected>Марка</option>-->
-<!--                     <option value="1">One</option>-->
-<!--                     <option value="2">Two</option>-->
-<!--                     <option value="3">Three</option>-->
+                  <!--                     <option selected>Марка</option>-->
+                  <!--                     <option value="1">One</option>-->
+                  <!--                     <option value="2">Two</option>-->
+                  <!--                     <option value="3">Three</option>-->
                 </select>
-                <input type="hidden" name="car.marc.name" id="car.marc.name" value="">
+                <input type="hidden" name="car.marc.name" id="car.marc.name" th:value="${post1.car.marc.name}">
               </div>
               <!-- Модель -->
               <div class="form-group row">
                 <label class="form-label col-md-4 text-muted">Модель:</label>
                 <select class="form-select col-md-8" name="car.model.id" id="car.model.id"
                         onchange="setMarc('car.marc', 'car.model', 'car.body')">
-                  <option th:if="${models!=null}" value="0" marcid="0" bodyid="0" selected disabled>Любая модель</option>
+                  <option th:if="${models!=null}" value="0" marcid="0" bodyid="0" hidden>Любая модель</option>
                   <option th:if="${models!=null}" th:each="model, statModel: ${models}"
                           th:marcid="${model.marcId}" th:bodyid="${model.bodyId}"
-                          th:value="${model.id}" th:text="${model.name}">Модель</option>
+                          th:value="${model.id}" th:text="${model.name}"
+                          th:selected="${model.id==post1.car.model.id}">Модель</option>
                   <option th:if="${models==null}" value="0" marcid="0" bodyid="0" selected disabled>нет данных</option>
                   <!--                  <option selected>Модель</option>-->
-<!--                  <option value="1">One</option>-->
-<!--                  <option value="2">Two</option>-->
-<!--                  <option value="3">Three</option>-->
+                  <!--                  <option value="1">One</option>-->
+                  <!--                  <option value="2">Two</option>-->
+                  <!--                  <option value="3">Three</option>-->
                 </select>
-                <input type="hidden" name="car.model.name" id="car.model.name" value="">
-                <input type="hidden" name="car.model.marcId" id="car.model.marcId" value="0">
-                <input type="hidden" name="car.model.bodyId" id="car.model.bodyId" value="0">
+                <input type="hidden" name="car.model.name" id="car.model.name" th:value="${post1.car.model.name}">
+                <input type="hidden" name="car.model.marcId" id="car.model.marcId" value="${post1.car.model.marcId}">
+                <input type="hidden" name="car.model.bodyId" id="car.model.bodyId" value="${post1.car.model.bodyId}">
               </div>
               <!-- Кузов -->
               <div class="form-group row">
                 <label class="form-label col-md-4 text-muted">Кузов:</label>
                 <select class="form-select col-md-8" name="car.body.id" id="car.body.id"
                         onchange="setModel('car.marc', 'car.model', 'car.body')">
-                  <option th:if="${bodies!=null}" selected value="0">Любой кузов</option>
-                  <option th:if="${bodies!=null}" th:each="body, statBody: ${bodies}" th:selected="${statBody.first}"
+                  <option th:if="${bodies!=null}" hidden value="0">Любой кузов</option>
+                  <option th:if="${bodies!=null}" th:each="body, statBody: ${bodies}" th:selected="${body.id==post1.car.bodyId}"
                           th:value="${body.id}" th:text="${body.name}">Кузов</option>
-<!--                  <option selected>Кузов</option>-->
-<!--                  <option value="1">One</option>-->
-<!--                  <option value="2">Two</option>-->
-<!--                  <option value="3">Three</option>-->
+                  <!--                  <option selected>Кузов</option>-->
+                  <!--                  <option value="1">One</option>-->
+                  <!--                  <option value="2">Two</option>-->
+                  <!--                  <option value="3">Three</option>-->
                 </select>
-                <input type="hidden" name="car.body.name" id="car.body.name" value="">
+                <input type="hidden" name="car.body.name" id="car.body.name" th:value="${post1.car.bodyId}">
               </div>
               <!-- Двигатель -->
               <div class="form-group row">
                 <label class="form-label col-md-4 text-muted">Двигатель:</label>
                 <select class="form-select col-md-8" name="car.engine.id" id="car.engine.id" onchange="setEngine('car.engine')">
-                  <option th:if="${engines!=null}" selected disabled value="0">Любой двигатель</option>
-                  <option th:if="${engines!=null}" th:each="engine, statEngine: ${engines}" th:selected="${statEngine.first}"
+                  <option th:if="${engines!=null}" hidden value="0">Любой двигатель</option>
+                  <option th:if="${engines!=null}" th:each="engine, statEngine: ${engines}" th:selected="${engine.id==post1.car.engine.id}"
                           th:value="${engine.id}" th:text="${engine.name}">Двигатель</option>
-<!--                  <option selected>Двигатель</option>-->
-<!--                  <option value="1">One</option>-->
-<!--                  <option value="2">Two</option>-->
-<!--                  <option value="3">Three</option>-->
+                  <!--                  <option selected>Двигатель</option>-->
+                  <!--                  <option value="1">One</option>-->
+                  <!--                  <option value="2">Two</option>-->
+                  <!--                  <option value="3">Three</option>-->
                 </select>
-                <input type="hidden" name="car.engine.name" id="car.engine.name">
+                <input type="hidden" name="car.engine.name" id="car.engine.name" th:value="${post1.car.engine.name}">
               </div>
               <!-- Цена -->
               <div class="form-group row">
                 <label class="form-label col-sm-4 col-md-4 text-muted">Цена:</label>
-                <input type="number" class="form-input col-sm-4 col-md-8" name="price" id="price" value="0" oninput="checkFields()">
+                <input type="number" class="form-input col-sm-4 col-md-8" name="price" id="price" th:value="${post1.price}" oninput="checkPrice()">
               </div>
               <!-- Кнопка Фотографии -->
               <div class="form-btn row m-2">
                 <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
                         data-bs-target="#photoModal" id="buttonPhotoModal">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-fill me-2" viewBox="0 0 16 16">
-                  <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
-                  <path d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2zm.5 2a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z" />
+                    <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
+                    <path d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2zm.5 2a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z" />
                   </svg>Фотографии
                 </button>
               </div>
               <!-- Modal -->
-              <div class="modal fade" id="photoModal" tabindex="-1" aria-labelledby="photoModalLabel"
-                   aria-hidden="true">
+              <div class="modal fade" id="photoModal" tabindex="-1" aria-labelledby="photoModalLabel" aria-hidden="true">
                 <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
                   <div class="modal-content">
                     <!-- modal-header -->
@@ -284,76 +326,33 @@
                         <label for="formFileMultiple" class="col-sm-3 col-form-label">
                           Фотки:
                         </label>
-<!-- input files ----------------------------------------------------------------------   -->
+                        <!-- input files ----------------------------------------------------------------------   -->
                         <input class="form-control col-9" type="file" name="files" id="formFileMultiple"
                                multiple  ref="file" accept="image/*">
-<!-- input files ----------------------------------------------------------------------   -->
+                        <!-- input files ----------------------------------------------------------------------   -->
                       </div>
                       <!-- Кнопка Крестик (закрыть окно) -->
                       <button type="button" class="btn-close" data-bs-dismiss="modal"
                               aria-label="Close"></button>
                     </div>
 
-
                     <!-- modal-body -->
                     <div class="modal-body" id="modalPhotoDivs">
-                      <!-- Фото №1 -->
-<!--                      <div class="row mb-1" name="modalPhotoDiv" id="modalPhotoDiv0">-->
-<!--                        <div class="col-11 p-0">-->
-<!--                          <img src="https://avatars.mds.yandex.net/get-autoru-vos/2074421/91c2cd54adb2cbf0ec0304457545950c/1200x900n"-->
-<!--                               alt="" name="modalImg" id="modalImg0">-->
-<!--                        </div>-->
-<!--                        &lt;!&ndash; Кнопки &ndash;&gt;-->
-<!--                        <div class="col-1 d-flex flex-column justify-content-around align-items-center">-->
-<!--                          &lt;!&ndash; Стрелка вверх &ndash;&gt;-->
-<!--                          <button type="button"-->
-<!--                                  class="btn btm-sm btn-outline-secondar"><svg-->
-<!--                                  xmlns="http://www.w3.org/2000/svg" width="16"-->
-<!--                                  height="16" fill="currentColor" class="bi bi-caret-up"-->
-<!--                                  viewBox="0 0 16 16"-->
-<!--                                  id="modalUpButton0"-->
-<!--                                  onclick="upButtonClick(0)">-->
-<!--                            <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />-->
-<!--                          </svg></button>-->
-<!--                          &lt;!&ndash; Крестик (удалить фото) &ndash;&gt;-->
-<!--                          <button type="button"-->
-<!--                                  class="btn btm-sm btn-outline-secondar"><svg-->
-<!--                                  xmlns="http://www.w3.org/2000/svg" width="16"-->
-<!--                                  height="16" fill="currentColor" class="bi bi-x-lg"-->
-<!--                                  viewBox="0 0 16 16"-->
-<!--                                  onclick="delButtonClick(0)">-->
-<!--                            <path-->
-<!--                                    d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />-->
-<!--                          </svg></button>-->
-<!--                          &lt;!&ndash; Стрелка вниз &ndash;&gt;-->
-<!--                          <button type="button"-->
-<!--                                  class="btn btm-sm btn-outline-secondar"><svg-->
-<!--                                  xmlns="http://www.w3.org/2000/svg" width="16"-->
-<!--                                  height="16" fill="currentColor" class="bi bi-caret-down"-->
-<!--                                  viewBox="0 0 16 16"-->
-<!--                                  id="modalDownButton0"-->
-<!--                                  onclick="downButtonClick(0)">-->
-<!--                            <path-->
-<!--                                    d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />-->
-<!--                          </svg></button>-->
-<!--                        </div>-->
-<!--                      </div>-->
-                      <!-- Фото №2 -->
-                      <!-- Фото №3 -->
+                      <!-- здесь js помещает фото из крусели -->
                     </div>
                     <!-- modal-footer -->
                     <!-- Кнопка Закрыть -->
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="modalCloseButton">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg me-1" viewBox="0 0 16 16">
-                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+                          <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
                         </svg>Закрыть
                       </button>
                       <!-- Кнопка Сохранить -->
                       <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="modalSaveButton">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-all me-1" viewBox="0 0 16 16">
-                        <path d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z" />
-                        <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
+                          <path d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z" />
+                          <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
                         </svg>Сохранить
                       </button>
                     </div>
@@ -366,7 +365,7 @@
                         xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                         fill="currentColor" class="bi bi-x-lg me-1" viewBox="0 0 16 16">
                   <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
-                  </svg>Отмена
+                </svg>Отмена
                 </button>
               </div>
               <!-- Кнопка Сохранить -->
@@ -374,8 +373,8 @@
                 <button type="submit" class="btn btn-primary" id="saveButton">
                   <svg  xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                         fill="currentColor" class="bi bi-check2-all me-1" viewBox="0 0 16 16">
-                  <path d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z" />
-                  <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
+                    <path d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z" />
+                    <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
                   </svg>Сохранить
                 </button>
               </div>
@@ -428,8 +427,8 @@
 </footer>
 
 <!-- Скрипт! -->
-  <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script>
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script>
     document.getElementById('formFileMultiple').addEventListener('change', handleFileSelectMulti, false);
     document.getElementById('modalSaveButton').addEventListener('click', modalSaveButtonClick, false);
     document.getElementById('modalCloseButton').addEventListener('click', modalCloseButtonClick, false);
