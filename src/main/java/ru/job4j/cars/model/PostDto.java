@@ -2,29 +2,25 @@ package ru.job4j.cars.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
+import org.springframework.format.annotation.DateTimeFormat;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class PostDto implements Serializable {
+    final static DateTimeFormatter CUSTOM_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     @EqualsAndHashCode.Include
     private int id;
-
     private String text;
-    private LocalDateTime created;
-
+    private String created;
     private UserDto user;
-
     private int price;
-
     private Car car;
-
     private List<Photo> photos;
-
     private int statusId;
 
     @Override
@@ -41,6 +37,11 @@ public class PostDto implements Serializable {
                 + '}';
     }
 
+
+    public static LocalDateTime getCreate(PostDto postDto) {
+        return LocalDateTime.parse(postDto.getCreated(), CUSTOM_FORMATTER);
+    }
+
     /**
      * Конвертация типа Post в PostDto
      * @param post тип Post
@@ -53,7 +54,7 @@ public class PostDto implements Serializable {
         PostDto postDto = new PostDto();
         postDto.setId(post.getId());
         postDto.setText(post.getText());
-        postDto.setCreated(post.getCreated());
+        postDto.setCreated(post.getCreated().format(CUSTOM_FORMATTER));
         postDto.setCar(post.getCar());
         PriceHistory priceHistory = post.getPriceHistories()
                 .stream()

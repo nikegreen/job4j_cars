@@ -200,10 +200,7 @@
                             <div class="form-group row">
                                 <label class="form-label col-md-4 text-muted">Опубликовано:</label>
                                 <input type="text" class="form-input col-sm-4 col-md-8" name="created" id="created"
-                                       th:value="${#temporals.format(post1.created,'dd MMM yyyy HH:mm')}" readonly>
-<!--                                th:value="${#calendars.format(post1.created, 'dd/MMM/yyyy HH:mm')}">-->
-<!--                                       pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}" required>-->
-<!-- ="${post1.created}"                               -->
+                                       th:value="${post1.created}" readonly>
                             </div>
                             <!-- Статус -->
                             <div class="form-group row">
