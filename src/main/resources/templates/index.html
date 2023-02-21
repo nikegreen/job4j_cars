@@ -158,9 +158,11 @@
     <div class="container-fluid">
         <div class="row">
             <!-- post Карусель -->
-            <div class="col-sm-12 col-md-6 col-lg-3" th:each="post1, statPost: ${posts}">
-                <!-- Карусель -->
-                <div th:id="'carouselCarIndicators'+${statPost.count}" class="carousel slide" data-bs-touche="carousel">
+            <div class="col-sm-12 col-md-6 col-lg-3 p-2" th:each="post1, statPost: ${posts}">
+              <div class="shadow">
+                <a class="text-muted text-decoration-none" th:href="${user==post1.user.login?'/edit?post='+post1.id:'/view?post='+post1.id}">
+                    <!-- Карусель -->
+                    <div th:id="'carouselCarIndicators'+${statPost.count}" class="carousel slide" data-bs-touche="carousel">
                     <div class="carousel-indicators">
                         <button type="button" th:data-bs-target="'#carouselCarIndicators'+${statPost.count}" data-bs-slide-to="0"
                                 aria-label="Slide 1" class="active" aria-current="true" th:if="${post1.photos==null || #lists.isEmpty(post1.photos)}"></button>
@@ -190,15 +192,16 @@
                         <span class="visually-hidden">Вперед</span>
                     </button>
                 </div>
-                <!-- Название машины -->
-                <a th:href="${user==post1.user.login?'/edit?post='+post1.id:'/view?post='+post1.id}">
-                    <div class="title" th:text="${post1.car.marc.name}+' '+${post1.car.model.name}"
-                         th:if="${post1!=null && post1.price!=null}">Ford Focus</div>
-                    <div class="title" th:text="'цена:'+${post1.price}+'руб'"
-                        th:if="${post1!=null && post1.price!=null}">цена 0 руб.</div>
-                    <div class="title" th:if="${post1==null}">...</div>
+                    <!-- Название машины -->
+                    <div class="title h5 mb-0" th:text="${post1.car.marc.name}+' '+${post1.car.model.name}"
+                         th:if="${post1!=null && post1.price!=null}"><b>Ford Focus</b></div>
+                    <div class="title" th:if="${post1!=null && post1.price!=null}">
+                        цена:<span class="h6 mb-0" th:text="' '+${post1.price}"></span>руб.
+                    </div>
+                    <div class="title h5 mb-0" th:if="${post1==null}">...</div>
                     <div class="title" th:if="${post1==null}">...</div>
                 </a>
+              </div>
             </div>
         </div>
     </div>

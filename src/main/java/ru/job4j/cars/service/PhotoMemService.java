@@ -3,18 +3,14 @@ package ru.job4j.cars.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.job4j.cars.model.Photo;
-import ru.job4j.cars.model.Post;
+import ru.job4j.cars.model.repository.PhotoMemRepository;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @RequiredArgsConstructor
 public class PhotoMemService implements PhotoAbstractService {
-    private final PostMemService posts;
-    private final Map<Integer, Photo> photoNoOwner = new ConcurrentHashMap<>();
-    private final AtomicInteger count = new AtomicInteger();
+    private final PhotoMemRepository photos;
 
     /**
      * Сохранить в базе фотографию.
@@ -23,35 +19,8 @@ public class PhotoMemService implements PhotoAbstractService {
      */
     @Override
     public Photo create(Photo photo) {
-        if (photo == null) {
-            return null;
-        }
-        photo.setId(count.incrementAndGet());
-        return insert(photo);
+        return photos.create(photo);
     }
-
-    /**
-     * вставить фото без проверки наличия идентификатора в хранилище
-     * @param photo фотография
-     * @return фотография
-     */
-    private Photo insert(Photo photo) {
-        int postId = 0;
-        if (photo.getPost() != null) {
-            postId = photo.getPost().getId();
-        }
-        if (postId > 0)  {
-            posts.findById(postId).ifPresent(post -> {
-                List<Photo> ps = new  ArrayList<>(post.getPhotos());
-                ps.add(photo);
-                post.setPhotos(ps);
-            });
-        } else {
-            photoNoOwner.put(photo.getId(), photo);
-        }
-        return photo;
-    }
-
 
     /**
      * Обновить в базе фотографию.
@@ -59,26 +28,7 @@ public class PhotoMemService implements PhotoAbstractService {
      */
     @Override
     public void update(Photo photo) {
-        if (photo.getId() > 0) {
-            findById(photo.getId()).ifPresent(
-                    photo1 -> {
-                        if (photo != photo1
-                         || ((photo.getName() != photo1.getName()
-                                || photo.getName() != null
-                                && !photo.getName().equals(photo1.getName()))
-                         ||  (photo.getFileName() != photo1.getFileName()
-                                || photo.getFileName() != null
-                                && !photo.getFileName().equals(photo1.getFileName()))
-                         ||  (photo.getPost() != photo1.getPost()
-                                || photo.getPost() != null
-                                && !photo.getPost().equals(photo1.getPost()))
-                            )) {
-                             delete(photo1.getId());
-                             insert(photo);
-                        }
-                    }
-            );
-        }
+        photos.update(photo);
     }
 
     /**
@@ -87,17 +37,7 @@ public class PhotoMemService implements PhotoAbstractService {
      */
     @Override
     public void delete(int id) {
-        findById(id).ifPresent(
-                photo -> {
-                    Post post = photo.getPost();
-                    if (post != null && post.getId() > 0) {
-                        post = posts.findById(post.getId()).orElse(post);
-                        post.getPhotos().removeIf(photo1 -> photo1.getId() == id);
-                    } else {
-                        photoNoOwner.remove(id);
-                    }
-                }
-        );
+        photos.delete(id);
     }
 
     /**
@@ -106,10 +46,7 @@ public class PhotoMemService implements PhotoAbstractService {
      */
     @Override
     public List<Photo> findAllOrderById() {
-        List<Photo> photoList = new ArrayList<>(photoNoOwner.values());
-        posts.findAllOrderById().forEach(post -> photoList.addAll(post.getPhotos()));
-        photoList.sort(Comparator.comparing(Photo::getId));
-        return photoList;
+        return photos.findAllOrderById();
     }
 
     /**
@@ -119,12 +56,7 @@ public class PhotoMemService implements PhotoAbstractService {
      */
     @Override
     public List<Photo> findAllWherePost(int postId) {
-        if (postId > 0) {
-            Post post = new Post();
-            post.setPhotos(List.of());
-            return posts.findById(postId).orElse(post).getPhotos();
-        }
-        return photoNoOwner.values().stream().toList();
+        return photos.findAllWherePost(postId);
     }
 
     /**
@@ -133,6 +65,6 @@ public class PhotoMemService implements PhotoAbstractService {
      */
     @Override
     public Optional<Photo> findById(int id) {
-        return findAllOrderById().stream().filter(photo -> photo.getId() == id).findFirst();
+        return photos.findById(id);
     }
 }

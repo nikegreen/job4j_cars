@@ -8,12 +8,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import ru.job4j.cars.config.LoadConfig;
 import ru.job4j.cars.model.*;
 import ru.job4j.cars.service.*;
 import ru.job4j.cars.util.ErrorPage;
 import ru.job4j.cars.util.PhotoUtil;
 
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -21,7 +23,6 @@ import java.util.*;
 @Controller
 @RequiredArgsConstructor
 public class PostController {
-    private final PhotoUtil photoUtil;
     private final PriceHistoryMemService histories;
     private final PhotoMemService photos;
     private final UserMemService users;
@@ -30,7 +31,7 @@ public class PostController {
     private final CarModelMemService models;
     private final CarBodyMemService bodies;
     private final EngineMemService engines;
-    //private final long imageFileSizeMax = Integer.MAX_VALUE;
+    private final PhotoUtil photoUtil;
 
     @GetMapping("/create")
     String createPage(Model model,
@@ -61,13 +62,18 @@ public class PostController {
         }
         User user = users.findByLogin((String) session.getAttribute("user"))
                 .orElse(users.findByLogin("Гость").orElse(null));
-        postDto.setText("");
+        if (postDto.getText() == null) {
+            postDto.setText("");
+        }
         postDto.getCar().setName("");
         Driver driver = new Driver();
         driver.setUser(user);
         driver.setName(user.getLogin());
         postDto.getCar().setOwners(Set.of(driver));
         postDto.getCar().setBodyId(postDto.getCar().getModel().getBodyId());
+        postDto.getCar().setMarc(
+                marcs.findById(postDto.getCar().getModel().getMarcId()).orElse(null)
+        );
         Post post = new Post();
         post.setUser(user);
         post.setCreated(LocalDateTime.now());
@@ -99,7 +105,7 @@ public class PostController {
                     "/index"
             );
         }
-        String errorMessage = photoUtil.SavePhotosFromPage(model, ids, files, post, photos);
+        String errorMessage = photoUtil.SavePhotosFromPage(model, ids, files, post);
         if (!"".equals(errorMessage)) {
             return ErrorPage.error(
                     model, "Объявление создано! Но не сохранены Фотографии.<br>"
@@ -119,9 +125,18 @@ public class PostController {
         model.addAttribute("bodies", bodies.findAll());
         model.addAttribute("engines", engines.findAllOrderById());
         model.addAttribute("user", session.getAttribute("user"));
-        model.addAttribute("post1", PostDto.fromPost(posts.findById(postId).orElse(null)));
+        Post post = posts.findById(postId).orElse(null);
+        model.addAttribute("post1", PostDto.fromPost(post));
+        model.addAttribute("histories", post!=null?post.getPriceHistories():List.of());
         return "view";
     }
+
+    @PostMapping("/view")
+    String view() {
+
+        return "redirect:/index";
+    }
+
 
     @GetMapping("/edit")
     String editPage(
@@ -135,5 +150,115 @@ public class PostController {
         model.addAttribute("user", session.getAttribute("user"));
         model.addAttribute("post1", PostDto.fromPost(posts.findById(postId).orElse(null)));
         return "edit";
+    }
+
+    @PostMapping("/edit")
+    String edit(@ModelAttribute("postDto") PostDto postDto,
+                Model model,
+                HttpSession session,
+                @RequestParam("photos.id") int[] ids,
+                @RequestParam("files") MultipartFile[] files
+    ) throws IOException {
+
+        if (session.getAttribute("user") == null || session.getAttribute("user").equals("Гость")) {
+            return ErrorPage.error(
+                    model, "Объявление не создано! Авторизуйтесь.", "/login");
+        }
+        if (postDto == null) {
+            return ErrorPage.error(
+                    model, "Объявление не создано! Нет получена информация.", "/index");
+        }
+        User user = users.findByLogin((String) session.getAttribute("user"))
+                .orElse(users.findByLogin("Гость").orElse(null));
+        if (postDto.getText() == null) {
+            postDto.setText("");
+        }
+//        postDto.getCar().setName("");
+//        Driver driver = new Driver();
+//        driver.setUser(user);
+//        driver.setName(user.getLogin());
+//        postDto.getCar().setOwners(Set.of(driver));
+//        postDto.getCar().setBodyId(postDto.getCar().getModel().getBodyId());
+//        postDto.getCar().setMarc(
+//                marcs.findById(postDto.getCar().getModel().getMarcId()).orElse(null)
+//        );
+        Post post = posts.findById(postDto.getId()).orElse(new Post());
+        if (post == null || post.getId() == 0) {
+            return ErrorPage.error(
+                    model,
+                    "Объявление не обновлено! Не найдено объявления с id="
+                            + postDto.getId() + "<br>",
+                    "/index"
+            );
+        }
+        PostDto oldPostDto = PostDto.fromPost(post);
+//        post.setUser(user);
+//        post.setCreated(LocalDateTime.now());
+//        post.setCar(postDto.getCar());
+//        post.setPriceHistories(List.of());
+//        post.setParticipates(List.of());
+        post.setText(postDto.getText());
+//        post.setPhotos(List.of());
+        posts.update(post); // or find
+        if (post == null || post.getId() == 0) {
+            return ErrorPage.error(
+                    model,
+                    "Объявление не обновлено!",
+                    "/index"
+            );
+        }
+        String errorMessage = "";
+        if (postDto.getPrice() != oldPostDto.getPrice()) {
+            PriceHistory priceHistory = new PriceHistory(
+                    0,
+                    oldPostDto.getPrice(),
+                    postDto.getPrice(),
+                    LocalDateTime.now(),
+                    post.getId()
+            );
+            PriceHistory priceHistory1 = histories.create(priceHistory);
+            if (priceHistory1 == null) {
+                errorMessage += "Не сохранено изменение цены.<br>";
+            }
+        }
+        if (postDto.getStatusId() != oldPostDto.getStatusId()) {
+            PriceHistory priceHistory = null;
+            if (postDto.getStatusId() == 2) {
+                priceHistory = new PriceHistory(
+                        0,
+                        postDto.getPrice(),
+                        postDto.getPrice(),
+                        LocalDateTime.now(),
+                        post.getId()
+                );
+            } else {
+                priceHistory = new PriceHistory(
+                        0,
+                        0,
+                        postDto.getPrice(),
+                        LocalDateTime.now(),
+                        post.getId()
+                );
+            }
+            priceHistory = histories.create(priceHistory);
+            if (priceHistory == null) {
+                    errorMessage += "Объявление создано! Но не сохранена цена.<br>";
+            }
+        }
+        List<Photo> photoList = photos.findAllWherePost(post.getId());
+        List<Integer> idList =  Arrays.stream(ids).boxed().toList();
+        photoList.forEach(photo -> {
+                    if (!idList.contains(photo.getId())) {
+                        photoUtil.delete(photo);
+                    }
+                });
+        String errorMessage1 = photoUtil.SavePhotosFromPage(model, ids, files, post);
+        errorMessage += errorMessage1;
+        if (!"".equals(errorMessage)) {
+            return ErrorPage.error(
+                    model, "Объявление создано! Но не сохранены Фотографии.<br>"
+                            + System.lineSeparator() + errorMessage, "/index");
+        }
+        return "redirect:/index";
     }
 }

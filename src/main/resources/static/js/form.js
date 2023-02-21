@@ -344,7 +344,11 @@
         setupErrClass(selEngine, isErrEngine);
         //check photos
         let isErrPhotos = document.getElementsByName('modalImg').length == 0;
-        document.getElementById('saveButton').disabled = isErrPrice || isErrStatus || isErrMarc || isErrModel || isErrBody || isErrEngine || isErrPhotos;
+        //check text
+        let selText = document.getElementById('text');
+        let isErrText = selText.value === '';
+        setupErrClass(selText, isErrText);
+        document.getElementById('saveButton').disabled = isErrPrice || isErrStatus || isErrMarc || isErrModel || isErrBody || isErrEngine || isErrPhotos || isErrText;
     }
 
     function setupErrClass(sel, isErr) {

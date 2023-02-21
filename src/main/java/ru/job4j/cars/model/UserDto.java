@@ -1,15 +1,15 @@
 package ru.job4j.cars.model;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class UserDto {
-    @Getter
-    private final int id;
+    private int id;
 
-    @Getter
-    private final String login;
+    private String login;
 
     public UserDto(User user) {
         id = user.getId();

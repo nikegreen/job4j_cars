@@ -55,13 +55,14 @@ public class PostDto implements Serializable {
         postDto.setText(post.getText());
         postDto.setCreated(post.getCreated());
         postDto.setCar(post.getCar());
-        postDto.setPrice(
-                (int) post.getPriceHistories()
-                        .stream()
-                        .max(Comparator.comparing(PriceHistory::getCreated))
-                        .orElse(new PriceHistory())
-                        .getAfter()
-        );
+        PriceHistory priceHistory = post.getPriceHistories()
+                .stream()
+                .max(Comparator.comparing(PriceHistory::getCreated))
+                .orElse(new PriceHistory());
+        postDto.setPrice((int) priceHistory.getAfter());
+        postDto.setStatusId(
+                priceHistory.getAfter() > 0 &&  priceHistory.getAfter() == priceHistory.getBefore()
+                        ? 2 : 1);
         postDto.setUser(new UserDto(post.getUser()));
         postDto.setPhotos(post.getPhotos());
         return postDto;

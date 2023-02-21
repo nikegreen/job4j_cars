@@ -155,41 +155,6 @@
         <div class="row g-3">
           <!-- Колонка с фотографией -->
           <div class="col-md-6 col-lg-8">
-            <!--                                      -->
-            <!-- Карусель (отключено автоперемещение) -->
-            <!--            <div id="carouselCarIndicators1" class="carousel slide" data-bs-touche="carousel">-->
-            <!--              <div class="carousel-indicators" id="carouselIndicators">-->
-            <!--                <button type="button" data-bs-target="#carouselCarIndicators1" data-bs-slide-to="0"-->
-            <!--                        aria-label="Slide 1" class="active" aria-current="true" th:if="${post1.photos==null || #lists.isEmpty(post1.photos)}"></button>-->
-            <!--                <button th:unless="${post1.photos==null || #lists.isEmpty(post1.photos)}" th:each="photo1, statPhoto: ${post1.photos}"-->
-            <!--                        type="button" data-bs-target="#carouselCarIndicators1" th:data-bs-slide-to="${statPhoto.index}"-->
-            <!--                        th:aria-label="${'Slide '+statPhoto.count}" th:class="${(statPhoto.first==true) ? 'active':''}" th:aria-current="${statPhoto.first}"></button>-->
-            <!--              </div>-->
-            <!--              <div class="carousel-inner" id="carousel-inner">-->
-            <!--                <div class="carousel-item active" th:if="${post1.photos==null || #lists.isEmpty(post1.photos)}">-->
-            <!--                  <img src="/images/null.png"-->
-            <!--                       class="d-block w-100" alt="..." name="carouselImg" id="carouselImg0">-->
-            <!--                  <input type="hidden" name="carouselPhotoId" id="carouselPhotoId0" value="-1">-->
-            <!--                </div>-->
-
-            <!--                <div th:class="'carousel-item '+${(statPhoto.first)?'active':''}" th:unless="${post1.photos==null || #lists.isEmpty(post1.photos)}" th:each="photo1, statPhoto: ${post1.photos}">-->
-            <!--                  <img th:src="'/images/'+${photo1.fileName}"-->
-            <!--                       class="d-block w-100" alt="..." name="carouselImg" th:id="'carouselImg'+${statPhoto.index}">-->
-            <!--                  <input type="hidden" name="carouselPhotoId" th:id="'carouselPhotoId'+${statPhoto.index}" th:value="${photo1.id}">-->
-            <!--                </div>-->
-            <!--              </div>-->
-            <!--              <button class="carousel-control-prev" type="button" data-bs-target="#carouselCarIndicators1"-->
-            <!--                      data-bs-slide="prev">-->
-            <!--                <span class="carousel-control-prev-icon" aria-hidden="true"></span>-->
-            <!--                <span class="visually-hidden">Назад</span>-->
-            <!--              </button>-->
-            <!--              <button class="carousel-control-next" type="button" data-bs-target="#carouselCarIndicators1"-->
-            <!--                      data-bs-slide="next">-->
-            <!--                <span class="carousel-control-next-icon" aria-hidden="true"></span>-->
-            <!--                <span class="visually-hidden">Вперед</span>-->
-            <!--              </button>-->
-            <!--            </div>-->
-
             <!-- Карусель (отключено автоперемещение) -->
             <div id="carouselCarIndicators1" class="carousel slide" data-bs-touche="carousel">
               <div class="carousel-indicators" id="carouselIndicators">
@@ -225,21 +190,29 @@
           <!-- Колонка с описанием товара-->
           <div class="col-md-6 col-lg-4">
             <!-- Form -->
-            <form class="form" action="create" method="post" enctype="multipart/form-data" modelAttribute="postDto">
+            <form class="form" action="edit" method="post" enctype="multipart/form-data" modelAttribute="postDto">
+              <input type="hidden" name="id" th:value="${post1.id}">
+<!--              <input type="hidden" name="user.id" th:value="${post1.user.id}">-->
+<!--              <input type="hidden" name="user.login" th:value="${post1.user.login}">-->
+              <!-- дата и время создания -->
+              <div class="form-group row">
+                <label class="form-label col-md-4 text-muted">Опубликовано:</label>
+                <input type="text" class="form-input col-sm-4 col-md-8" name="post1.created" id="created" th:value="${post1.created}" readonly>
+              </div>
               <!-- Статус -->
               <div class="form-group row">
                 <label class="form-label col-md-4 text-muted">Статус:</label>
-                <select class="form-select col-md-8" name="status" id="status" readonly>
+                <select class="form-select col-md-8" name="statusId" id="status">
                   <!--                                    <option value="0" disabled selected>Статус</option>-->
-                  <option value="1" th:selected="${statusId==1}">В наличии</option>
-                  <option value="2" th:selected="${statusId==2}">Продано</option>
+                  <option value="1" th:selected="${post1.statusId==1}">В наличии</option>
+                  <option value="2" th:selected="${post1.statusId==2}">Продано</option>
                 </select>
               </div>
               <!-- Марка -->
               <div class="form-group row">
                 <label class="form-label col-md-4 text-muted">Марка:</label>
                 <select class="form-select col-md-8" name="car.marc.id" id="car.marc.id"
-                        onchange="setModel('car.marc', 'car.model', 'car.body')">
+                        onchange="setModel('car.marc', 'car.model', 'car.body')" readonly>
                   <option th:if="${marcs!=null}" hidden value="0">Любая марка</option>
                   <option th:if="${marcs!=null}" th:each="marc, statMarc: ${marcs}" th:selected="${marc.id==post1.car.marc.id}"
                           th:value="${marc.id}" th:text="${marc.name}">Марка</option>
@@ -254,7 +227,7 @@
               <div class="form-group row">
                 <label class="form-label col-md-4 text-muted">Модель:</label>
                 <select class="form-select col-md-8" name="car.model.id" id="car.model.id"
-                        onchange="setMarc('car.marc', 'car.model', 'car.body')">
+                        onchange="setMarc('car.marc', 'car.model', 'car.body')" readonly>
                   <option th:if="${models!=null}" value="0" marcid="0" bodyid="0" hidden>Любая модель</option>
                   <option th:if="${models!=null}" th:each="model, statModel: ${models}"
                           th:marcid="${model.marcId}" th:bodyid="${model.bodyId}"
@@ -274,7 +247,7 @@
               <div class="form-group row">
                 <label class="form-label col-md-4 text-muted">Кузов:</label>
                 <select class="form-select col-md-8" name="car.body.id" id="car.body.id"
-                        onchange="setModel('car.marc', 'car.model', 'car.body')">
+                        onchange="setModel('car.marc', 'car.model', 'car.body')" readonly>
                   <option th:if="${bodies!=null}" hidden value="0">Любой кузов</option>
                   <option th:if="${bodies!=null}" th:each="body, statBody: ${bodies}" th:selected="${body.id==post1.car.bodyId}"
                           th:value="${body.id}" th:text="${body.name}">Кузов</option>
@@ -288,7 +261,7 @@
               <!-- Двигатель -->
               <div class="form-group row">
                 <label class="form-label col-md-4 text-muted">Двигатель:</label>
-                <select class="form-select col-md-8" name="car.engine.id" id="car.engine.id" onchange="setEngine('car.engine')">
+                <select class="form-select col-md-8" name="car.engine.id" id="car.engine.id" onchange="setEngine('car.engine')" readonly>
                   <option th:if="${engines!=null}" hidden value="0">Любой двигатель</option>
                   <option th:if="${engines!=null}" th:each="engine, statEngine: ${engines}" th:selected="${engine.id==post1.car.engine.id}"
                           th:value="${engine.id}" th:text="${engine.name}">Двигатель</option>
@@ -303,6 +276,11 @@
               <div class="form-group row">
                 <label class="form-label col-sm-4 col-md-4 text-muted">Цена:</label>
                 <input type="number" class="form-input col-sm-4 col-md-8" name="price" id="price" th:value="${post1.price}" oninput="checkPrice()">
+              </div>
+              <!-- Описание - текст -->
+              <div class="form-group row">
+                <label class="form-label col-md-4 text-muted">Описание:</label>
+                <input type="text" class="form-input col-sm-4 col-md-8" name="text" id="text" th:value="${post1.text}" oninput="checkFields()">
               </div>
               <!-- Кнопка Фотографии -->
               <div class="form-btn row m-2">
@@ -361,8 +339,8 @@
               </div>
               <!-- Кпопка Отмена -->
               <div class="form-btn row m-2">
-                <button type="button" class="btn btn-primary"><svg
-                        xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                <button type="submit" class="btn btn-primary" formmethod="get" formaction="/index">
+                  <svg  xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                         fill="currentColor" class="bi bi-x-lg me-1" viewBox="0 0 16 16">
                   <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
                 </svg>Отмена

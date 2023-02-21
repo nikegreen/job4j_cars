@@ -9,6 +9,7 @@ import ru.job4j.cars.config.LoadConfig;
 import ru.job4j.cars.model.Photo;
 import ru.job4j.cars.model.Post;
 import ru.job4j.cars.service.PhotoAbstractService;
+import ru.job4j.cars.service.PhotoMemService;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,12 +23,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PhotoUtil {
     private final LoadConfig loadConfig;
+    private final PhotoMemService photos;
 
     public String SavePhotosFromPage(@NotNull Model model,
                                       @NotNull int[] ids,
                                       @NotNull MultipartFile[] files,
-                                      @NotNull Post post,
-                                      PhotoAbstractService photos) throws IOException {
+                                      @NotNull Post post
+                                      ) throws IOException {
         List<Photo> photoList = new ArrayList<>();
         String err = "";
         int count = 0;
@@ -86,5 +88,15 @@ public class PhotoUtil {
             }
         }
         return photo;
+    }
+
+    public void delete(Photo photo) {
+        try {
+            File outputFile = new File(loadConfig.getImagesPath() + photo.getFileName());
+            outputFile.delete();
+            photos.delete(photo.getId());
+            photo = null;
+        } catch (Exception e) {
+        }
     }
 }

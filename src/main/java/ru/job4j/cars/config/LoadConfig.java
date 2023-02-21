@@ -1,28 +1,14 @@
 package ru.job4j.cars.config;
 
-import com.sun.istack.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.stereotype.Component;
-import org.springframework.ui.Model;
-import org.springframework.web.multipart.MultipartFile;
-import ru.job4j.cars.model.Photo;
-import ru.job4j.cars.model.Post;
-import ru.job4j.cars.service.PhotoAbstractService;
-import ru.job4j.cars.util.ErrorPage;
-
-import javax.servlet.http.HttpSession;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
 
-@Component
+@Configuration
 @RequiredArgsConstructor
 public class LoadConfig {
     private final ResourceLoader resourceLoader;

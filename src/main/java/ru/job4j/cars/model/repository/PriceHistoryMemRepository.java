@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.Post;
 import ru.job4j.cars.model.PriceHistory;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -11,10 +13,34 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
-@RequiredArgsConstructor
 public class PriceHistoryMemRepository implements PriceHistoryAbstractRepository {
     private final PostMemRepository posts;
     private final AtomicInteger count = new AtomicInteger();
+
+    public PriceHistoryMemRepository(PostMemRepository posts) {
+        this.posts = posts;
+        List<Post> postList = posts.findAllOrderById();
+        PriceHistory priceHistory = new PriceHistory();
+        priceHistory.setCreated(LocalDateTime.now());
+        priceHistory.setAfter(1000000);
+        priceHistory.setBefore(800000);
+        priceHistory.setAutoPostId(postList.get(0).getId());
+        this.create(priceHistory);
+
+        priceHistory = new PriceHistory();
+        priceHistory.setCreated(LocalDateTime.now());
+        priceHistory.setAfter(2100000);
+        priceHistory.setBefore(1999000);
+        priceHistory.setAutoPostId(postList.get(1).getId());
+        this.create(priceHistory);
+
+        priceHistory = new PriceHistory();
+        priceHistory.setCreated(LocalDateTime.now());
+        priceHistory.setAfter(900000);
+        priceHistory.setBefore(850000);
+        priceHistory.setAutoPostId(postList.get(2).getId());
+        this.create(priceHistory);
+    }
 
     /**
      * Сохранить в базе изменение цены.
@@ -31,7 +57,10 @@ public class PriceHistoryMemRepository implements PriceHistoryAbstractRepository
             if (post.isEmpty()) {
                 return null;
             }
-            List<PriceHistory> histories = new ArrayList<>(post.get().getPriceHistories());
+            List<PriceHistory> histories = new ArrayList<>();
+            if (post.get().getPriceHistories() != null) {
+                histories.addAll(post.get().getPriceHistories());
+            }
             priceHistory.setId(count.incrementAndGet());
             histories.add(priceHistory);
             post.get().setPriceHistories(histories);

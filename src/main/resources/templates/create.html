@@ -184,10 +184,12 @@
           <div class="col-md-6 col-lg-4">
             <!-- Form -->
             <form class="form" action="create" method="post" enctype="multipart/form-data" modelAttribute="postDto">
+              <!-- id -->
+              <input type="hidden" name="id" value="0">
               <!-- Статус -->
               <div class="form-group row">
                 <label class="form-label col-md-4 text-muted">Статус:</label>
-                <select class="form-select col-md-8" name="status" id="status">
+                <select class="form-select col-md-8" name="statusId" id="status">
                   <option value="0" disabled>Любой</option>
                   <option value="1" selected>В наличии</option>
                   <option value="2" disabled>Продано</option>
@@ -261,6 +263,11 @@
                 <label class="form-label col-sm-4 col-md-4 text-muted">Цена:</label>
                 <input type="number" class="form-input col-sm-4 col-md-8" name="price" id="price" value="0" oninput="checkFields()">
               </div>
+              <!-- Описание - текст -->
+              <div class="form-group row">
+                <label class="form-label col-md-4 text-muted">Описание:</label>
+                <input type="text" class="form-input col-sm-4 col-md-8" name="text" id="text" value="" oninput="checkFields()">
+              </div>
               <!-- Кнопка Фотографии -->
               <div class="form-btn row m-2">
                 <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
@@ -293,51 +300,9 @@
                       <button type="button" class="btn-close" data-bs-dismiss="modal"
                               aria-label="Close"></button>
                     </div>
-
-
                     <!-- modal-body -->
                     <div class="modal-body" id="modalPhotoDivs">
                       <!-- Фото №1 -->
-<!--                      <div class="row mb-1" name="modalPhotoDiv" id="modalPhotoDiv0">-->
-<!--                        <div class="col-11 p-0">-->
-<!--                          <img src="https://avatars.mds.yandex.net/get-autoru-vos/2074421/91c2cd54adb2cbf0ec0304457545950c/1200x900n"-->
-<!--                               alt="" name="modalImg" id="modalImg0">-->
-<!--                        </div>-->
-<!--                        &lt;!&ndash; Кнопки &ndash;&gt;-->
-<!--                        <div class="col-1 d-flex flex-column justify-content-around align-items-center">-->
-<!--                          &lt;!&ndash; Стрелка вверх &ndash;&gt;-->
-<!--                          <button type="button"-->
-<!--                                  class="btn btm-sm btn-outline-secondar"><svg-->
-<!--                                  xmlns="http://www.w3.org/2000/svg" width="16"-->
-<!--                                  height="16" fill="currentColor" class="bi bi-caret-up"-->
-<!--                                  viewBox="0 0 16 16"-->
-<!--                                  id="modalUpButton0"-->
-<!--                                  onclick="upButtonClick(0)">-->
-<!--                            <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />-->
-<!--                          </svg></button>-->
-<!--                          &lt;!&ndash; Крестик (удалить фото) &ndash;&gt;-->
-<!--                          <button type="button"-->
-<!--                                  class="btn btm-sm btn-outline-secondar"><svg-->
-<!--                                  xmlns="http://www.w3.org/2000/svg" width="16"-->
-<!--                                  height="16" fill="currentColor" class="bi bi-x-lg"-->
-<!--                                  viewBox="0 0 16 16"-->
-<!--                                  onclick="delButtonClick(0)">-->
-<!--                            <path-->
-<!--                                    d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />-->
-<!--                          </svg></button>-->
-<!--                          &lt;!&ndash; Стрелка вниз &ndash;&gt;-->
-<!--                          <button type="button"-->
-<!--                                  class="btn btm-sm btn-outline-secondar"><svg-->
-<!--                                  xmlns="http://www.w3.org/2000/svg" width="16"-->
-<!--                                  height="16" fill="currentColor" class="bi bi-caret-down"-->
-<!--                                  viewBox="0 0 16 16"-->
-<!--                                  id="modalDownButton0"-->
-<!--                                  onclick="downButtonClick(0)">-->
-<!--                            <path-->
-<!--                                    d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />-->
-<!--                          </svg></button>-->
-<!--                        </div>-->
-<!--                      </div>-->
                       <!-- Фото №2 -->
                       <!-- Фото №3 -->
                     </div>
@@ -362,8 +327,8 @@
               </div>
               <!-- Кпопка Отмена -->
               <div class="form-btn row m-2">
-                <button type="button" class="btn btn-primary"><svg
-                        xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                <button type="submit" class="btn btn-primary" formaction="/index" formmethod="get">
+                  <svg  xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                         fill="currentColor" class="bi bi-x-lg me-1" viewBox="0 0 16 16">
                   <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
                   </svg>Отмена
