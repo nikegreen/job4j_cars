@@ -23,10 +23,10 @@ import java.util.*;
 @Controller
 @RequiredArgsConstructor
 public class PostController {
+    private final PostMemService posts;
     private final PriceHistoryMemService histories;
     private final PhotoMemService photos;
     private final UserMemService users;
-    private final PostMemService posts;
     private final CarMarcMemService marcs;
     private final CarModelMemService models;
     private final CarBodyMemService bodies;

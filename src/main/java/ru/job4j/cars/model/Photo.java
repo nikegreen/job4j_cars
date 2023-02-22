@@ -1,14 +1,19 @@
 package ru.job4j.cars.model;
 
 import javax.persistence.*;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.EqualsAndHashCode.Include;
+import lombok.NoArgsConstructor;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "photo")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Photo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -45,4 +45,11 @@ public interface CarModelAbstractRepository {
      * с выбранной маркой и типом кузова.
      */
     List<CarModel> findAllByMarcIdAndBodyId(int marcId, int bodyId);
+
+    /**
+     * Найти модель авто марки по имени
+     * @param name имя модели авто марки
+     * @return модель авто марки.
+     */
+    Optional<CarModel> findByName(String name);
 }

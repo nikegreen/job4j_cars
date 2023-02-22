@@ -13,87 +13,90 @@ public class PostMemRepository implements  PostAbstractRepository {
     private final AtomicInteger size = new AtomicInteger();
     private final Map<Integer, Post> posts = new ConcurrentHashMap<>();
 
+    private final CarMarcMemRepository marcs;
+    private final CarModelMemRepository models;
+
     public PostMemRepository(
             CarMarcMemRepository marcs,
             CarModelMemRepository models,
-//            PriceHistoryMemRepository histories,
             UserMemRepository users
         ) {
+        this.marcs = marcs;
+        this.models = models;
+
         User user = users.findById(1).orElse(null);
         User user2 = users.findById(2).orElse(null);
 
-        //post1
-        Post post = new Post();
-        post.setText("text1");
-        post.setPhotos(List.of());
-        post.setParticipates(List.of());
-        post.setCreated(LocalDateTime.now());
         Driver driver = new Driver();
         driver.setId(user.getId());
         driver.setName(user.getLogin());
         driver.setUser(user);
-        Car car = new Car();
-        car.setId(1);
-        car.setOwners(Set.of(driver));
-        car.setName("name");
-        CarModel carModel = models.findById(1).orElse(null);
-        car.setModel(carModel);
-        CarMarc carMarc =  marcs.findById(carModel.getMarcId()).orElse(null);
-        car.setMarc(carMarc);
-        car.setBodyId(carModel.getBodyId());
+
+        Driver driver2 = new Driver();
+        driver2.setId(user2.getId());
+        driver2.setName(user2.getLogin());
+        driver2.setUser(user2);
+
         Engine engine = new Engine();
         engine.setId(1);
         engine.setName("бензин");
-        car.setEngine(engine);
-        post.setCar(car);
-        post.setUser(user);
-        post.setParticipates(List.of());
-        create(post);
 
+        //post1
+        createPost("A6", user, driver, engine);
         //post2
-        post = new Post();
-        post.setText("text2");
-        post.setPhotos(List.of());
-        post.setParticipates(List.of());
-        post.setCreated(LocalDateTime.now());
-        car = new Car();
-        car.setId(1);
-        car.setOwners(Set.of(driver));
-        car.setName("name2");
-        carModel = models.findById(2).orElse(null);
-        car.setModel(carModel);
-        carMarc =  marcs.findById(carModel.getMarcId()).orElse(null);
-        car.setMarc(carMarc);
-        car.setBodyId(carModel.getBodyId());
-        car.setEngine(engine);
-        post.setCar(car);
-        post.setUser(user);
-        post.setParticipates(List.of());
-        create(post);
-
+        createPost("X5", user, driver, engine);
         //post3
-        post = new Post();
-        post.setText("text3");
+        createPost("X6", user2, driver2, engine);
+        //post4
+        createPost("Focus", user2, driver2, engine);
+        //post5
+        createPost("Accent", user2, driver2, engine);
+        //post6
+        createPost("Santa Fe", user2, driver2, engine);
+        //post7
+        createPost("Rio", user2, driver2, engine);
+        //post8
+        createPost("E-Класс", user2, driver2, engine);
+        //post9
+        createPost("Pajero", user2, driver2, engine);
+        //post10
+        createPost("Pathfinder", user2, driver2, engine);
+        //post11
+        createPost("Astra", user2, driver2, engine);
+        //post12
+        createPost("Duster", user, driver, engine);
+        //post13
+        createPost("Outback", user, driver, engine);
+        //post14
+        createPost("Land Cruiser", user, driver, engine);
+        //post15
+        createPost("RAV4", user2, driver2, engine);
+    }
+
+    private void createPost(String modelName, User user2, Driver driver, Engine engine) {
+        Post post = new Post();
+        post.setText("");
         post.setPhotos(List.of());
         post.setParticipates(List.of());
         post.setCreated(LocalDateTime.now());
-        driver.setId(user2.getId());
-        driver.setName(user2.getLogin());
-        driver.setUser(user2);
-        car = new Car();
+
+        CarModel carModel = models.findByName(modelName).orElse(null);
+        CarMarc carMarc =  marcs.findById(carModel.getMarcId()).orElse(null);
+
+        Car car = new Car();
         car.setId(1);
         car.setOwners(Set.of(driver));
-        car.setName("name2");
-        carModel = models.findById(120).orElse(null);
+        car.setName("car " + carMarc.getName() + " " +  modelName);
         car.setModel(carModel);
-        carMarc =  marcs.findById(carModel.getMarcId()).orElse(null);
         car.setMarc(carMarc);
         car.setBodyId(carModel.getBodyId());
         car.setEngine(engine);
+
         post.setCar(car);
         post.setUser(user2);
         post.setParticipates(List.of());
         create(post);
+        post.setText("post " + post.getId() + " " + carMarc.getName() + " " + modelName);
     }
 
     /**

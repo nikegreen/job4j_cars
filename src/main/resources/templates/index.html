@@ -16,6 +16,19 @@
     <link rel="stylesheet" href="/bootstrap/css/bootstrap-reboot.min.css">
     <link rel="stylesheet" href="/bootstrap/css/bootstrap-utilities.min.css">
     <title>Автобарахолка</title>
+    <style>
+ /*
+ * Row with equal height columns
+ * --------------------------------------------------
+ */
+
+.row-eq-height {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display:         flex;
+}
+    </style>
 </head>
 
 <body>
@@ -155,52 +168,55 @@
 
 <main>
     <!-- фото на странице -->
-    <div class="container-fluid">
+    <div class="container-fluid" id="mainContainer">
         <div class="row">
             <!-- post Карусель -->
-            <div class="col-sm-12 col-md-6 col-lg-3 p-2" th:each="post1, statPost: ${posts}">
-              <div class="shadow">
-                <a class="text-muted text-decoration-none" th:href="${user==post1.user.login?'/edit?post='+post1.id:'/view?post='+post1.id}">
+            <div class="col-sm-12 col-md-6 col-lg-3 p-2 row-eq-height"  name="postCell" th:each="post1, statPost: ${posts}">
+              <div class="shadow  d-flex flex-column justify-content-end" name="postCard">
+                <div class="flex-fill d-flex align-items-center" style="background:#dfe1e2">
                     <!-- Карусель -->
                     <div th:id="'carouselCarIndicators'+${statPost.count}" class="carousel slide" data-bs-touche="carousel">
-                    <div class="carousel-indicators">
-                        <button type="button" th:data-bs-target="'#carouselCarIndicators'+${statPost.count}" data-bs-slide-to="0"
-                                aria-label="Slide 1" class="active" aria-current="true" th:if="${post1.photos==null || #lists.isEmpty(post1.photos)}"></button>
-                        <button th:unless="${post1.photos==null || #lists.isEmpty(post1.photos)}" th:each="photo1, statPhoto: ${post1.photos}"
-                                type="button" th:data-bs-target="'#carouselCarIndicators'+${statPost.count}" th:data-bs-slide-to="${statPhoto.index}"
-                                th:aria-label="${'Slide '+statPhoto.count}" th:class="${(statPhoto.first==true) ? 'active':''}" th:aria-current="${statPhoto.first}"></button>
-                    </div>
-                    <div class="carousel-inner">
-                        <div class="carousel-item active" th:if="${post1.photos==null || #lists.isEmpty(post1.photos)}">
-                            <img src="/images/null.png"
-                                 class="d-block w-100" alt="...">
+                        <div class="carousel-indicators">
+                            <button type="button" th:data-bs-target="'#carouselCarIndicators'+${statPost.count}" data-bs-slide-to="0"
+                                    aria-label="Slide 1" class="active" aria-current="true" th:if="${post1.photos==null || #lists.isEmpty(post1.photos)}"></button>
+                            <button th:unless="${post1.photos==null || #lists.isEmpty(post1.photos)}" th:each="photo1, statPhoto: ${post1.photos}"
+                                    type="button" th:data-bs-target="'#carouselCarIndicators'+${statPost.count}" th:data-bs-slide-to="${statPhoto.index}"
+                                    th:aria-label="${'Slide '+statPhoto.count}" th:class="${(statPhoto.first==true) ? 'active':''}" th:aria-current="${statPhoto.first}"></button>
                         </div>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active" th:if="${post1.photos==null || #lists.isEmpty(post1.photos)}">
+                                <img src="/images/null.png"
+                                     class="d-block w-100" alt="...">
+                            </div>
 
-                        <div th:class="'carousel-item '+${(statPhoto.first)?'active':''}" th:unless="${post1.photos==null || #lists.isEmpty(post1.photos)}" th:each="photo1, statPhoto: ${post1.photos}">
-                            <img th:src="'/images/'+${photo1.fileName}"
-                                 class="d-block w-100" alt="...">
+                            <div th:class="'carousel-item '+${(statPhoto.first)?'active':''}" th:unless="${post1.photos==null || #lists.isEmpty(post1.photos)}" th:each="photo1, statPhoto: ${post1.photos}">
+                                <img th:src="'/images/'+${photo1.fileName}"
+                                     class="d-block w-100" alt="...">
+                            </div>
                         </div>
+                        <button class="carousel-control-prev" type="button" th:data-bs-target="'#carouselCarIndicators'+${statPost.count}"
+                                data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Назад</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" th:data-bs-target="'#carouselCarIndicators'+${statPost.count}"
+                                data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Вперед</span>
+                        </button>
                     </div>
-                    <button class="carousel-control-prev" type="button" th:data-bs-target="'#carouselCarIndicators'+${statPost.count}"
-                            data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Назад</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" th:data-bs-target="'#carouselCarIndicators'+${statPost.count}"
-                            data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Вперед</span>
-                    </button>
                 </div>
                     <!-- Название машины -->
-                    <div class="title h5 mb-0" th:text="${post1.car.marc.name}+' '+${post1.car.model.name}"
-                         th:if="${post1!=null && post1.price!=null}"><b>Ford Focus</b></div>
-                    <div class="title" th:if="${post1!=null && post1.price!=null}">
-                        цена:<span class="h6 mb-0" th:text="' '+${post1.price}"></span>руб.
+                    <div class="title h5 mb-0 align-center" th:text="${post1.car.marc.name}+' '+${post1.car.model.name}"
+                         th:if="${post1!=null && post1.price!=null}"><b>Ford Focus</b>
                     </div>
-                    <div class="title h5 mb-0" th:if="${post1==null}">...</div>
-                    <div class="title" th:if="${post1==null}">...</div>
-                </a>
+                    <div class="title align-center" th:if="${post1!=null && post1.price!=null}">
+                        <a class="text-muted text-decoration-none" th:href="${user==post1.user.login?'/edit?post='+post1.id:'/view?post='+post1.id}">
+                        цена:<span class="h6 mb-0" th:text="' '+${post1.price}"></span>руб.
+                        </a>
+                    </div>
+                    <div class="title h5 mb-0 align-center" th:if="${post1==null}">...</div>
+                    <div class="title align-center" th:if="${post1==null}">...</div>
               </div>
             </div>
         </div>

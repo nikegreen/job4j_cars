@@ -74,4 +74,16 @@ public class CarModelCrudRepository implements  CarModelAbstractRepository {
                 .setParameter("fBodyId", bodyId)
                 .list());
     }
+
+    /**
+     * Найти модель авто марки по имени
+     * @param name имя модели авто марки
+     * @return модель авто марки.
+     */
+    @Override
+    public Optional<CarModel> findByName(String name) {
+        return crudRepository.tx(session -> session.createQuery(
+                        "from CarModel i where i.name = :fName order by i.id", CarModel.class)
+                .setParameter("fName", name).uniqueResultOptional());
+    }
 }

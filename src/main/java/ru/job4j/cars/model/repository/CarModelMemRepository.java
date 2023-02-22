@@ -1302,4 +1302,17 @@ public class CarModelMemRepository implements  CarModelAbstractRepository {
             System.out.println(ex.getMessage());
         }
     }
+
+    /**
+     * Найти модель авто марки по имени
+     * @param name имя модели авто марки
+     * @return модель авто марки.
+     */
+    @Override
+    public Optional<CarModel> findByName(String name) {
+        return models.values()
+                .stream()
+                .filter(model -> model.getName().equals(name))
+                .findFirst();
+    }
 }

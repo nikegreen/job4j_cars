@@ -379,3 +379,4 @@
 //        throw new Error('Failed to determine the platform specific decoder');
 //    }
 //}
+

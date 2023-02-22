@@ -11,7 +11,7 @@ insert into car_body (name) values ('хэтчбек 3 дверей');
 insert into car_body (name) values ('хэтчбек 5 дверей');
 insert into car_body (name) values ('лифтбек');
 insert into car_body (name) values ('внедорожник 3 двери');
-insert into car_body (name) values ('внедорожник 5 двери');
+insert into car_body (name) values ('внедорожник 5 дверей');
 insert into car_body (name) values ('универсал');
 insert into car_body (name) values ('купе');
 insert into car_body (name) values ('минивен');

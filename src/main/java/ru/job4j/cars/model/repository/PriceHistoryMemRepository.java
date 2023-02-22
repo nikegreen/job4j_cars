@@ -20,26 +20,25 @@ public class PriceHistoryMemRepository implements PriceHistoryAbstractRepository
     public PriceHistoryMemRepository(PostMemRepository posts) {
         this.posts = posts;
         List<Post> postList = posts.findAllOrderById();
-        PriceHistory priceHistory = new PriceHistory();
-        priceHistory.setCreated(LocalDateTime.now());
-        priceHistory.setAfter(1000000);
-        priceHistory.setBefore(800000);
-        priceHistory.setAutoPostId(postList.get(0).getId());
-        this.create(priceHistory);
 
-        priceHistory = new PriceHistory();
-        priceHistory.setCreated(LocalDateTime.now());
-        priceHistory.setAfter(2100000);
-        priceHistory.setBefore(1999000);
-        priceHistory.setAutoPostId(postList.get(1).getId());
-        this.create(priceHistory);
-
-        priceHistory = new PriceHistory();
-        priceHistory.setCreated(LocalDateTime.now());
-        priceHistory.setAfter(900000);
-        priceHistory.setBefore(850000);
-        priceHistory.setAutoPostId(postList.get(2).getId());
-        this.create(priceHistory);
+        this.create(new PriceHistory(0, 100000L, 110000L, LocalDateTime.now(), postList.get(0).getId()));
+        this.create(new PriceHistory(0, 110000L, 100000L, LocalDateTime.now(), postList.get(0).getId()));
+        this.create(new PriceHistory(0, 120000L, 140000L, LocalDateTime.now(), postList.get(1).getId()));
+        this.create(new PriceHistory(0, 220000L, 210000L, LocalDateTime.now(), postList.get(2).getId()));
+        this.create(new PriceHistory(0, 310000L, 320000L, LocalDateTime.now(), postList.get(3).getId()));
+        this.create(new PriceHistory(0, 320000L, 320000L, LocalDateTime.now(), postList.get(3).getId()));
+        this.create(new PriceHistory(0, 500000L, 510000L, LocalDateTime.now(), postList.get(4).getId()));
+        this.create(new PriceHistory(0, 100000L, 100000L, LocalDateTime.now(), postList.get(5).getId()));
+        this.create(new PriceHistory(0, 150000L, 160000L, LocalDateTime.now(), postList.get(6).getId()));
+        this.create(new PriceHistory(0, 190000L, 180000L, LocalDateTime.now(), postList.get(7).getId()));
+        this.create(new PriceHistory(0, 175000L, 170000L, LocalDateTime.now(), postList.get(8).getId()));
+        this.create(new PriceHistory(0, 105000L, 110000L, LocalDateTime.now(), postList.get(9).getId()));
+        this.create(new PriceHistory(0, 400000L, 416000L, LocalDateTime.now(), postList.get(10).getId()));
+        this.create(new PriceHistory(0, 700000L, 730000L, LocalDateTime.now(), postList.get(11).getId()));
+        this.create(new PriceHistory(0, 200000L, 210000L, LocalDateTime.now(), postList.get(12).getId()));
+        this.create(new PriceHistory(0, 100000L, 110000L, LocalDateTime.now(), postList.get(13).getId()));
+        this.create(new PriceHistory(0, 900000L, 910000L, LocalDateTime.now(), postList.get(14).getId()));
+//        this.create(new PriceHistory(0, 500000L, 510000L, LocalDateTime.now(), postList.get(15).getId()));
     }
 
     /**
