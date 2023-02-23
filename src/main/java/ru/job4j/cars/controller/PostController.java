@@ -23,14 +23,14 @@ import java.util.*;
 @Controller
 @RequiredArgsConstructor
 public class PostController {
-    private final PostMemService posts;
-    private final PriceHistoryMemService histories;
-    private final PhotoMemService photos;
-    private final UserMemService users;
-    private final CarMarcMemService marcs;
-    private final CarModelMemService models;
-    private final CarBodyMemService bodies;
-    private final EngineMemService engines;
+    private final PostCrudService posts;
+    private final PriceHistoryCrudService histories;
+    private final PhotoCrudService photos;
+    private final UserCrudService users;
+    private final CarMarcCrudService marcs;
+    private final CarModelCrudService models;
+    private final CarBodyCrudService bodies;
+    private final EngineCrudService engines;
     private final PhotoUtil photoUtil;
 
     @GetMapping("/create")

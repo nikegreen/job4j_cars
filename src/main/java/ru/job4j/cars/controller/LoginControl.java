@@ -12,14 +12,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.cars.model.User;
-import ru.job4j.cars.service.UserMemService;
+import ru.job4j.cars.service.UserCrudService;
 
 import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
 public class LoginControl {
-    private final UserMemService users;
+    private final UserCrudService users;
 
     @GetMapping("/login")
     public String loginPage(@RequestParam(value = "error", required = false) String error,

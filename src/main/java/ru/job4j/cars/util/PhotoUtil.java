@@ -9,6 +9,7 @@ import ru.job4j.cars.config.LoadConfig;
 import ru.job4j.cars.model.Photo;
 import ru.job4j.cars.model.Post;
 import ru.job4j.cars.service.PhotoAbstractService;
+import ru.job4j.cars.service.PhotoCrudService;
 import ru.job4j.cars.service.PhotoMemService;
 
 import java.io.File;
@@ -23,7 +24,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PhotoUtil {
     private final LoadConfig loadConfig;
-    private final PhotoMemService photos;
+    private final PhotoCrudService photos;
 
     public String SavePhotosFromPage(@NotNull Model model,
                                       @NotNull int[] ids,

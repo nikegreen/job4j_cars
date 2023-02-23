@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.job4j.cars.model.User;
-import ru.job4j.cars.service.UserMemService;
+import ru.job4j.cars.service.UserCrudService;
 
 @Controller
 @RequiredArgsConstructor
 public class RegControl {
-    private final UserMemService users;
+    private final UserCrudService users;
 
     @PostMapping("/reg")
     public String regSave(@ModelAttribute User user) {

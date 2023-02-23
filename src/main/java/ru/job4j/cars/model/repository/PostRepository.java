@@ -52,24 +52,27 @@ public class PostRepository {
         return crudRepository.tx(
             session -> {
                 List<Post> posts = session.createQuery(
-                "select distinct i from Post i left join fetch i.car c"
-                    + " left join fetch c.owners"
-                    + " order by i.id", Post.class).list();
-                posts = session.createQuery(
-                        "select distinct i from Post i left join fetch i.priceHistories"
-                                + " where i in :fPosts order by i.id", Post.class)
-                        .setParameter("fPosts", posts)
-                        .list();
-                posts = session.createQuery(
-                                "select distinct i from Post i left join fetch i.participates"
-                                        + " where i in :fPosts order by i.id", Post.class)
-                        .setParameter("fPosts", posts)
-                        .list();
-                posts = session.createQuery(
-                                "select distinct i from Post i left join fetch i.photos"
-                                        + " where i in :fPosts order by i.id", Post.class)
-                        .setParameter("fPosts", posts)
-                        .list();
+                        "from Post order by id").list();
+
+//                List<Post> posts = session.createQuery(
+//                "select distinct i from Post i left join fetch i.car c"
+//                    + " left join fetch c.owners"
+//                    + " order by i.id", Post.class).list();
+//                posts = session.createQuery(
+//                        "select distinct i from Post i left join fetch i.priceHistories"
+//                                + " where i in :fPosts order by i.id", Post.class)
+//                        .setParameter("fPosts", posts)
+//                        .list();
+//                posts = session.createQuery(
+//                                "select distinct i from Post i left join fetch i.participates"
+//                                        + " where i in :fPosts order by i.id", Post.class)
+//                        .setParameter("fPosts", posts)
+//                        .list();
+//                posts = session.createQuery(
+//                                "select distinct i from Post i left join fetch i.photos"
+//                                        + " where i in :fPosts order by i.id", Post.class)
+//                        .setParameter("fPosts", posts)
+//                        .list();
                 return posts;
             }
         );

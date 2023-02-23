@@ -20,11 +20,11 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequiredArgsConstructor
 public class IndexController {
-    private final PostDtoMemService posts;
-    private final CarMarcMemService marcs;
-    private final CarModelMemService models;
-    private final CarBodyMemService bodies;
-    private final EngineMemService engines;
+    private final PostDtoCrudService posts;
+    private final CarMarcCrudService marcs;
+    private final CarModelCrudService models;
+    private final CarBodyCrudService bodies;
+    private final EngineCrudService engines;
 
     /**
      * <p>index.</p>
