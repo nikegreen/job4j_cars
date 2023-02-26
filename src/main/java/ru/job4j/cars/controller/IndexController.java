@@ -10,7 +10,6 @@ import ru.job4j.cars.model.PostDto;
 import ru.job4j.cars.service.*;
 import javax.servlet.http.HttpSession;
 
-
 /**
  * <p>IndexController class. Spring boot controller</p>
  * @author nikez
