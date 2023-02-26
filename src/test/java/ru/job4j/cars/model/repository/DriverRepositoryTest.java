@@ -11,7 +11,13 @@ import java.util.List;
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * тест хранилища водителей
+ */
 class DriverRepositoryTest {
+    /**
+     * Создание водителя, список всех водителей, удаление водителя
+     */
     @Test
     void whenCreateFindAllOrderByIdDelete() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
@@ -59,6 +65,9 @@ class DriverRepositoryTest {
         }
     }
 
+    /**
+     * Создание водителя, список всех водителей по имени, удаление водителя
+     */
     @Test
     void whenCreateFindByLikeNameDelete() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
@@ -106,6 +115,9 @@ class DriverRepositoryTest {
         }
     }
 
+    /**
+     * Создание водителя, поиск водителя по идентификатору, удаление водителя
+     */
     @Test
     void whenCreateFindByIdDelete() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
@@ -146,6 +158,10 @@ class DriverRepositoryTest {
         }
     }
 
+    /**
+     * Создание водителя, поиск водителя по идентификатору,
+     * обновить водителя, удаление водителя
+     */
     @Test
     void whenCreateFindByIdUpdateDelete() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()

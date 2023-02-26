@@ -12,7 +12,13 @@ import java.util.List;
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * тест хранилища фотографий
+ */
 class PhotoRepositoryTest {
+    /**
+     * Создание  фотографии, список всех  фотографий, удаление  фотографии
+     */
     @Test
     void whenCreateFindAllOrderByIdDelete() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
@@ -35,13 +41,13 @@ class PhotoRepositoryTest {
             Photo photo = new Photo();
             photo.setName("photo 2 super car 1");
             photo.setFileName("photo3.jpg");
-            photo.setPost(post);
+            photo.setPostId(post.getId());
             Photo photo1 = photoRepository.create(photo);
             assertThat(photo1).isNotNull();
             assertThat(photo1.getId()).isNotEqualTo(0);
             assertThat(photo1.getName()).isEqualTo("photo 2 super car 1");
             assertThat(photo1.getFileName()).isEqualTo("photo3.jpg");
-            assertThat(photo1.getPost().getId()).isEqualTo(post.getId());
+            assertThat(photo1.getPostId()).isEqualTo(post.getId());
 
             List<Photo> photos2 = photoRepository.findAllOrderById();
             assertThat(photos2).isNotNull().hasSize(size + 1);
@@ -51,7 +57,7 @@ class PhotoRepositoryTest {
             assertThat(photo2.getId()).isEqualTo(photo1.getId());
             assertThat(photo2.getName()).isEqualTo("photo 2 super car 1");
             assertThat(photo2.getFileName()).isEqualTo("photo3.jpg");
-            assertThat(photo2.getPost().getId()).isEqualTo(post.getId());
+            assertThat(photo2.getPostId()).isEqualTo(post.getId());
 
             photoRepository.delete(photo1.getId());
             List<Photo> photos3 = photoRepository.findAllOrderById();
@@ -59,6 +65,9 @@ class PhotoRepositoryTest {
         }
     }
 
+    /**
+     * Создание  фотографии, список всех  фотографий по объявлению, удаление  фотографии
+     */
     @Test
     void whenCreateFindAllWherePostDelete() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
@@ -81,13 +90,13 @@ class PhotoRepositoryTest {
             Photo photo = new Photo();
             photo.setName("photo 2 super car 1");
             photo.setFileName("photo3.jpg");
-            photo.setPost(post);
+            photo.setPostId(post.getId());
             Photo photo1 = photoRepository.create(photo);
             assertThat(photo1).isNotNull();
             assertThat(photo1.getId()).isNotEqualTo(0);
             assertThat(photo1.getName()).isEqualTo("photo 2 super car 1");
             assertThat(photo1.getFileName()).isEqualTo("photo3.jpg");
-            assertThat(photo1.getPost().getId()).isEqualTo(post.getId());
+            assertThat(photo1.getPostId()).isEqualTo(post.getId());
 
             List<Photo> photos2 = photoRepository.findAllWherePost(1);
             assertThat(photos2).isNotNull().hasSize(size + 1);
@@ -97,7 +106,7 @@ class PhotoRepositoryTest {
             assertThat(photo2.getId()).isEqualTo(photo1.getId());
             assertThat(photo2.getName()).isEqualTo("photo 2 super car 1");
             assertThat(photo2.getFileName()).isEqualTo("photo3.jpg");
-            assertThat(photo2.getPost().getId()).isEqualTo(post.getId());
+            assertThat(photo2.getPostId()).isEqualTo(post.getId());
 
             photoRepository.delete(photo1.getId());
             List<Photo> photos3 = photoRepository.findAllWherePost(1);
@@ -105,6 +114,9 @@ class PhotoRepositoryTest {
         }
     }
 
+    /**
+     * Создание  фотографии, поиск фотографии по идентификатору, удаление  фотографии
+     */
     @Test
     void whenCreateFindByIdDelete() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
@@ -124,20 +136,20 @@ class PhotoRepositoryTest {
             Photo photo = new Photo();
             photo.setName("photo 2 super car 1");
             photo.setFileName("photo3.jpg");
-            photo.setPost(post);
+            photo.setPostId(post.getId());
             Photo photo1 = photoRepository.create(photo);
             assertThat(photo1).isNotNull();
             assertThat(photo1.getId()).isNotEqualTo(0);
             assertThat(photo1.getName()).isEqualTo("photo 2 super car 1");
             assertThat(photo1.getFileName()).isEqualTo("photo3.jpg");
-            assertThat(photo1.getPost().getId()).isEqualTo(post.getId());
+            assertThat(photo1.getPostId()).isEqualTo(post.getId());
 
             Optional<Photo> photo2 = photoRepository.findById(photo1.getId());
             assertThat(photo2).isNotEqualTo(Optional.empty());
             assertThat(photo2.get().getId()).isEqualTo(photo1.getId());
             assertThat(photo2.get().getName()).isEqualTo("photo 2 super car 1");
             assertThat(photo2.get().getFileName()).isEqualTo("photo3.jpg");
-            assertThat(photo2.get().getPost().getId()).isEqualTo(post.getId());
+            assertThat(photo2.get().getPostId()).isEqualTo(post.getId());
 
             photoRepository.delete(photo1.getId());
             Optional<Photo> photos3 = photoRepository.findById(photo1.getId());
@@ -145,7 +157,10 @@ class PhotoRepositoryTest {
         }
     }
 
-    @Test
+    /**
+     * Создание  фотографии, поиск фотографии по идентификатору,
+     * обновление фотографии, удаление  фотографии
+     */    @Test
     void whenCreateFindByIdUpdateDelete() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .configure().build();
@@ -164,20 +179,20 @@ class PhotoRepositoryTest {
             Photo photo = new Photo();
             photo.setName("photo 2 super car 1");
             photo.setFileName("photo3.jpg");
-            photo.setPost(post);
+            photo.setPostId(post.getId());
             Photo photo1 = photoRepository.create(photo);
             assertThat(photo1).isNotNull();
             assertThat(photo1.getId()).isNotEqualTo(0);
             assertThat(photo1.getName()).isEqualTo("photo 2 super car 1");
             assertThat(photo1.getFileName()).isEqualTo("photo3.jpg");
-            assertThat(photo1.getPost().getId()).isEqualTo(post.getId());
+            assertThat(photo1.getPostId()).isEqualTo(post.getId());
 
             Optional<Photo> photo2 = photoRepository.findById(photo1.getId());
             assertThat(photo2).isNotEqualTo(Optional.empty());
             assertThat(photo2.get().getId()).isEqualTo(photo1.getId());
             assertThat(photo2.get().getName()).isEqualTo("photo 2 super car 1");
             assertThat(photo2.get().getFileName()).isEqualTo("photo3.jpg");
-            assertThat(photo2.get().getPost().getId()).isEqualTo(post.getId());
+            assertThat(photo2.get().getPostId()).isEqualTo(post.getId());
 
             photo1.setName("photo 2 super car 1-1");
             photo1.setFileName("photo3-3.jpg");
@@ -186,7 +201,7 @@ class PhotoRepositoryTest {
             assertThat(photo1.getId()).isEqualTo(photo2.get().getId());
             assertThat(photo1.getName()).isEqualTo("photo 2 super car 1-1");
             assertThat(photo1.getFileName()).isEqualTo("photo3-3.jpg");
-            assertThat(photo1.getPost().getId()).isEqualTo(post.getId());
+            assertThat(photo1.getPostId()).isEqualTo(post.getId());
 
             photoRepository.delete(photo1.getId());
             Optional<Photo> photos3 = photoRepository.findById(photo1.getId());

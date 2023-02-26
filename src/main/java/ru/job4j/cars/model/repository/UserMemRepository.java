@@ -10,6 +10,9 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Хранилище пользователей в ОЗУ
+ */
 @Repository
 public class UserMemRepository implements UserAbstractRepository {
     private final Map<Integer, User> users = new ConcurrentHashMap<>();

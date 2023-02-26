@@ -5,6 +5,9 @@ import ru.job4j.cars.model.Car;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Сервис автомобилей
+ */
 public interface CarAbstractService {
     /**
      * Сохранить в базе.

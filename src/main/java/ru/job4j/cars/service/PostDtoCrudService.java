@@ -8,6 +8,9 @@ import ru.job4j.cars.model.repository.PostDtoCrudRepository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Сервис DTO объявлений в БД
+ */
 @Service
 @RequiredArgsConstructor
 public class PostDtoCrudService implements PostDtoAbstractService {

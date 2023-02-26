@@ -5,6 +5,9 @@ import ru.job4j.cars.model.Post;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Сервис объявлений
+ */
 public interface PostAbstractService {
     /**
      * Сохранить в базе объявление.

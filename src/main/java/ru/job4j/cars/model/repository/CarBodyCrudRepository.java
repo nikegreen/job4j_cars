@@ -7,6 +7,9 @@ import ru.job4j.cars.model.CarBody;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Хранилище с информацией об кузовах автомобилей в БД
+ */
 @Repository
 @RequiredArgsConstructor
 public class CarBodyCrudRepository implements CarBodyAbstractRepository {

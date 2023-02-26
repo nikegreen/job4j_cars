@@ -2,16 +2,18 @@ package ru.job4j.cars.model.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import ru.job4j.cars.model.Photo;
 import ru.job4j.cars.model.PriceHistory;
-
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Хранилище истории цены в БД
+ */
 @Repository
 @RequiredArgsConstructor
 public class PriceHistoryCrudRepository implements PriceHistoryAbstractRepository {
     private final CrudRepository crudRepository;
+
     /**
      * Сохранить в базе изменение цены.
      * @param priceHistory запись с измением цены.
@@ -44,7 +46,8 @@ public class PriceHistoryCrudRepository implements PriceHistoryAbstractRepositor
 
     /**
      * Список записей с измением цены отсортированных по id.
-     * @return {@link java.util.List<ru.job4j.cars.model.PriceHistory>} список записей с измением цены.
+     * @return {@link java.util.List<ru.job4j.cars.model.PriceHistory>}
+     * список записей с измением цены.
      */
     @Override
     public List<PriceHistory> findAllOrderById() {
@@ -59,7 +62,8 @@ public class PriceHistoryCrudRepository implements PriceHistoryAbstractRepositor
     @Override
     public List<PriceHistory> findAllWherePost(int postId) {
         return crudRepository.tx(session  -> session.createQuery(
-                        "from PriceHistory p where p.autoPostId = :fId")
+                        "from PriceHistory p where p.autoPostId = :fId",
+                        PriceHistory.class)
                 .setParameter("fId", postId)
                 .list()
         );

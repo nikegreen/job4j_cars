@@ -5,6 +5,9 @@ import ru.job4j.cars.model.Photo;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Хранилище с информацией об фотографиях
+ */
 public interface PhotoAbstractRepository {
     /**
      * Сохранить в базе фотографию.

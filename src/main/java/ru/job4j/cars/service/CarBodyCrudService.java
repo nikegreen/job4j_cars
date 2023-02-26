@@ -7,6 +7,9 @@ import ru.job4j.cars.model.repository.CarBodyCrudRepository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Сервис кузовов авто в БД
+ */
 @Service
 @RequiredArgsConstructor
 public class CarBodyCrudService implements  CarBodyAbstractService {

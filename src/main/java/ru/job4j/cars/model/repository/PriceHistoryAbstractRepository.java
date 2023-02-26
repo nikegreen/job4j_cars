@@ -4,6 +4,9 @@ import ru.job4j.cars.model.PriceHistory;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Хранилище истории цены
+ */
 public interface PriceHistoryAbstractRepository {
     /**
      * Сохранить в базе изменение цены.
@@ -26,7 +29,8 @@ public interface PriceHistoryAbstractRepository {
 
     /**
      * Список записей с измением цены отсортированных по id.
-     * @return {@link java.util.List<ru.job4j.cars.model.PriceHistory>} список записей с измением цены.
+     * @return тип {@link java.util.List<ru.job4j.cars.model.PriceHistory>}
+     * список записей с измением цены.
      */
     List<PriceHistory> findAllOrderById();
 

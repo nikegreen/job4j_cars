@@ -4,6 +4,9 @@ import ru.job4j.cars.model.PostDto;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Сервис DTO объявлений
+ */
 public interface PostDtoAbstractService {
 
     /**

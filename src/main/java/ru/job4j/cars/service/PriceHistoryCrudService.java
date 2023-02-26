@@ -9,6 +9,9 @@ import ru.job4j.cars.model.repository.PriceHistoryMemRepository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Сервис истории цены в БД
+ */
 @Service
 @RequiredArgsConstructor
 public class PriceHistoryCrudService implements PriceHistoryAbstractService {
@@ -44,7 +47,8 @@ public class PriceHistoryCrudService implements PriceHistoryAbstractService {
 
     /**
      * Список записей с измением цены отсортированных по id.
-     * @return {@link java.util.List<ru.job4j.cars.model.PriceHistory>} список записей с измением цены.
+     * @return {@link java.util.List<ru.job4j.cars.model.PriceHistory>}
+     * список записей с измением цены.
      */
     @Override
     public List<PriceHistory> findAllOrderById() {

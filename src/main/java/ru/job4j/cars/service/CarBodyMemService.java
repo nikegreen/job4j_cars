@@ -8,6 +8,9 @@ import ru.job4j.cars.model.repository.CarBodyMemRepository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Сервис кузовов авто в ОЗУ
+ */
 @Service
 @RequiredArgsConstructor
 public class CarBodyMemService implements CarBodyAbstractService {

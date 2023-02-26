@@ -4,13 +4,61 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.job4j.cars.model.Engine;
 import java.util.List;
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * тест хранилища типов двигателей
+ */
 class EngineRepositoryTest {
+    private static int engineSize = 0;
+
+    /**
+     * запоминаем кол-во записей до теста
+     */
+    @BeforeEach
+    public void before() {
+        if (engineSize == 0) {
+            StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+                    .configure().build();
+            try (SessionFactory sf = new MetadataSources(registry)
+                    .buildMetadata().buildSessionFactory()) {
+                EngineRepository engineRepository = new EngineRepository(new CrudRepository(sf));
+                List<Engine> engines = engineRepository.findAllOrderById();
+                engineSize = engines.size();
+            }
+        }
+    }
+
+    /**
+     * удаляем записи оставшиеся после теста
+     */
+    @AfterEach
+    public void deleteTestData() {
+        StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+                .configure().build();
+        try (SessionFactory sf = new MetadataSources(registry)
+                .buildMetadata().buildSessionFactory()) {
+            EngineRepository engineRepository = new EngineRepository(new CrudRepository(sf));
+            List<Engine> engines = engineRepository.findAllOrderById();
+            engines.forEach(
+                    engine -> {
+                        if (engine.getId() > engineSize) {
+                                engineRepository.delete(engine.getId());
+                        }
+                    }
+            );
+        }
+    }
+
+    /**
+     * Создание типа двигателя, список всех типов двигателей, удаление типа двигателя
+     */
     @Test
     void whenCreateFindAllOrderByIdDelete() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
@@ -43,6 +91,9 @@ class EngineRepositoryTest {
         }
     }
 
+    /**
+     * Создание типа двигателя, список всех типов двигателей с именем, удаление типа двигателя
+     */
     @Test
     void whenCreateFindAllWherePostDelete() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
@@ -75,6 +126,9 @@ class EngineRepositoryTest {
         }
     }
 
+    /**
+     * Создание типа двигателя, поиск типа двигателя по идентификатору, удаление типа двигателя
+     */
     @Test
     void whenCreateFindByIdDelete() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
@@ -101,6 +155,10 @@ class EngineRepositoryTest {
         }
     }
 
+    /**
+     * Создание типа двигателя, поиск типа двигателя по идентификатору,
+     * обновление типа двигателя, удаление типа двигателя
+     */
     @Test
     void whenCreateFindByIdUpdateDelete() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()

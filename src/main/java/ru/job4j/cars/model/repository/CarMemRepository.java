@@ -12,6 +12,9 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Хранилище с информацией об автомобилях в ОЗУ
+ */
 @Repository
 @RequiredArgsConstructor
 public class CarMemRepository implements CarAbstractRepository {

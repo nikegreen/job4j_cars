@@ -8,6 +8,9 @@ import ru.job4j.cars.model.repository.PostRepository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Сервис объявлений в БД
+ */
 @Service
 @RequiredArgsConstructor
 public class PostCrudService implements PostAbstractService {

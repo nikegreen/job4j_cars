@@ -7,6 +7,9 @@ import ru.job4j.cars.model.repository.PostDtoMemRepository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Сервис DTO объявлений в ОЗУ
+ */
 @Service
 @RequiredArgsConstructor
 public class PostDtoMemService implements PostDtoAbstractService {

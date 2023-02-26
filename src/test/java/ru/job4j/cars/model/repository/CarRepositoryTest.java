@@ -4,6 +4,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import ru.job4j.cars.model.Car;
 import ru.job4j.cars.model.Driver;
 import ru.job4j.cars.model.Engine;
@@ -13,11 +15,18 @@ import java.util.Optional;
 import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * тест хранилища автомобилей
+ */
 class CarRepositoryTest {
     private final SessionFactory sf = new MetadataSources(
             new StandardServiceRegistryBuilder()
-            .configure().build()
+                    .configure().build()
     ).buildMetadata().buildSessionFactory();
+
+    /**
+     * Создание автомобиля, поиск автомобиля по идентификатору, удаление автомобиля
+     */
     @Test
     void whenCreateFindByIdDelete() {
         UserRepository userRepository = new UserRepository(new CrudRepository(sf));
@@ -72,6 +81,10 @@ class CarRepositoryTest {
         assertThat(driverRepository.findById(driver.getId())).isEqualTo(Optional.empty());
     }
 
+    /**
+     * Создание автомобиля, поиск автомобиля по идентификатору,
+     * обновление автомобиля, удаление автомобиля
+     */
     @Test
     void whenCreateFindByIdUpdateDelete() {
         UserRepository userRepository = new UserRepository(new CrudRepository(sf));
@@ -137,6 +150,9 @@ class CarRepositoryTest {
         assertThat(driverRepository.findById(driver.getId())).isEqualTo(Optional.empty());
     }
 
+    /**
+     * Создание автомобиля, список всех автомобилей, удаление автомобиля
+     */
     @Test
     void whenCreateFindAllDelete() {
         UserRepository userRepository = new UserRepository(new CrudRepository(sf));
@@ -199,6 +215,9 @@ class CarRepositoryTest {
         assertThat(driverRepository.findById(driver.getId())).isEqualTo(Optional.empty());
     }
 
+    /**
+     * Создание автомобиля, список всех автомобилей по имени, удаление автомобиля
+     */
     @Test
     void whenCreateFindByLikeNameDelete() {
         UserRepository userRepository = new UserRepository(new CrudRepository(sf));

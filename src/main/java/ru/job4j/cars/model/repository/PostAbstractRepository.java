@@ -7,7 +7,6 @@ import java.util.Optional;
 /**
  * Хранилище с информацией об объявлениях
  */
-
 public interface PostAbstractRepository {
     /**
      * Сохранить в базе объявление.

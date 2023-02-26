@@ -5,15 +5,18 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.EqualsAndHashCode.Include;
 import org.hibernate.annotations.BatchSize;
-
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * модель данных БД - сущность объявление для хранилища
+ */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity(name = "Post")
 @Table(name = "auto_post")
-public class Post {
+public class Post implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Include
@@ -25,8 +28,8 @@ public class Post {
     @JoinColumn(name = "auto_user_id")
     private User user;
 
+    //    @BatchSize(size = 150)
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @BatchSize(size = 150)
     @JoinColumn(name = "auto_post_id")
     private List<PriceHistory> priceHistories;
 

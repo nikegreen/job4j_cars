@@ -4,6 +4,9 @@ import ru.job4j.cars.model.CarBody;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Хранилище с информацией об кузовах автомобилей
+ */
 public interface CarBodyAbstractRepository {
     /**
      * Список  отсортированных по id.

@@ -6,6 +6,9 @@ import ru.job4j.cars.model.User;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Хранилище пользователей в БД
+ */
 @Repository
 @AllArgsConstructor
 public class UserRepository implements UserAbstractRepository {

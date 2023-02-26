@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Хранилище с информацией об марках автомобилей в ОЗУ
+ */
 @Repository
 public class CarMarcMemRepository implements CarMarcAbstractRepository {
     private static final List<String> MARC_NAMES = List.of(

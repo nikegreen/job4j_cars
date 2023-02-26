@@ -8,6 +8,9 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Хранилище с информацией об объявлениях в ОЗУ
+ */
 @Repository
 public class PostMemRepository implements  PostAbstractRepository {
     private final AtomicInteger size = new AtomicInteger();
@@ -41,35 +44,20 @@ public class PostMemRepository implements  PostAbstractRepository {
         engine.setId(1);
         engine.setName("бензин");
 
-        //post1
         createPost("A6", user, driver, engine);
-        //post2
         createPost("X5", user, driver, engine);
-        //post3
         createPost("X6", user2, driver2, engine);
-        //post4
         createPost("Focus", user2, driver2, engine);
-        //post5
         createPost("Accent", user2, driver2, engine);
-        //post6
         createPost("Santa Fe", user2, driver2, engine);
-        //post7
         createPost("Rio", user2, driver2, engine);
-        //post8
         createPost("E-Класс", user2, driver2, engine);
-        //post9
         createPost("Pajero", user2, driver2, engine);
-        //post10
         createPost("Pathfinder", user2, driver2, engine);
-        //post11
         createPost("Astra", user2, driver2, engine);
-        //post12
         createPost("Duster", user, driver, engine);
-        //post13
         createPost("Outback", user, driver, engine);
-        //post14
         createPost("Land Cruiser", user, driver, engine);
-        //post15
         createPost("RAV4", user2, driver2, engine);
     }
 
@@ -89,7 +77,6 @@ public class PostMemRepository implements  PostAbstractRepository {
         car.setName("car " + carMarc.getName() + " " +  modelName);
         car.setModel(carModel);
         car.setMarc(carMarc);
-        car.setBodyId(carModel.getBodyId());
         car.setEngine(engine);
 
         post.setCar(car);

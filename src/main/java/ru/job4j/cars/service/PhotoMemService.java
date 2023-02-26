@@ -7,6 +7,9 @@ import ru.job4j.cars.model.repository.PhotoMemRepository;
 
 import java.util.*;
 
+/**
+ * Сервис фотографий в ОЗУ
+ */
 @Service
 @RequiredArgsConstructor
 public class PhotoMemService implements PhotoAbstractService {

@@ -3,15 +3,11 @@ package ru.job4j.cars.util;
 import com.sun.istack.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import ru.job4j.cars.config.LoadConfig;
 import ru.job4j.cars.model.Photo;
 import ru.job4j.cars.model.Post;
-import ru.job4j.cars.service.PhotoAbstractService;
 import ru.job4j.cars.service.PhotoCrudService;
-import ru.job4j.cars.service.PhotoMemService;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -26,10 +22,22 @@ public class PhotoUtil {
     private final LoadConfig loadConfig;
     private final PhotoCrudService photos;
 
-    public String SavePhotosFromPage(@NotNull Model model,
-                                      @NotNull int[] ids,
-                                      @NotNull MultipartFile[] files,
-                                      @NotNull Post post
+    /**
+     * Сохраняет загруженные файлы на диск и хранилище
+     * путь к файлам задаётся в переменной:
+     * upload.path=classpath:static/images/
+     * максимальный размер загружаемого файла:
+     * spring.servlet.multipart.max-file-size=10MB
+     *
+     * @param ids массив идентификаторов фото
+     * @param files массив файлов
+     * @param post объявление
+     * @return сообщение с ошибками, если пусто - без ошибок.
+     * @throws IOException сохранить и удалить файлы
+     */
+    public String savePhotosFromPage(@NotNull int[] ids,
+                                     @NotNull MultipartFile[] files,
+                                     @NotNull Post post
                                       ) throws IOException {
         List<Photo> photoList = new ArrayList<>();
         String err = "";
@@ -39,15 +47,19 @@ public class PhotoUtil {
                 Optional<Photo> photo = photos.findById(id);
                 if (photo.isPresent()) {
                     Photo photo1 =  photo.get();
-                    photo1.setPost(post);
+                    photo1.setPostId(id);
                     photos.update(photo1);
                     photoList.add(photo1);
                 } else {
-                    err += "фото №" + count + " не найдено, id=" + id + "!" + System.lineSeparator();
+                    err += "фото №"
+                            + count
+                            + " не найдено, id="
+                            + id + "!"
+                            + System.lineSeparator();
                 }
             } else {
                 MultipartFile file = files[count];
-                Photo photo = create(photos, post, file.getOriginalFilename(), file);
+                Photo photo = create(post, file.getOriginalFilename(), file);
                 if (photo == null) {
                     err += "фото №" + count + " не сохранено!<br>" + System.lineSeparator();
                 }
@@ -57,8 +69,15 @@ public class PhotoUtil {
         return err;
     }
 
-    public Photo create(PhotoAbstractService photos,
-                        Post post,
+    /**
+     * Создание одной фотографии на диске и в хранилище
+     * @param post объявление
+     * @param photoName имя фотографии
+     * @param file файл из страницы браузера
+     * @return фотографию, если ошибка то null.
+     * @throws IOException запись файла
+     */
+    public Photo create(Post post,
                         String photoName,
                         MultipartFile file) throws IOException {
         Photo photo = null;
@@ -66,10 +85,9 @@ public class PhotoUtil {
             photo = new Photo();
             photo.setName("");
             photo.setFileName("f");
-            photo.setPost(post);
+            photo.setPostId(post.getId());
             photo = photos.create(photo);
             byte[] data = file.getBytes();
-            //String type = file.getContentType();
             String fn = file.getOriginalFilename();
             if (fn != null) {
                 photo.setName(fn);
@@ -91,6 +109,10 @@ public class PhotoUtil {
         return photo;
     }
 
+    /**
+     * Удалить фотографию из хранилища и с диска.
+     * @param photo - фотография
+     */
     public void delete(Photo photo) {
         try {
             File outputFile = new File(loadConfig.getImagesPath() + photo.getFileName());

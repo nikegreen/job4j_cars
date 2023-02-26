@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Хранилище с информацией об двигателях
+ * Хранилище с информацией об двигателях в БД
  */
 @Repository
 @AllArgsConstructor
@@ -46,7 +46,10 @@ public class EngineRepository implements EngineAbstractRepository {
      * @return список двигателей.
      */
     public List<Engine> findAllOrderById() {
-        return crudRepository.findAll(Engine.class);
+//        return crudRepository.findAll(Engine.class);
+        return crudRepository.tx(
+                session -> session.createQuery("from Engine order by id", Engine.class)
+                .list());
     }
 
     /**

@@ -7,6 +7,9 @@ import ru.job4j.cars.model.repository.CarMarcCrudRepository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Сервис марок авто в БД
+ */
 @Service
 @RequiredArgsConstructor
 public class CarMarcCrudService implements CarMarcAbstractService {

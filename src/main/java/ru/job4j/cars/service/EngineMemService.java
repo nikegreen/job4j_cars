@@ -8,6 +8,9 @@ import ru.job4j.cars.model.repository.EngineMemRepository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Сервис типов двигателей в ОЗУ
+ */
 @Service
 @RequiredArgsConstructor
 public class EngineMemService implements EngineAbstractService {

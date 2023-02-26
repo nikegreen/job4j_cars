@@ -2,10 +2,14 @@ package ru.job4j.cars.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+/**
+ * DTO User пользователя для передачи данных на страницу (нет пароля)
+ */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
 public class UserDto {
     private int id;
 

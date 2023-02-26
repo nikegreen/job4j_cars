@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Хранилище с информацией об кузовах автомобилей в ОЗУ
+ */
 @Repository
 public class CarBodyMemRepository implements CarBodyAbstractRepository {
     private final Map<Integer, CarBody> bodies = new ConcurrentHashMap<>();

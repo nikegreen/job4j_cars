@@ -7,6 +7,9 @@ import ru.job4j.cars.model.repository.PostMemRepository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Сервис объявлений в ОЗУ
+ */
 @Service
 @RequiredArgsConstructor
 public class PostMemService implements PostAbstractService {

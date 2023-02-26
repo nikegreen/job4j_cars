@@ -5,6 +5,9 @@ import ru.job4j.cars.model.Engine;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Хранилище с информацией об двигателях
+ */
 public interface EngineAbstractRepository {
     /**
      * Сохранить в базе двигателей.

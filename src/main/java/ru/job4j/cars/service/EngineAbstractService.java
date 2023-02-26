@@ -5,6 +5,9 @@ import ru.job4j.cars.model.Engine;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Сервис типов двигателей
+ */
 public interface EngineAbstractService {
     /**
      * Сохранить в базе двигателей.

@@ -5,6 +5,9 @@ import ru.job4j.cars.model.PostDto;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Хранилище с информацией об объявлениях DTO
+ */
 public interface PostDtoAbstractRepository {
 
     /**

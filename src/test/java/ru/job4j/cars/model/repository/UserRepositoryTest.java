@@ -10,7 +10,14 @@ import java.util.List;
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * тест хранилища пользователей
+ */
 class UserRepositoryTest {
+
+    /**
+     * Создание пользователя, список всех пользователей, удаление пользователя
+     */
     @Test
     void whenCreateFindAllOrderByIdDelete() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
@@ -39,6 +46,10 @@ class UserRepositoryTest {
             assertThat(users.size()).isEqualTo(count);
         }
     }
+
+    /**
+     * Создание пользователя, поиск пользователя по логину, удаление пользователя
+     */
     @Test
     void whenCreateFindByLoginDelete() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
@@ -64,6 +75,9 @@ class UserRepositoryTest {
         }
     }
 
+    /**
+     * Создание пользователя, список всех пользователей по логину, удаление пользователя
+     */
     @Test
     void whenCreateFindByLikeLoginDelete() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
@@ -96,6 +110,9 @@ class UserRepositoryTest {
         }
     }
 
+    /**
+     * Создание пользователя, поиск пользователя по идентификатору, удаление пользователя
+     */
     @Test
     void whenCreateFindByIdDelete() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
@@ -121,6 +138,10 @@ class UserRepositoryTest {
         }
     }
 
+    /**
+     * Создание пользователя, обновление пользователя,
+     * поиск пользователя по идентификатору, удаление пользователя
+     */
     @Test
     void whenCreateUpdateFindByIdDelete() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()

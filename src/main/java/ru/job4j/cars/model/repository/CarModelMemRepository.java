@@ -4,13 +4,16 @@ import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.CarBody;
 import ru.job4j.cars.model.CarMarc;
 import ru.job4j.cars.model.CarModel;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+
+/**
+ * Хранилище с информацией об моделях авто в ОЗУ
+ */
 @Repository
 public class CarModelMemRepository implements  CarModelAbstractRepository {
     private final CarBodyMemRepository bodies;

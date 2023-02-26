@@ -4,16 +4,18 @@ import javax.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.EqualsAndHashCode.Include;
+
+import java.io.Serializable;
 import java.util.Set;
 
 /**
- * Модель данных таблицы с информацией об автомобилях
+ * Модель данных - сущность автомобиль
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "car")
-public class Car {
+public class Car implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Include
@@ -30,9 +32,6 @@ public class Car {
     @ManyToOne
     @JoinColumn(name = "model_id")
     private CarModel model;
-
-    @Column(name = "body_id")
-    private int bodyId;
 
     @ManyToMany
     @JoinTable(

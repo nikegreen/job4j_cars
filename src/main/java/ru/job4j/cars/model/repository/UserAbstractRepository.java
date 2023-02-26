@@ -5,6 +5,9 @@ import ru.job4j.cars.model.User;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Хранилище пользователей
+ */
 public interface UserAbstractRepository {
     /**
      * Сохранить в базе.

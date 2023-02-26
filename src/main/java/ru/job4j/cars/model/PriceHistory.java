@@ -5,15 +5,20 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.EqualsAndHashCode.Include;
 import lombok.*;
+
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/**
+ * модель данных БД - сущность записи истории цены
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "price_history")
-public class PriceHistory {
+public class PriceHistory implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Include

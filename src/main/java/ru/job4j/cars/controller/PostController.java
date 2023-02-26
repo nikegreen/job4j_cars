@@ -8,18 +8,18 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import ru.job4j.cars.config.LoadConfig;
 import ru.job4j.cars.model.*;
 import ru.job4j.cars.service.*;
 import ru.job4j.cars.util.ErrorPage;
 import ru.job4j.cars.util.PhotoUtil;
-
 import javax.servlet.http.HttpSession;
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 
+/**
+ * контроллер для объявлений
+ */
 @Controller
 @RequiredArgsConstructor
 public class PostController {
@@ -33,6 +33,18 @@ public class PostController {
     private final EngineCrudService engines;
     private final PhotoUtil photoUtil;
 
+    /**
+     * Контроллер GET страницы создания объявления /create
+     * передаём в страницу коллекции:
+     *  marcs  - список марок авто
+     *  models - список моделей авто
+     *  bodies - список типов кузова авто
+     *  engines - список типов двигателей
+     * user - авторизованный пользователь
+     * @param model тип {@link org.springframework.ui.Model}
+     * @param session тип {@link javax.servlet.http.HttpSession}
+     * @return строка "create".
+     */
     @GetMapping("/create")
     String createPage(Model model,
                  HttpSession session) {
@@ -44,6 +56,19 @@ public class PostController {
         return "create";
     }
 
+    /**
+     * Контроллер POST страницы создания объявления /create
+     * получаем из страницы:
+     * @param postDto - созданное объявление
+     * @param model тип {@link org.springframework.ui.Model}
+     * @param session тип {@link javax.servlet.http.HttpSession}
+     * @param ids - массив идентификаторов фотографий
+     * @param files - массив файлов с фотографией
+     * @return строку
+     * "redirect:/index" - ОК
+     * "error"           - ошибка
+     * @throws IOException создание и удаление файлов
+     */
     @PostMapping("/create")
     String create(@ModelAttribute("postDto") PostDto postDto,
                   Model model,
@@ -70,7 +95,9 @@ public class PostController {
         driver.setUser(user);
         driver.setName(user.getLogin());
         postDto.getCar().setOwners(Set.of(driver));
-        postDto.getCar().setBodyId(postDto.getCar().getModel().getBodyId());
+        postDto.getCar().setModel(
+                models.findById(postDto.getCar().getModel().getId()).orElse(null)
+        );
         postDto.getCar().setMarc(
                 marcs.findById(postDto.getCar().getModel().getMarcId()).orElse(null)
         );
@@ -105,7 +132,7 @@ public class PostController {
                     "/index"
             );
         }
-        String errorMessage = photoUtil.SavePhotosFromPage(model, ids, files, post);
+        String errorMessage = photoUtil.savePhotosFromPage(ids, files, post);
         if (!"".equals(errorMessage)) {
             return ErrorPage.error(
                     model, "Объявление создано! Но не сохранены Фотографии.<br>"
@@ -114,7 +141,21 @@ public class PostController {
         return "redirect:/index";
     }
 
-
+    /**
+     * Контроллер GET страницы просмотра объявления /view
+     * передаём в страницу коллекции:
+     *  marcs  - список марок авто
+     *  models - список моделей авто
+     *  bodies - список типов кузова авто
+     *  engines - список типов двигателей
+     *  histories - список ищменений цены в объявлении
+     * user - авторизованный пользователь
+     * post1 - просматриваемое объявление
+     * @param postId - идентификатор просматриваемого объявления
+     * @param model тип {@link org.springframework.ui.Model}
+     * @param session тип {@link javax.servlet.http.HttpSession}
+     * @return строка "view".
+     */
     @GetMapping("/view")
     String viewPage(
             @RequestParam(value = "post", required = true) int postId,
@@ -127,17 +168,35 @@ public class PostController {
         model.addAttribute("user", session.getAttribute("user"));
         Post post = posts.findById(postId).orElse(null);
         model.addAttribute("post1", PostDto.fromPost(post));
-        model.addAttribute("histories", post!=null?post.getPriceHistories():List.of());
+        model.addAttribute("histories",
+                post != null ? post.getPriceHistories() : List.of());
         return "view";
     }
 
+    /**
+     * Контроллер POST страницы просмотра объявления /view
+     * @return строку "redirect:/index";
+     */
     @PostMapping("/view")
     String view() {
 
         return "redirect:/index";
     }
 
-
+    /**
+     * Контроллер GET страницы редактирования объявления /edit
+     * передаём в страницу коллекции:
+     *  marcs  - список марок авто
+     *  models - список моделей авто
+     *  bodies - список типов кузова авто
+     *  engines - список типов двигателей
+     * user - авторизованный пользователь
+     * post1 - просматриваемое объявление
+     * @param postId - идентификатор просматриваемого объявления
+     * @param model тип {@link org.springframework.ui.Model}
+     * @param session тип {@link javax.servlet.http.HttpSession}
+     * @return строка "edit".
+     */
     @GetMapping("/edit")
     String editPage(
             @RequestParam(value = "post", required = true) int postId,
@@ -152,6 +211,20 @@ public class PostController {
         return "edit";
     }
 
+    /**
+     * Контроллер POST страницы редактирования объявления /edit
+     * получаем из страницы:
+     * @param postDto - созданное объявление
+     * @param model тип {@link org.springframework.ui.Model}
+     * @param session тип {@link javax.servlet.http.HttpSession}
+     * @param ids - массив идентификаторов фотографий
+     * @param files - массив файлов с фотографией
+     * @return строку
+     * "redirect:/index" - ОК
+     * "error"           - ошибка
+     *
+     * @throws IOException запись и удаление файлов
+     */
     @PostMapping("/edit")
     String edit(@ModelAttribute("postDto") PostDto postDto,
                 Model model,
@@ -159,7 +232,6 @@ public class PostController {
                 @RequestParam("photos.id") int[] ids,
                 @RequestParam("files") MultipartFile[] files
     ) throws IOException {
-
         if (session.getAttribute("user") == null || session.getAttribute("user").equals("Гость")) {
             return ErrorPage.error(
                     model, "Объявление не создано! Авторизуйтесь.", "/login");
@@ -173,17 +245,8 @@ public class PostController {
         if (postDto.getText() == null) {
             postDto.setText("");
         }
-//        postDto.getCar().setName("");
-//        Driver driver = new Driver();
-//        driver.setUser(user);
-//        driver.setName(user.getLogin());
-//        postDto.getCar().setOwners(Set.of(driver));
-//        postDto.getCar().setBodyId(postDto.getCar().getModel().getBodyId());
-//        postDto.getCar().setMarc(
-//                marcs.findById(postDto.getCar().getModel().getMarcId()).orElse(null)
-//        );
         Post post = posts.findById(postDto.getId()).orElse(new Post());
-        if (post == null || post.getId() == 0) {
+        if (post.getId() == 0) {
             return ErrorPage.error(
                     model,
                     "Объявление не обновлено! Не найдено объявления с id="
@@ -192,13 +255,7 @@ public class PostController {
             );
         }
         PostDto oldPostDto = PostDto.fromPost(post);
-//        post.setUser(user);
-//        post.setCreated(LocalDateTime.now());
-//        post.setCar(postDto.getCar());
-//        post.setPriceHistories(List.of());
-//        post.setParticipates(List.of());
         post.setText(postDto.getText());
-//        post.setPhotos(List.of());
         posts.update(post); // or find
         if (post == null || post.getId() == 0) {
             return ErrorPage.error(
@@ -252,7 +309,7 @@ public class PostController {
                         photoUtil.delete(photo);
                     }
                 });
-        String errorMessage1 = photoUtil.SavePhotosFromPage(model, ids, files, post);
+        String errorMessage1 = photoUtil.savePhotosFromPage(ids, files, post);
         errorMessage += errorMessage1;
         if (!"".equals(errorMessage)) {
             return ErrorPage.error(

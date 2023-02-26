@@ -4,6 +4,9 @@ import ru.job4j.cars.model.CarMarc;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Хранилище с информацией об марках автомобилей
+ */
 public interface CarMarcAbstractRepository {
     /**
      * Список авто марок отсортированных по id.

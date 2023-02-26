@@ -26,8 +26,8 @@ public class LoadConfig {
     private String imagesPath = null;
 
     /**
-     *
-     * @throws IOException
+     * Настраивает путь к фотографиям
+     * @throws IOException операции с файлами
      */
     private void config() throws IOException {
         String resourceFile = "application.properties";
@@ -38,9 +38,9 @@ public class LoadConfig {
             imagesPathCfg = imagesPathCfg.replace("classpath:", this.classPath);
         }
         if (File.separatorChar == '/') {
-            imagesPath = imagesPathCfg.replace('\\',File.separatorChar);
+            imagesPath = imagesPathCfg.replace('\\', File.separatorChar);
         } else {
-            imagesPath = imagesPathCfg.replace('/',File.separatorChar);
+            imagesPath = imagesPathCfg.replace('/', File.separatorChar);
         }
         int k = 1;
         if (fileSizeMax.endsWith("MB")) {

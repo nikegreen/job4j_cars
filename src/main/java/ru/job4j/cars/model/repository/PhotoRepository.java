@@ -7,7 +7,7 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 
 /**
- * Хранилище с информацией об фотографиях
+ * Хранилище с информацией об фотографиях в БД
  */
 @Repository
 @AllArgsConstructor
@@ -55,13 +55,14 @@ public class PhotoRepository implements PhotoAbstractRepository {
 
     /**
      * Список id объявлений с фотографий отсортированных по id фотографии.
-     * @param postId
+     * @param postId - идентификатор объявления
      * @return {@link java.util.List<java.lang.Integer>} список фотографий.
      */
     @Override
     public List<Photo> findAllWherePost(int postId) {
         return crudRepository.tx(session  -> session.createQuery(
-                "from Photo where post_id = :fId")
+                "from Photo where post_id = :fId",
+                        Photo.class)
                 .setParameter("fId", postId)
                 .list()
         );

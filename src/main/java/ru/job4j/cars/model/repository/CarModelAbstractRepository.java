@@ -4,6 +4,9 @@ import ru.job4j.cars.model.CarModel;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Хранилище с информацией об моделях авто
+ */
 public interface CarModelAbstractRepository {
 
     /**

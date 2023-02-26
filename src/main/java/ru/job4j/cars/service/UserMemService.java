@@ -8,6 +8,9 @@ import ru.job4j.cars.model.repository.UserMemRepository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Сервис пользователей в ОЗУ
+ */
 @Service
 @RequiredArgsConstructor
 public class UserMemService {

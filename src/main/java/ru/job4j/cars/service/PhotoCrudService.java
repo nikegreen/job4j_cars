@@ -8,6 +8,9 @@ import ru.job4j.cars.model.repository.PhotoRepository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Сервис фотографий в БД
+ */
 @Service
 @RequiredArgsConstructor
 public class PhotoCrudService implements PhotoAbstractService {

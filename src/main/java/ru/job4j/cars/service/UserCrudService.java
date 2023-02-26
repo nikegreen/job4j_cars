@@ -8,6 +8,9 @@ import ru.job4j.cars.model.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Сервис пользователей в БД
+ */
 @Service
 @RequiredArgsConstructor
 public class UserCrudService implements UserAbstractService {

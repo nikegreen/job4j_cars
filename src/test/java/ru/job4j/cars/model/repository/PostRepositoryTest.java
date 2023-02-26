@@ -4,18 +4,73 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.job4j.cars.model.Car;
-import ru.job4j.cars.model.Photo;
-import ru.job4j.cars.model.Post;
-import ru.job4j.cars.model.User;
+import ru.job4j.cars.model.*;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * тест хранилища объявлений
+ */
 class PostRepositoryTest {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:ss.SSS");
+
+    private static int postsSize = 0;
+
+    /**
+     * запоминаем кол-во записей в БД
+     */
+    @BeforeEach
+    public void before() {
+        if (postsSize == 0) {
+            StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+                    .configure().build();
+            try (SessionFactory sf = new MetadataSources(registry)
+                    .buildMetadata().buildSessionFactory()) {
+                PostRepository postRepository = new PostRepository(new CrudRepository(sf));
+                List<Post> posts = postRepository.findAllOrderById();
+                postsSize = posts.size();
+            }
+        }
+    }
+
+    /**
+     * очистка БД в случае провала теста
+     */
+    @AfterEach
+    public void deleteTestData() {
+        StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+                .configure().build();
+        try (SessionFactory sf = new MetadataSources(registry)
+                .buildMetadata().buildSessionFactory()) {
+            PostRepository postRepository = new PostRepository(new CrudRepository(sf));
+            List<Post> posts = postRepository.findAllOrderById();
+            posts.forEach(
+                    post -> {
+                        if (post.getId() > postsSize) {
+                            postRepository.delete(post.getId());
+                        }
+                    }
+            );
+            PhotoRepository photoRepository = new PhotoRepository(new CrudRepository(sf));
+            photoRepository.findAllOrderById().forEach(
+                    photo -> {
+                        if ("new_photo.jpg".equals(photo.getFileName())) {
+                            photoRepository.delete(photo.getId());
+                        }
+                    }
+            );
+        }
+    }
+
+    /**
+     * Создание объявления, список всех объявлений, удаление объявления
+     */
     @Test
     void whenCreateFindAllOrderByIdDelete() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
@@ -90,6 +145,9 @@ class PostRepositoryTest {
         }
     }
 
+    /**
+     * Создание объявления, список всех объявлений за текущий день, удаление объявления
+     */
     @Test
     void whenCreateFindAllTodayDelete() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
@@ -164,6 +222,9 @@ class PostRepositoryTest {
         }
     }
 
+    /**
+     * Создание объявления, список всех объявлений по имени, удаление объявления
+     */
     @Test
     void whenCreateFindByLikeCarNameDelete() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
@@ -238,6 +299,9 @@ class PostRepositoryTest {
         }
     }
 
+    /**
+     * Создание объявления, список всех объявлений с фотографией, удаление объявления
+     */
     @Test
     void whenCreateFindAllWithPhotoDelete() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
@@ -295,13 +359,13 @@ class PostRepositoryTest {
             assertThat(photo).isNotNull();
             photo.setName("new photo name");
             photo.setFileName("new_photo.jpg");
-            photo.setPost(post);
+            photo.setPostId(post.getId());
             photo = photoRepository.create(photo);
             assertThat(photo).isNotNull();
             assertThat(photo.getId()).isNotEqualTo(0);
             assertThat(photo.getName()).isEqualTo("new photo name");
             assertThat(photo.getFileName()).isEqualTo("new_photo.jpg");
-            assertThat(photo.getPost().getId()).isEqualTo(post.getId());
+            assertThat(photo.getPostId()).isEqualTo(post.getId());
 
             posts = postRepository.findAllWithPhoto();
             assertThat(posts).isNotNull();
@@ -319,7 +383,7 @@ class PostRepositoryTest {
             assertThat(post1.getPhotos().get(0).getId()).isNotEqualTo(0);
             assertThat(post1.getPhotos().get(0).getName()).isEqualTo(photo.getName());
             assertThat(post1.getPhotos().get(0).getFileName()).isEqualTo(photo.getFileName());
-            assertThat(post1.getPhotos().get(0).getPost().getId()).isEqualTo(post.getId());
+            assertThat(post1.getPhotos().get(0).getPostId()).isEqualTo(post.getId());
 
             assertThat(post1.getParticipates()).isNotNull();
             assertThat(post1.getParticipates().size()).isEqualTo(0);
@@ -333,6 +397,9 @@ class PostRepositoryTest {
         }
     }
 
+    /**
+     * Создание объявления, поиск объявления по идентификатору, удаление объявления
+     */
     @Test
     void whenCreateFindByIdDelete() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
@@ -405,6 +472,10 @@ class PostRepositoryTest {
         }
     }
 
+    /**
+     * Создание объявления, обновление объявления,
+     * поиск объявления по идентификатору, удаление объявления
+     */
     @Test
     void whenCreateFindByIdUpdateDelete() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()

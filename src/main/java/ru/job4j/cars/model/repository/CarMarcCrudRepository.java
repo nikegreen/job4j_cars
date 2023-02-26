@@ -6,6 +6,9 @@ import ru.job4j.cars.model.CarMarc;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Хранилище с информацией об марках автомобилей в БД
+ */
 @Repository
 @RequiredArgsConstructor
 public class CarMarcCrudRepository implements CarMarcAbstractRepository {
@@ -45,5 +48,4 @@ public class CarMarcCrudRepository implements CarMarcAbstractRepository {
                         .getId()
         );
     }
-
 }

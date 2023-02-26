@@ -10,6 +10,9 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Хранилище с информацией об двигателях в ОЗУ
+ */
 @Repository
 public class EngineMemRepository implements EngineAbstractRepository {
     private final Map<Integer, Engine> engines = new ConcurrentHashMap<>();

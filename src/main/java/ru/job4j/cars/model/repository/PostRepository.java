@@ -8,7 +8,7 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 
 /**
- * Хранилище с информацией об объявлениях
+ * Хранилище с информацией об объявлениях в БД
  */
 @Repository
 @AllArgsConstructor
@@ -52,27 +52,23 @@ public class PostRepository {
         return crudRepository.tx(
             session -> {
                 List<Post> posts = session.createQuery(
-                        "from Post order by id").list();
-
-//                List<Post> posts = session.createQuery(
-//                "select distinct i from Post i left join fetch i.car c"
-//                    + " left join fetch c.owners"
-//                    + " order by i.id", Post.class).list();
-//                posts = session.createQuery(
-//                        "select distinct i from Post i left join fetch i.priceHistories"
-//                                + " where i in :fPosts order by i.id", Post.class)
-//                        .setParameter("fPosts", posts)
-//                        .list();
-//                posts = session.createQuery(
-//                                "select distinct i from Post i left join fetch i.participates"
-//                                        + " where i in :fPosts order by i.id", Post.class)
-//                        .setParameter("fPosts", posts)
-//                        .list();
-//                posts = session.createQuery(
-//                                "select distinct i from Post i left join fetch i.photos"
-//                                        + " where i in :fPosts order by i.id", Post.class)
-//                        .setParameter("fPosts", posts)
-//                        .list();
+                "select distinct i from Post i left join fetch i.car c"
+                    + " left join fetch c.owners", Post.class).list();
+                posts = session.createQuery(
+                        "select distinct i from Post i left join fetch i.priceHistories"
+                                + " where i in :fPosts", Post.class)
+                        .setParameter("fPosts", posts)
+                        .list();
+                posts = session.createQuery(
+                                "select distinct i from Post i left join fetch i.participates"
+                                        + " where i in :fPosts", Post.class)
+                        .setParameter("fPosts", posts)
+                        .list();
+                posts = session.createQuery(
+                                "select distinct i from Post i left join fetch i.photos"
+                                        + " where i in :fPosts order by i.id", Post.class)
+                        .setParameter("fPosts", posts)
+                        .list();
                 return posts;
             }
         );
@@ -96,12 +92,12 @@ public class PostRepository {
                     }
                     posts = session.createQuery(
                                     "select distinct i from Post i left join fetch i.priceHistories"
-                                            + " where i in :fPosts order by i.id", Post.class)
+                                            + " where i in :fPosts", Post.class)
                             .setParameter("fPosts", posts)
                             .list();
                     posts = session.createQuery(
                                     "select distinct i from Post i left join fetch i.participates"
-                                            + " where i in :fPosts order by i.id", Post.class)
+                                            + " where i in :fPosts", Post.class)
                             .setParameter("fPosts", posts)
                             .list();
                     posts = session.createQuery(
@@ -125,7 +121,7 @@ public class PostRepository {
                     List<Post> posts = session.createQuery(
                             "select distinct i from Post i left join fetch i.car c"
                                     + " left join fetch c.owners"
-                                    + " where c.name like :fKey order by i.id", Post.class)
+                                    + " where c.name like :fKey", Post.class)
                             .setParameter("fKey", '%' + key + '%')
                             .list();
                     if (posts.size() == 0) {
@@ -133,12 +129,12 @@ public class PostRepository {
                     }
                     posts = session.createQuery(
                                     "select distinct i from Post i left join fetch i.priceHistories"
-                                            + " where i in :fPosts order by i.id", Post.class)
+                                            + " where i in :fPosts", Post.class)
                             .setParameter("fPosts", posts)
                             .list();
                     posts = session.createQuery(
                                     "select distinct i from Post i left join fetch i.participates"
-                                            + " where i in :fPosts order by i.id", Post.class)
+                                            + " where i in :fPosts", Post.class)
                             .setParameter("fPosts", posts)
                             .list();
                     posts = session.createQuery(
@@ -204,12 +200,12 @@ public class PostRepository {
                     posts = session.createQuery(
                                     "select distinct i from Post i left join fetch i.car c"
                                             + " left join fetch c.owners"
-                                            + " where i in :fPosts order by i.id", Post.class)
+                                            + " where i in :fPosts", Post.class)
                             .setParameter("fPosts", posts)
                             .list();
                     posts = session.createQuery(
                                     "select distinct i from Post i left join fetch i.priceHistories"
-                                            + " where i in :fPosts order by i.id", Post.class)
+                                            + " where i in :fPosts", Post.class)
                             .setParameter("fPosts", posts)
                             .list();
                     posts = session.createQuery(

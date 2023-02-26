@@ -6,11 +6,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import ru.job4j.cars.model.Post;
 import ru.job4j.cars.model.PostDto;
 import ru.job4j.cars.service.*;
-
 import javax.servlet.http.HttpSession;
+
 
 /**
  * <p>IndexController class. Spring boot controller</p>
@@ -38,7 +37,7 @@ public class IndexController {
 
     /**
      * <p>index.</p>
-     * Main page web service
+     * Main page web service GET /index
      * @return a {@link java.lang.String} object.
      */
     @GetMapping("/index")
@@ -55,6 +54,13 @@ public class IndexController {
         return "index";
     }
 
+    /**
+     * <p>index.</p>
+     * Main page web service POST /index
+     * @param postFilter - содержит заполненный фильтр соххраним в {@param session}
+     * @param session тип {@link javax.servlet.http.HttpSession}
+     * @return строка "redirect:/index";
+     */
     @PostMapping("/index")
     String index(@ModelAttribute PostDto postFilter,
                  HttpSession session) {

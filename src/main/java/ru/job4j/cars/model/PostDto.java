@@ -2,17 +2,20 @@ package ru.job4j.cars.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.format.annotation.DateTimeFormat;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * DTO объявление
+ */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class PostDto implements Serializable {
-    final static DateTimeFormatter CUSTOM_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    final static DateTimeFormatter CUSTOM_FORMATTER =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     @EqualsAndHashCode.Include
     private int id;
     private String text;
@@ -37,7 +40,11 @@ public class PostDto implements Serializable {
                 + '}';
     }
 
-
+    /**
+     * Функция помошник для конвертации String в LocalDateTime
+     * @param postDto DTO объявления
+     * @return тип {@link java.time.LocalDateTime} дата и время из DTO объявления
+     */
     public static LocalDateTime getCreate(PostDto postDto) {
         return LocalDateTime.parse(postDto.getCreated(), CUSTOM_FORMATTER);
     }

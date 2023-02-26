@@ -7,6 +7,9 @@ import ru.job4j.cars.model.repository.EngineRepository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Сервис типов двигателей в БД
+ */
 @Service
 @RequiredArgsConstructor
 public class EngineCrudService implements EngineAbstractService {

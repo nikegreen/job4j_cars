@@ -70,16 +70,21 @@ public class PostDtoMemRepository implements PostDtoAbstractRepository {
                             return false;
                         }
                     }
-                    if (car.getModel() != null && car.getModel().getId() != 0) {
-                        if (carDto.getModel().getId() != car.getModel().getId()) {
+                    if (car.getModel() != null) {
+                        if (car.getModel().getId() != 0
+                            && carDto.getModel().getId() != car.getModel().getId()) {
+                            return false;
+                        }
+                        if (car.getModel().getBodyId() != 0
+                            && carDto.getModel().getBodyId() != car.getModel().getBodyId()) {
                             return false;
                         }
                     }
-                    if (car.getBodyId() != 0) {
-                        if (carDto.getBodyId() != car.getBodyId()) {
-                            return false;
-                        }
-                    }
+//                    if (car.getBodyId() != 0) {
+//                        if (carDto.getBodyId() != car.getBodyId()) {
+//                            return false;
+//                        }
+//                    }
                     if (car.getEngine() != null && car.getEngine().getId() != 0) {
                         if (carDto.getEngine().getId() != car.getEngine().getId()) {
                             return false;

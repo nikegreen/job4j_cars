@@ -5,6 +5,9 @@ import ru.job4j.cars.model.CarModel;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Сервис моделей авто
+ */
 public interface CarModelAbstractService {
     /**
      * Список моделей отсортированных по id.

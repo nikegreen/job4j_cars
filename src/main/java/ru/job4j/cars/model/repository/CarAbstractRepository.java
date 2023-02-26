@@ -5,6 +5,9 @@ import ru.job4j.cars.model.Car;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Хранилище с информацией об автомобилях в ОЗУ
+ */
 public interface CarAbstractRepository {
     /**
      * Сохранить в базе.
