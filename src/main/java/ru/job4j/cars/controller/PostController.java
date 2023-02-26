@@ -109,7 +109,7 @@ public class PostController {
         post.setParticipates(List.of());
         post.setText(postDto.getText());
         post.setPhotos(List.of());
-        post = posts.create(post); // or find
+        post = posts.create(post);
         if (post == null || post.getId() == 0) {
             return ErrorPage.error(
                     model,
@@ -256,7 +256,7 @@ public class PostController {
         }
         PostDto oldPostDto = PostDto.fromPost(post);
         post.setText(postDto.getText());
-        posts.update(post); // or find
+        posts.update(post);
         if (post == null || post.getId() == 0) {
             return ErrorPage.error(
                     model,

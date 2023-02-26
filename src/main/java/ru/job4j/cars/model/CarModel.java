@@ -14,26 +14,13 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CarModel implements Serializable {
-//    @Getter
-//    @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private int id;
-//    @Getter
-//    @Setter
     private String name;
-//    @Getter
-//    @Setter
     @Column(name = "marc_id")
     private int marcId;
-
-//    @Getter
-//    @Setter
     @Column(name = "body_id")
     private int bodyId;
-
-//    public CarModel() {
-//
-//    }
 }

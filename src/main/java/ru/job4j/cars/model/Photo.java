@@ -28,30 +28,8 @@ public class Photo implements Serializable {
     private String name;
     @Column(name = "file_name")
     private String fileName;
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "post_id")
-//    private Post post;
     @Column(name = "post_id")
     private int postId;
-
-//    private String photosToString() {
-//        StringBuilder res = new StringBuilder();
-//        String separator = "";
-//        for (Photo photo: post.getPhotos()) {
-//            res.append(separator)
-//                    .append("{id=")
-//                    .append(photo.getId())
-//                    .append(", name=")
-//                    .append(photo.getName())
-//                    .append(", fileName=")
-//                    .append(photo.getFileName())
-//                    .append(", ")
-//                    .append(photo.getPost().getId())
-//                    .append("}");
-//            separator = ", ";
-//        }
-//        return res.toString();
-//    }
 
     @Override
     public String toString() {
@@ -61,17 +39,6 @@ public class Photo implements Serializable {
                 + ", fileName='" + fileName + '\''
                 + ", post={"
                     + "id=" + getPostId()
-//                    + post.getId()
-//                    + ", text='" + post.getText() + '\''
-//                    + ", created=" + post.getCreated()
-//                    + ", user="
-//                    + "{id=" + post.getUser().getId()
-//                    + ", login=" + post.getUser().getLogin()
-//                    + ", password=" + post.getUser().getPassword() + "}"
-//                    + ", priceHistories=" + post.getPriceHistories().toString()
-//                    + ", participates=" + post.getParticipates()
-//                    + ", car=" + post.getCar().toString()
-//                    + ", photos=[" + photosToString() + "]}"
                 + '}';
     }
 }

@@ -80,11 +80,6 @@ public class PostDtoMemRepository implements PostDtoAbstractRepository {
                             return false;
                         }
                     }
-//                    if (car.getBodyId() != 0) {
-//                        if (carDto.getBodyId() != car.getBodyId()) {
-//                            return false;
-//                        }
-//                    }
                     if (car.getEngine() != null && car.getEngine().getId() != 0) {
                         if (carDto.getEngine().getId() != car.getEngine().getId()) {
                             return false;

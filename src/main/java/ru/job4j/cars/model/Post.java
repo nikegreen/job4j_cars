@@ -28,7 +28,7 @@ public class Post implements Serializable {
     @JoinColumn(name = "auto_user_id")
     private User user;
 
-    //    @BatchSize(size = 150)
+    @BatchSize(size = 150)
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "auto_post_id")
     private List<PriceHistory> priceHistories;

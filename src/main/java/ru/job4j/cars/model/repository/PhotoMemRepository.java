@@ -206,7 +206,6 @@ public class PhotoMemRepository implements PhotoAbstractRepository {
     public void delete(int id) {
         findById(id).ifPresent(
                 photo -> {
-//                    Post post = photo.getPostId();
                     if (photo.getPostId() > 0) {
                         Post post = posts.findById(photo.getPostId()).orElse(new Post());
                         post.getPhotos().removeIf(photo1 -> photo1.getId() == id);

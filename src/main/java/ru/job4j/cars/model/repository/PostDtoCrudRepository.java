@@ -16,7 +16,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PostDtoCrudRepository implements PostDtoAbstractRepository {
     private final CrudRepository crudRepository;
-    //private final PostRepository posts;
 
     /**
      * Список всех объявлений (для отображения)

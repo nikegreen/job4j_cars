@@ -46,7 +46,6 @@ public class EngineRepository implements EngineAbstractRepository {
      * @return список двигателей.
      */
     public List<Engine> findAllOrderById() {
-//        return crudRepository.findAll(Engine.class);
         return crudRepository.tx(
                 session -> session.createQuery("from Engine order by id", Engine.class)
                 .list());
