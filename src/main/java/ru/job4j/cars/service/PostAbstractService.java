@@ -1,6 +1,8 @@
 package ru.job4j.cars.service;
 
+import ru.job4j.cars.model.Car;
 import ru.job4j.cars.model.Post;
+import ru.job4j.cars.model.PostDto;
 
 import java.util.List;
 import java.util.Optional;
