@@ -1,0 +1,18 @@
+insert into PRICE_HISTORY(before, after, created, auto_post_id) values (0, 1000000, now(), (select id from auto_post where _text = 'sell Audi-A6'));
+insert into PRICE_HISTORY(before, after, created, auto_post_id) values (1000000, 1100000, now(), (select id from auto_post where _text = 'sell Audi-A6'));
+insert into PRICE_HISTORY(before, after, created, auto_post_id) values (1000000, 1100000, now(), (select id from auto_post where _text = 'sell BMW-X5'));
+insert into PRICE_HISTORY(before, after, created, auto_post_id) values (0, 9100000, now(), (select id from auto_post where _text = 'sell BMW-X6'));
+insert into PRICE_HISTORY(before, after, created, auto_post_id) values (0, 1500000, now(), (select id from auto_post where _text = 'sell Ford-Focus'));
+insert into PRICE_HISTORY(before, after, created, auto_post_id) values (0, 1200000, now(), (select id from auto_post where _text = 'sell Hyundai-Accent'));
+insert into PRICE_HISTORY(before, after, created, auto_post_id) values (0, 2800000, now(), (select id from auto_post where _text = 'sell Hyundai-Santa Fe'));
+insert into PRICE_HISTORY(before, after, created, auto_post_id) values (0, 900000, now(), (select id from auto_post where _text = 'sell Kia-Rio'));
+insert into PRICE_HISTORY(before, after, created, auto_post_id) values (0, 2500000, now(), (select id from auto_post where _text = 'sell Mercedes-Benz-E-Класс'));
+insert into PRICE_HISTORY(before, after, created, auto_post_id) values (0, 3200000, now(), (select id from auto_post where _text = 'sell Mitsubishi-Pajero'));
+insert into PRICE_HISTORY(before, after, created, auto_post_id) values (0, 2900000, now(), (select id from auto_post where _text = 'sell Nissan-Pathfinder'));
+insert into PRICE_HISTORY(before, after, created, auto_post_id) values (0, 900000, now(), (select id from auto_post where _text = 'sell Opel-Astra'));
+insert into PRICE_HISTORY(before, after, created, auto_post_id) values (0, 1700000, now(), (select id from auto_post where _text = 'sell Renault-Duster'));
+insert into PRICE_HISTORY(before, after, created, auto_post_id) values (0, 3300000, now(), (select id from auto_post where _text = 'sell Subaru-Outback'));
+insert into PRICE_HISTORY(before, after, created, auto_post_id) values (0, 4300000, now(), (select id from auto_post where _text = 'sell Toyota-Land Cruiser'));
+insert into PRICE_HISTORY(before, after, created, auto_post_id) values (0, 3150000, now(), (select id from auto_post where _text = 'sell Toyota-RAV4'));
+insert into PRICE_HISTORY(before, after, created, auto_post_id) values (1000000, 1100000, now(), 1);
+insert into PRICE_HISTORY(before, after, created, auto_post_id) values (1100000, 1200000, now(), 2);

@@ -249,19 +249,18 @@
                             <!-- Кузов -->
                             <div class="form-group row">
                                 <label class="form-label col-md-4 text-muted">Кузов:</label>
-                                <select class="form-select col-md-8" name="car.body.id" id="car.body.id"
+                                <select class="form-select col-md-8" name="car.model.bodyId" id="car.body.id"
                                         onchange="setModel('car.marc', 'car.model', 'car.body')" readonly>
                                     <option th:if="${bodies!=null}" hidden value="0" disabled>Любой кузов</option>
                                     <option th:if="${bodies!=null}" th:each="body, statBody: ${bodies}"
-                                            th:selected="${body.id==post1.car.bodyId}"
-                                            th:disabled="${body.id!=post1.car.bodyId}"
+                                            th:selected="${body.id==post1.car.model.bodyId}"
+                                            th:disabled="${body.id!=post1.car.model.bodyId}"
                                             th:value="${body.id}" th:text="${body.name}">Кузов</option>
                                     <!--                  <option selected>Кузов</option>-->
                                     <!--                  <option value="1">One</option>-->
                                     <!--                  <option value="2">Two</option>-->
                                     <!--                  <option value="3">Three</option>-->
                                 </select>
-                                <input type="hidden" name="car.body.name" id="car.body.name" th:value="${post1.car.bodyId}">
                             </div>
                             <!-- Двигатель -->
                             <div class="form-group row">

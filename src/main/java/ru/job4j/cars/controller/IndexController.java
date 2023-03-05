@@ -70,7 +70,6 @@ public class IndexController {
         return "redirect:/index";
     }
 
-
     /**
      * Список всех объявлений по фильтру (для отображения)
      * @param filter - параметры фильтра тип: {@link ru.job4j.cars.model.UserDto}
@@ -84,13 +83,12 @@ public class IndexController {
     private List<PostDto> findAllByFilter(PostDto filter) {
         if (filter == null) {
             List<Post> postList = posts.findAllOrderById();
-            Post post = postList.get(0);
             return postList.stream()
-                    .map(post1 -> PostDto.fromPost(post1))
+                    .map(PostDto::fromPost)
                     .toList();
         }
         return posts.findAllOrderById().stream()
-                .map(post -> PostDto.fromPost(post))
+                .map(PostDto::fromPost)
                 .filter(
                         postDto -> {
                             if (postDto.getPrice() > filter.getPrice()) {
@@ -107,11 +105,12 @@ public class IndexController {
                                 }
                                 if (car.getModel() != null) {
                                     if (car.getModel().getId() != 0
-                                            && carDto.getModel().getId() != car.getModel().getId()) {
+                                        && carDto.getModel().getId() != car.getModel().getId()) {
                                         return false;
                                     }
                                     if (car.getModel().getBodyId() != 0
-                                            && carDto.getModel().getBodyId() != car.getModel().getBodyId()) {
+                                        && carDto.getModel().getBodyId() != car.getModel()
+                                            .getBodyId()) {
                                         return false;
                                     }
                                 }

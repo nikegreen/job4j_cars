@@ -23,4 +23,5 @@
     <include file="scripts/016_ddl_add_column_marc_id_model_id_in_table_car.sql" relativeToChangelogFile="true"/>
     <include file="scripts/017_ddl_update_constraint_in_table_car_model.sql" relativeToChangelogFile="true"/>
     <include file="scripts/018_dml_insert_auto_post_photo_.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/019_dml_insert_price_hystory.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
