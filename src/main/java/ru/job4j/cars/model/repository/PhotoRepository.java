@@ -12,6 +12,14 @@ import lombok.AllArgsConstructor;
 @Repository
 @AllArgsConstructor
 public class PhotoRepository implements PhotoAbstractRepository {
+    /**
+     * HQL
+     */
+    public static final String FIND_ALL_BY_POST_ID = "from Photo where post_id = :fId";
+
+    /**
+     * Hibernate CRUD хранилище
+     */
     private final CrudRepository crudRepository;
 
     /**
@@ -61,7 +69,7 @@ public class PhotoRepository implements PhotoAbstractRepository {
     @Override
     public List<Photo> findAllWherePost(int postId) {
         return crudRepository.tx(session  -> session.createQuery(
-                "from Photo where post_id = :fId",
+                        FIND_ALL_BY_POST_ID,
                         Photo.class)
                 .setParameter("fId", postId)
                 .list()

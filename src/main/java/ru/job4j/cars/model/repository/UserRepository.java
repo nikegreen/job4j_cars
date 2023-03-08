@@ -12,6 +12,14 @@ import java.util.Optional;
 @Repository
 @AllArgsConstructor
 public class UserRepository implements UserAbstractRepository {
+    /**
+     * HQL
+     */
+    public static final String FIND_BY_LOGIN = "from User as i where i.login = :fLogin order by id";
+
+    /**
+     * Hibernate CRUD хранилище
+     */
     private final CrudRepository crudRepository;
 
     /**
@@ -80,7 +88,7 @@ public class UserRepository implements UserAbstractRepository {
     @Override
     public Optional<User> findByLogin(String login) {
         return Optional.ofNullable(crudRepository.tx(session -> session.createQuery(
-                        "from User as i where i.login = :fLogin order by id", User.class)
+                FIND_BY_LOGIN, User.class)
                 .setParameter("fLogin", login).uniqueResult()));
     }
 }

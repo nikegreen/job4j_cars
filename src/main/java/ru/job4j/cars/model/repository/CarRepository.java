@@ -12,6 +12,19 @@ import java.util.Optional;
 @Repository
 @AllArgsConstructor
 public class CarRepository implements  CarAbstractRepository {
+    /**
+     * HQL
+     */
+    public static final String FIND_ALL =
+            "from Car i left join fetch i.owners order by i.id";
+    public static final String FIND_BY_ID =
+            "from Car i join fetch i.owners where i.id = :fId";
+    public static final String FIND_ALL_BY_NAME =
+            "from Car i join fetch i.owners where i.name like :fKey order by i.id";
+
+    /**
+     * Hibernate CRUD repository
+     */
     private final CrudRepository crudRepository;
 
     /**
@@ -50,9 +63,9 @@ public class CarRepository implements  CarAbstractRepository {
      */
     @Override
     public List<Car> findAllOrderById() {
-        return crudRepository.tx(session -> session.createQuery(
-                "from Car i left join fetch i.owners order by i.id", Car.class)
-                .list());
+        return crudRepository.tx(
+                session -> session.createQuery(FIND_ALL, Car.class).list()
+        );
     }
 
     /**
@@ -64,7 +77,7 @@ public class CarRepository implements  CarAbstractRepository {
         return Optional.ofNullable(
                 crudRepository.tx(session ->
                    session.createQuery(
-                           "from Car i join fetch i.owners where i.id = :fId",
+                           FIND_BY_ID,
                            Car.class)
                            .setParameter("fId", id)
                            .uniqueResult()
@@ -80,7 +93,7 @@ public class CarRepository implements  CarAbstractRepository {
     @Override
     public List<Car> findByLikeName(String key) {
         return crudRepository.tx(session -> session.createQuery(
-                        "from Car i join fetch i.owners where i.name like :fKey order by i.id",
+                        FIND_ALL_BY_NAME,
                         Car.class)
                 .setParameter("fKey", '%' + key + '%').list());
     }

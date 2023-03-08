@@ -98,8 +98,9 @@ public class CrudRepository {
         Session session = sf.openSession();
         try {
             tx = session.beginTransaction();
-            result = (T) function.apply(session);
+            T res = (T) function.apply(session);
             tx.commit();
+            result = res;
         } catch (Exception e) {
             if (tx != null) {
                 tx.rollback();

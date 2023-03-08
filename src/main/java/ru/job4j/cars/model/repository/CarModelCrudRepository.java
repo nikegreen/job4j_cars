@@ -12,6 +12,21 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class CarModelCrudRepository implements  CarModelAbstractRepository {
+    /**
+     * HQL
+     */
+    public static final String FIND_ALL_BY_MARC_ID =
+            "from CarModel i where i.marcId = :fId order by i.id";
+    public static final String FIND_ALL_BY_BODY_ID =
+            "from CarModel i where i.bodyId = :fId order by i.id";
+    public static final String FIND_ALL_BY_MARC_ID_AND_BODY_ID =
+            "from CarModel i where i.marcId = :fMarcId and i.bodyId = :fBodyId order by i.id";
+    public static final String FIND_BY_NAME =
+            "from CarModel i where i.name = :fName order by i.id";
+
+    /**
+     * Hibernate CRUD repository
+     */
     private final CrudRepository crudRepository;
 
     /**
@@ -42,7 +57,7 @@ public class CarModelCrudRepository implements  CarModelAbstractRepository {
     @Override
     public List<CarModel> findAllByMarcId(int id) {
         return crudRepository.tx(session -> session.createQuery(
-                        "from CarModel i where i.marcId = :fId order by i.id", CarModel.class)
+                        FIND_ALL_BY_MARC_ID, CarModel.class)
                 .setParameter("fId", id).list());
     }
 
@@ -56,7 +71,7 @@ public class CarModelCrudRepository implements  CarModelAbstractRepository {
     @Override
     public List<CarModel> findAllByBodyId(int id) {
         return crudRepository.tx(session -> session.createQuery(
-                        "from CarModel i where i.bodyId = :fId order by i.id", CarModel.class)
+                        FIND_ALL_BY_BODY_ID, CarModel.class)
                 .setParameter("fId", id).list());
     }
 
@@ -71,7 +86,7 @@ public class CarModelCrudRepository implements  CarModelAbstractRepository {
     @Override
     public List<CarModel> findAllByMarcIdAndBodyId(int marcId, int bodyId) {
         return crudRepository.tx(session -> session.createQuery(
-                "from CarModel i where i.marcId = :fMarcId and i.bodyId = :fBodyId order by i.id",
+                        FIND_ALL_BY_MARC_ID_AND_BODY_ID,
                         CarModel.class)
                 .setParameter("fMarcId", marcId)
                 .setParameter("fBodyId", bodyId)
@@ -86,7 +101,7 @@ public class CarModelCrudRepository implements  CarModelAbstractRepository {
     @Override
     public Optional<CarModel> findByName(String name) {
         return crudRepository.tx(session -> session.createQuery(
-                        "from CarModel i where i.name = :fName order by i.id", CarModel.class)
+                        FIND_BY_NAME, CarModel.class)
                 .setParameter("fName", name).uniqueResultOptional());
     }
 }

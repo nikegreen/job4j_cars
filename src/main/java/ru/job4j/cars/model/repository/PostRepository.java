@@ -13,6 +13,93 @@ import lombok.AllArgsConstructor;
 @Repository
 @AllArgsConstructor
 public class PostRepository {
+    /**
+     * HQL findAllOrderById()
+     */
+    public static final String FIND_ALL_FETCH_CAR =
+            "select distinct i from Post i left join fetch i.car c"
+            + " left join fetch c.owners";
+    public static final String FIND_ALL_FETCH_PRICE_PARTIPATIES =
+            "select distinct i from Post i left join fetch i.participates"
+            + " where i in :fPosts";
+    public static final String FIND_ALL_FETCH_PHOTO =
+            "select distinct i from Post i left join fetch i.photos"
+            + " where i in :fPosts order by i.id";
+    public static final String FIND_ALL_FETCH_PRICE_HISTORIES =
+            "select distinct i from Post i left join fetch i.priceHistories"
+            + " where i in :fPosts";
+
+    /**
+     * HQL findById()
+     */
+    public static final String FIND_BY_ID_FETCH_CAR =
+            "select distinct i from Post i left join fetch i.car c"
+            + " left join fetch c.owners"
+            + " where i.id = :fId";
+    public static final String FIND_BY_ID_FETCH_PRICE_HISTORIES =
+            "select distinct i from Post i left join fetch i.priceHistories"
+            + " where i in :fPosts";
+    public static final String FIND_BY_ID_FETCH_PARTICIPATES =
+            "select distinct i from Post i left join fetch i.participates"
+            + " where i in :fPosts";
+    public static final String FIND_BY_ID_FETCH_PHOTO =
+            "select distinct i from Post i left join fetch i.photos"
+            + " where i in :fPosts order by i.id";
+
+    /**
+     * HQL findByLikeCarName(String key)
+     */
+    public static final String FIND_ALL_BY_NAME_FETCH_CAR =
+            "select distinct i from Post i left join fetch i.car c"
+            + " left join fetch c.owners"
+            + " where c.name like :fKey";
+    public static final String FIND_ALL_BY_NAME_FETCH_PRICE_HISTORIES =
+            "select distinct i from Post i left join fetch i.priceHistories"
+            + " where i in :fPosts";
+    public static final String FIND_ALL_BY_NAME_FETCH_PARTICIPATES =
+            "select distinct i from Post i left join fetch i.participates"
+            + " where i in :fPosts";
+    public static final String FIND_ALL_BY_NAME_FETCH_PHOTO =
+            "select distinct i from Post i left join fetch i.photos"
+            + " where i in :fPosts order by i.id";
+
+    /**
+     * HQL findAllToday()
+     */
+    public static final String FIND_ALL_TODAY_FETCH_CAR =
+            "select distinct i from Post i left join fetch i.car c"
+            + " left join fetch c.owners"
+            + " where i.created >= :fDay order by i.id";
+    public static final String FIND_ALL_TODAY_FETCH_PRICE_HISTORIES =
+            "select distinct i from Post i left join fetch i.priceHistories"
+            + " where i in :fPosts order by i.id";
+    public static final String FIND_ALL_TODAY_FETCH_PARTICIPATES =
+            "select distinct i from Post i left join fetch i.participates"
+            + " where i in :fPosts order by i.id";
+    public static final String FIND_ALL_TODAY_PHOTO =
+            "select distinct i from Post i left join fetch i.photos"
+            + " where i in :fPosts order by i.id";
+
+    /**
+     * HQL findAllWithPhoto()
+     */
+    public static final String FIND_ALL_WITH_PHOTO_FETCH_PHOTO =
+            "from Post i left join fetch i.photos"
+            + " where i.photos.size>0";
+    public static final String FIND_ALL_WITH_PHOTO_FETCH_CAR =
+            "select distinct i from Post i left join fetch i.car c"
+            + " left join fetch c.owners"
+            + " where i in :fPosts";
+    public static final String FIND_ALL_WITH_PHOTO_FETCH_PRICE_HISTORIES =
+            "select distinct i from Post i left join fetch i.priceHistories"
+            + " where i in :fPosts";
+    public static final String FIND_ALL_WITH_PHOTO_FETCH_PARTICIPATES =
+            "select distinct i from Post i left join fetch i.participates"
+            + " where i in :fPosts order by i.id";
+
+    /**
+     * Hibernate CRUD хранилище
+     */
     private final CrudRepository crudRepository;
 
     /**
@@ -52,21 +139,17 @@ public class PostRepository {
         return crudRepository.tx(
             session -> {
                 List<Post> posts = session.createQuery(
-                "select distinct i from Post i left join fetch i.car c"
-                    + " left join fetch c.owners", Post.class).list();
+                        FIND_ALL_FETCH_CAR, Post.class).list();
                 posts = session.createQuery(
-                        "select distinct i from Post i left join fetch i.priceHistories"
-                                + " where i in :fPosts", Post.class)
+                        FIND_ALL_FETCH_PRICE_HISTORIES, Post.class)
                         .setParameter("fPosts", posts)
                         .list();
                 posts = session.createQuery(
-                                "select distinct i from Post i left join fetch i.participates"
-                                        + " where i in :fPosts", Post.class)
+                        FIND_ALL_FETCH_PRICE_PARTIPATIES, Post.class)
                         .setParameter("fPosts", posts)
                         .list();
                 posts = session.createQuery(
-                                "select distinct i from Post i left join fetch i.photos"
-                                        + " where i in :fPosts order by i.id", Post.class)
+                        FIND_ALL_FETCH_PHOTO, Post.class)
                         .setParameter("fPosts", posts)
                         .list();
                 return posts;
@@ -82,27 +165,22 @@ public class PostRepository {
         return crudRepository.tx(
                 session -> {
                     List<Post> posts = session.createQuery(
-                                    "select distinct i from Post i left join fetch i.car c"
-                                            + " left join fetch c.owners"
-                                            + " where i.id = :fId", Post.class)
+                            FIND_BY_ID_FETCH_CAR, Post.class)
                             .setParameter("fId", id)
                             .list();
                     if (posts.size() == 0) {
                         return Optional.empty();
                     }
                     posts = session.createQuery(
-                                    "select distinct i from Post i left join fetch i.priceHistories"
-                                            + " where i in :fPosts", Post.class)
+                            FIND_BY_ID_FETCH_PRICE_HISTORIES, Post.class)
                             .setParameter("fPosts", posts)
                             .list();
                     posts = session.createQuery(
-                                    "select distinct i from Post i left join fetch i.participates"
-                                            + " where i in :fPosts", Post.class)
+                            FIND_BY_ID_FETCH_PARTICIPATES, Post.class)
                             .setParameter("fPosts", posts)
                             .list();
                     posts = session.createQuery(
-                                    "select distinct i from Post i left join fetch i.photos"
-                                            + " where i in :fPosts order by i.id", Post.class)
+                            FIND_BY_ID_FETCH_PHOTO, Post.class)
                             .setParameter("fPosts", posts)
                             .list();
                     return Optional.ofNullable(posts.get(0));
@@ -119,27 +197,22 @@ public class PostRepository {
         return crudRepository.tx(
                 session -> {
                     List<Post> posts = session.createQuery(
-                            "select distinct i from Post i left join fetch i.car c"
-                                    + " left join fetch c.owners"
-                                    + " where c.name like :fKey", Post.class)
+                            FIND_ALL_BY_NAME_FETCH_CAR, Post.class)
                             .setParameter("fKey", '%' + key + '%')
                             .list();
                     if (posts.size() == 0) {
                         return posts;
                     }
                     posts = session.createQuery(
-                                    "select distinct i from Post i left join fetch i.priceHistories"
-                                            + " where i in :fPosts", Post.class)
+                            FIND_ALL_BY_NAME_FETCH_PRICE_HISTORIES, Post.class)
                             .setParameter("fPosts", posts)
                             .list();
                     posts = session.createQuery(
-                                    "select distinct i from Post i left join fetch i.participates"
-                                            + " where i in :fPosts", Post.class)
+                            FIND_ALL_BY_NAME_FETCH_PARTICIPATES, Post.class)
                             .setParameter("fPosts", posts)
                             .list();
                     posts = session.createQuery(
-                                    "select distinct i from Post i left join fetch i.photos"
-                                            + " where i in :fPosts order by i.id", Post.class)
+                            FIND_ALL_BY_NAME_FETCH_PHOTO, Post.class)
                             .setParameter("fPosts", posts)
                             .list();
                     return posts;
@@ -155,27 +228,24 @@ public class PostRepository {
         return crudRepository.tx(
                 session -> {
                     List<Post> posts = session.createQuery(
-                            "select distinct i from Post i left join fetch i.car c"
-                                    + " left join fetch c.owners"
-                                    + " where i.created >= :fDay order by i.id", Post.class)
-                        .setParameter("fDay", LocalDateTime.now().toLocalDate().atTime(0, 0))
+                            FIND_ALL_TODAY_FETCH_CAR, Post.class)
+                        .setParameter(
+                                "fDay",
+                                LocalDateTime.now().toLocalDate().atTime(0, 0))
                         .list();
                     if (posts.size() == 0) {
                         return posts;
                     }
                     posts = session.createQuery(
-                                    "select distinct i from Post i left join fetch i.priceHistories"
-                                            + " where i in :fPosts order by i.id", Post.class)
+                            FIND_ALL_TODAY_FETCH_PRICE_HISTORIES, Post.class)
                             .setParameter("fPosts", posts)
                             .list();
                     posts = session.createQuery(
-                                    "select distinct i from Post i left join fetch i.participates"
-                                            + " where i in :fPosts order by i.id", Post.class)
+                            FIND_ALL_TODAY_FETCH_PARTICIPATES, Post.class)
                             .setParameter("fPosts", posts)
                             .list();
                     posts = session.createQuery(
-                                    "select distinct i from Post i left join fetch i.photos"
-                                            + " where i in :fPosts order by i.id", Post.class)
+                            FIND_ALL_TODAY_PHOTO, Post.class)
                             .setParameter("fPosts", posts)
                             .list();
                     return posts;
@@ -191,26 +261,21 @@ public class PostRepository {
         return crudRepository.tx(
                 session -> {
                     List<Post> posts = session.createQuery(
-                                    "from Post i left join fetch i.photos"
-                                            + " where i.photos.size>0", Post.class)
+                            FIND_ALL_WITH_PHOTO_FETCH_PHOTO, Post.class)
                             .list();
                     if (posts.size() == 0) {
                         return posts;
                     }
                     posts = session.createQuery(
-                                    "select distinct i from Post i left join fetch i.car c"
-                                            + " left join fetch c.owners"
-                                            + " where i in :fPosts", Post.class)
+                            FIND_ALL_WITH_PHOTO_FETCH_CAR, Post.class)
                             .setParameter("fPosts", posts)
                             .list();
                     posts = session.createQuery(
-                                    "select distinct i from Post i left join fetch i.priceHistories"
-                                            + " where i in :fPosts", Post.class)
+                            FIND_ALL_WITH_PHOTO_FETCH_PRICE_HISTORIES, Post.class)
                             .setParameter("fPosts", posts)
                             .list();
                     posts = session.createQuery(
-                                    "select distinct i from Post i left join fetch i.participates"
-                                            + " where i in :fPosts order by i.id", Post.class)
+                            FIND_ALL_WITH_PHOTO_FETCH_PARTICIPATES, Post.class)
                             .setParameter("fPosts", posts)
                             .list();
                     return posts;

@@ -1,27 +1,20 @@
-package ru.job4j.cars.model.repository;
+package ru.job4j.cars.service;
 
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Repository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import ru.job4j.cars.model.Driver;
+import ru.job4j.cars.model.repository.DriverRepository;
+
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Хранилище с информацией об водителях
+ * сервис водителей.
  */
-@Repository
-@AllArgsConstructor
-public class DriverRepository implements DriverAbstractRepository {
-    /**
-     * HQL
-     */
-    public static final String FIND_ALL_BY_NAME =
-            "from Driver i where i.name like :fKey order by id";
-
-    /**
-     * Hibernate CRUD хранилище
-     */
-    private final CrudRepository crudRepository;
+@Service
+@RequiredArgsConstructor
+public class DriverCrudService implements DriverAbstractService {
+    private final DriverRepository drivers;
 
     /**
      * Сохранить в базе водителей.
@@ -30,7 +23,7 @@ public class DriverRepository implements DriverAbstractRepository {
      */
     @Override
     public Driver create(Driver driver) {
-        return  crudRepository.create(driver);
+        return drivers.create(driver);
     }
 
     /**
@@ -39,7 +32,7 @@ public class DriverRepository implements DriverAbstractRepository {
      */
     @Override
     public void update(Driver driver) {
-        crudRepository.update(driver);
+        drivers.update(driver);
     }
 
     /**
@@ -48,9 +41,7 @@ public class DriverRepository implements DriverAbstractRepository {
      */
     @Override
     public void delete(int id) {
-        Driver driver = new Driver();
-        driver.setId(id);
-        crudRepository.delete(driver);
+        drivers.delete(id);
     }
 
     /**
@@ -59,7 +50,7 @@ public class DriverRepository implements DriverAbstractRepository {
      */
     @Override
     public List<Driver> findAllOrderById() {
-        return crudRepository.findAll(Driver.class);
+        return drivers.findAllOrderById();
     }
 
     /**
@@ -68,7 +59,7 @@ public class DriverRepository implements DriverAbstractRepository {
      */
     @Override
     public Optional<Driver> findById(int id) {
-        return Optional.ofNullable(crudRepository.findById(id, Driver.class));
+        return drivers.findById(id);
     }
 
     /**
@@ -78,8 +69,6 @@ public class DriverRepository implements DriverAbstractRepository {
      */
     @Override
     public List<Driver> findByLikeName(String key) {
-        return crudRepository.tx(session -> session.createQuery(
-                        FIND_ALL_BY_NAME, Driver.class)
-                .setParameter("fKey", '%' + key + '%').list());
+        return drivers.findByLikeName(key);
     }
 }

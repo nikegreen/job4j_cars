@@ -12,6 +12,17 @@ import java.util.Optional;
 @Repository
 @AllArgsConstructor
 public class EngineRepository implements EngineAbstractRepository {
+    /**
+     * HQL
+     */
+    public static final String FIND_ALL =
+            "from Engine order by id";
+    public static final String FIND_ALL_BY_NAME =
+            "from Engine i where i.name like :fKey order by id";
+
+    /**
+     * Hibernate CRUD хранилище
+     */
     private final CrudRepository crudRepository;
 
     /**
@@ -47,7 +58,7 @@ public class EngineRepository implements EngineAbstractRepository {
      */
     public List<Engine> findAllOrderById() {
         return crudRepository.tx(
-                session -> session.createQuery("from Engine order by id", Engine.class)
+                session -> session.createQuery(FIND_ALL, Engine.class)
                 .list());
     }
 
@@ -65,8 +76,9 @@ public class EngineRepository implements EngineAbstractRepository {
      * @return список двигателей.
      */
     public List<Engine> findByLikeName(String key) {
-        return crudRepository.tx(session -> session.createQuery(
-                        "from Engine i where i.name like :fKey order by id", Engine.class)
-                .setParameter("fKey", '%' + key + '%').list());
+        return crudRepository.tx(
+                session -> session.createQuery(FIND_ALL_BY_NAME, Engine.class)
+                .setParameter("fKey", '%' + key + '%').list()
+        );
     }
 }

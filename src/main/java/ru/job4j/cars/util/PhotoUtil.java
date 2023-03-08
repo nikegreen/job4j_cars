@@ -11,10 +11,7 @@ import ru.job4j.cars.service.PhotoCrudService;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -47,7 +44,7 @@ public class PhotoUtil {
                 Optional<Photo> photo = photos.findById(id);
                 if (photo.isPresent()) {
                     Photo photo1 =  photo.get();
-                    photo1.setPostId(id);
+                    photo1.setPostId(post.getId());
                     photos.update(photo1);
                     photoList.add(photo1);
                 } else {
@@ -83,16 +80,20 @@ public class PhotoUtil {
         Photo photo = null;
         if (file.getSize() <= loadConfig.getImageSizeMax()) {
             photo = new Photo();
-            photo.setName("");
-            photo.setFileName("f");
+            int lastId = photos.findAllOrderById().stream()
+                    .max(Comparator.comparingInt(Photo::getId))
+                    .orElse(null)
+                    .getId() + 1;
+            photo.setName("photo " + lastId
+                    + " " + post.getCar().getMarc().getName()
+                    + "-" + post.getCar().getModel().getName()
+            );
+            String fn = file.getOriginalFilename();
+            String ext = fn.substring(fn.length() - 3);
+            photo.setFileName("f" + lastId + "." + ext);
             photo.setPostId(post.getId());
             photo = photos.create(photo);
             byte[] data = file.getBytes();
-            String fn = file.getOriginalFilename();
-            if (fn != null) {
-                photo.setName(fn);
-            }
-            String ext = fn.substring(fn.length() - 3);
             photo.setFileName("f" + photo.getId() + "." + ext);
             try {
                 File outputFile = new File(loadConfig.getImagesPath() + photo.getFileName());
@@ -100,6 +101,7 @@ public class PhotoUtil {
                     byte[] decoded = Base64.getDecoder().decode(data);
                     outputStream.write(decoded);
                     outputStream.flush();
+                    photos.update(photo);
                 }
             } catch (Exception e) {
                 photos.delete(photo.getId());

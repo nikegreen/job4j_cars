@@ -13,6 +13,7 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class CarBodyCrudRepository implements CarBodyAbstractRepository {
+    public static final String FIND_BY_NAME = "from CarBody i where i.name :fName";
     private final CrudRepository crudRepository;
 
     /**
@@ -39,8 +40,7 @@ public class CarBodyCrudRepository implements CarBodyAbstractRepository {
      */
     @Override
     public Optional<CarBody>  findByName(String bodyName) {
-        return crudRepository.tx(session -> session.createQuery(
-                "from CarBody i where i.name :fName", CarBody.class)
+        return crudRepository.tx(session -> session.createQuery(FIND_BY_NAME, CarBody.class)
                 .setParameter("fName", bodyName).uniqueResultOptional());
     }
 }

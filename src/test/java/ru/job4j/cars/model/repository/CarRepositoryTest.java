@@ -3,13 +3,10 @@ package ru.job4j.cars.model.repository;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import ru.job4j.cars.model.Car;
-import ru.job4j.cars.model.Driver;
-import ru.job4j.cars.model.Engine;
-import ru.job4j.cars.model.User;
+import ru.job4j.cars.model.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -23,6 +20,42 @@ class CarRepositoryTest {
             new StandardServiceRegistryBuilder()
                     .configure().build()
     ).buildMetadata().buildSessionFactory();
+
+    /**
+     * Очистка базы от тестовых данных перед тестом
+     */
+    @BeforeEach
+    public void before() {
+        deleteTestCar();
+        deleteTestDriver();
+    }
+
+    /**
+     * Очистка базы от тестовых данных после теста
+     */
+    @AfterEach
+    public void after() {
+        deleteTestCar();
+        deleteTestDriver();
+    }
+
+    /**
+     *  Очистка таблицы водителей от тестовых данных
+     */
+    private void deleteTestDriver() {
+        DriverRepository driverRepository = new DriverRepository(new CrudRepository(sf));
+        List<Driver> drivers = driverRepository.findByLikeName("driver name1");
+        drivers.forEach(driver -> driverRepository.delete(driver.getId()));
+    }
+
+    /**
+     *  Очистка таблицы автомобилей от тестовых данных
+     */
+    private void deleteTestCar() {
+        CarRepository repository = new CarRepository(new CrudRepository(sf));
+        List<Car> cars = repository.findByLikeName("car name1");
+        cars.forEach(car -> repository.delete(car.getId()));
+    }
 
     /**
      * Создание автомобиля, поиск автомобиля по идентификатору, удаление автомобиля
@@ -50,11 +83,23 @@ class CarRepositoryTest {
         driver = driverRepository.create(driver);
         assertThat(driver).isNotNull();
 
+        CarModelCrudRepository modelRepository = new CarModelCrudRepository(new CrudRepository(sf));
+        assertThat(modelRepository).isNotNull();
+        CarModel model = modelRepository.findByName("Pajero").orElse(null);
+        assertThat(model).isNotNull();
+
+        CarMarcCrudRepository marcRepository = new CarMarcCrudRepository(new CrudRepository(sf));
+        assertThat(marcRepository).isNotNull();
+        CarMarc marc = marcRepository.findById(model.getMarcId()).orElse(null);
+        assertThat(marc).isNotNull();
+
         CarRepository repository = new CarRepository(new CrudRepository(sf));
         assertThat(repository).isNotNull();
         Car car = new Car();
         car.setName("car name1");
         car.setEngine(engine);
+        car.setModel(model);
+        car.setMarc(marc);
         car.setOwners(Set.of(driver));
         car = repository.create(car);
         assertThat(car).isNotNull();
@@ -108,12 +153,24 @@ class CarRepositoryTest {
         driver = driverRepository.create(driver);
         assertThat(driver).isNotNull();
 
+        CarModelCrudRepository modelRepository = new CarModelCrudRepository(new CrudRepository(sf));
+        assertThat(modelRepository).isNotNull();
+        CarModel model = modelRepository.findByName("Pajero").orElse(null);
+        assertThat(model).isNotNull();
+
+        CarMarcCrudRepository marcRepository = new CarMarcCrudRepository(new CrudRepository(sf));
+        assertThat(marcRepository).isNotNull();
+        CarMarc marc = marcRepository.findById(model.getMarcId()).orElse(null);
+        assertThat(marc).isNotNull();
+
         CarRepository repository = new CarRepository(new CrudRepository(sf));
         assertThat(repository).isNotNull();
         Car car = new Car();
         car.setName("car name1");
         car.setEngine(engine);
         car.setOwners(Set.of(driver));
+        car.setModel(model);
+        car.setMarc(marc);
         car = repository.create(car);
         assertThat(car).isNotNull();
         assertThat(car.getId()).isNotEqualTo(0);
@@ -176,6 +233,16 @@ class CarRepositoryTest {
         driver = driverRepository.create(driver);
         assertThat(driver).isNotNull();
 
+        CarModelCrudRepository modelRepository = new CarModelCrudRepository(new CrudRepository(sf));
+        assertThat(modelRepository).isNotNull();
+        CarModel model = modelRepository.findByName("Pajero").orElse(null);
+        assertThat(model).isNotNull();
+
+        CarMarcCrudRepository marcRepository = new CarMarcCrudRepository(new CrudRepository(sf));
+        assertThat(marcRepository).isNotNull();
+        CarMarc marc = marcRepository.findById(model.getMarcId()).orElse(null);
+        assertThat(marc).isNotNull();
+
         CarRepository repository = new CarRepository(new CrudRepository(sf));
         assertThat(repository).isNotNull();
         List<Car> cars = repository.findAllOrderById();
@@ -186,6 +253,8 @@ class CarRepositoryTest {
         car.setName("car name1");
         car.setEngine(engine);
         car.setOwners(Set.of(driver));
+        car.setModel(model);
+        car.setMarc(marc);
         car = repository.create(car);
         assertThat(car).isNotNull();
         assertThat(car.getId()).isNotEqualTo(0);
@@ -241,6 +310,16 @@ class CarRepositoryTest {
         driver = driverRepository.create(driver);
         assertThat(driver).isNotNull();
 
+        CarModelCrudRepository modelRepository = new CarModelCrudRepository(new CrudRepository(sf));
+        assertThat(modelRepository).isNotNull();
+        CarModel model = modelRepository.findByName("Pajero").orElse(null);
+        assertThat(model).isNotNull();
+
+        CarMarcCrudRepository marcRepository = new CarMarcCrudRepository(new CrudRepository(sf));
+        assertThat(marcRepository).isNotNull();
+        CarMarc marc = marcRepository.findById(model.getMarcId()).orElse(null);
+        assertThat(marc).isNotNull();
+
         CarRepository repository = new CarRepository(new CrudRepository(sf));
         assertThat(repository).isNotNull();
         List<Car> cars = repository.findByLikeName("mitsubishi");
@@ -250,6 +329,8 @@ class CarRepositoryTest {
         car.setName("mitsubishi pajero");
         car.setEngine(engine);
         car.setOwners(Set.of(driver));
+        car.setModel(model);
+        car.setMarc(marc);
         car = repository.create(car);
         assertThat(car).isNotNull();
         assertThat(car.getId()).isNotEqualTo(0);

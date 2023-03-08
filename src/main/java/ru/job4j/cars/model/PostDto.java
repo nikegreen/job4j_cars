@@ -21,7 +21,7 @@ public class PostDto implements Serializable {
     private String text;
     private String created;
     private UserDto user;
-    private int price;
+    private long price;
     private Car car;
     private List<Photo> photos;
     private int statusId;
@@ -67,7 +67,7 @@ public class PostDto implements Serializable {
                 .stream()
                 .max(Comparator.comparing(PriceHistory::getCreated))
                 .orElse(new PriceHistory());
-        postDto.setPrice((int) priceHistory.getAfter());
+        postDto.setPrice(priceHistory.getAfter());
         postDto.setStatusId(
                 priceHistory.getAfter() > 0 &&  priceHistory.getAfter() == priceHistory.getBefore()
                         ? 2 : 1);

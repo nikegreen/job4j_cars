@@ -12,6 +12,7 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class CarMarcCrudRepository implements CarMarcAbstractRepository {
+    public static final String FIND_BY_NAME = "from CarMarc i where i.name = :fName";
     private final CrudRepository crudRepository;
 
     /**
@@ -40,8 +41,7 @@ public class CarMarcCrudRepository implements CarMarcAbstractRepository {
      */
     public int findIdByName(String name) {
         return crudRepository.tx(
-                session -> session.createQuery(
-                "from CarMarc i where i.name = :fName", CarMarc.class)
+                session -> session.createQuery(FIND_BY_NAME, CarMarc.class)
                 .setParameter("fName", name)
                         .uniqueResultOptional()
                         .orElse(new CarMarc())

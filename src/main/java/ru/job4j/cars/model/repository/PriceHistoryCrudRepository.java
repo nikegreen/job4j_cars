@@ -12,6 +12,15 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class PriceHistoryCrudRepository implements PriceHistoryAbstractRepository {
+    /**
+     * HQL
+     */
+    public static final String FIND_ALL_BY_POST_ID =
+            "from PriceHistory p where p.autoPostId = :fId";
+
+    /**
+     * Hibernate CRUD хранилище
+     */
     private final CrudRepository crudRepository;
 
     /**
@@ -62,7 +71,7 @@ public class PriceHistoryCrudRepository implements PriceHistoryAbstractRepositor
     @Override
     public List<PriceHistory> findAllWherePost(int postId) {
         return crudRepository.tx(session  -> session.createQuery(
-                        "from PriceHistory p where p.autoPostId = :fId",
+                        FIND_ALL_BY_POST_ID,
                         PriceHistory.class)
                 .setParameter("fId", postId)
                 .list()

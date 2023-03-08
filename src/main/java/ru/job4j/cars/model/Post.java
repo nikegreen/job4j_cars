@@ -5,9 +5,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.EqualsAndHashCode.Include;
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Cascade;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
+import static org.hibernate.annotations.CascadeType.SAVE_UPDATE;
+import static org.hibernate.annotations.CascadeType.PERSIST;
+import static org.hibernate.annotations.CascadeType.MERGE;
 
 /**
  * модель данных БД - сущность объявление для хранилища
@@ -25,6 +29,7 @@ public class Post implements Serializable {
     private String text;
     private LocalDateTime created;
     @ManyToOne
+    @Cascade({SAVE_UPDATE, MERGE})
     @JoinColumn(name = "auto_user_id")
     private User user;
 
@@ -34,6 +39,7 @@ public class Post implements Serializable {
     private List<PriceHistory> priceHistories;
 
     @ManyToMany
+    @Cascade({SAVE_UPDATE, MERGE, PERSIST})
     @JoinTable(
             name = "participates",
             joinColumns = { @JoinColumn(name = "post_id") },
@@ -42,6 +48,8 @@ public class Post implements Serializable {
     private List<User> participates;
 
     @ManyToOne
+    @Cascade({ SAVE_UPDATE, MERGE})
+//            (cascade = CascadeType.ALL)
     @JoinColumn(name = "car_id")
     private Car car;
 

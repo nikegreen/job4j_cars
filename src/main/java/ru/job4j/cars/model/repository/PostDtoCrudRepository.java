@@ -3,18 +3,63 @@ package ru.job4j.cars.model.repository;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
-import ru.job4j.cars.model.Car;
 import ru.job4j.cars.model.Post;
 import ru.job4j.cars.model.PostDto;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
 public class PostDtoCrudRepository implements PostDtoAbstractRepository {
+    /**
+     * HQL findAll()
+     */
+    public static final String FIND_ALL_FETCH_CAR =
+            "select distinct i from Post i left join fetch i.car c"
+            + " left join fetch c.owners"
+            + " order by i.id";
+    public static final String FIND_ALL_FETCH_PRICE_HISTORIES =
+            "select distinct i from Post i left join fetch i.priceHistories"
+            + " where i in :fPosts order by i.id";
+    public static final String FIND_ALL_FETCH_PARTICIPATES =
+            "select distinct i from Post i left join fetch i.participates"
+            + " where i in :fPosts order by i.id";
+    public static final String FIND_ALL_FETCH_PHOTO =
+            "select distinct i from Post i left join fetch i.photos"
+            + " where i in :fPosts order by i.id";
+
+    /**
+     * HQL findById(int id)
+     */
+    public static final String FIND_BY_ID_FETCH_CAR =
+            "select distinct i from Post i left join fetch i.car c"
+            + " left join fetch c.owners"
+            + " where i.id = :fId";
+    public static final String FIND_BY_ID_FETCH_PRICE_HISTORIES =
+            "select distinct i from Post i left join fetch i.priceHistories"
+            + " where i in :fPosts order by i.id";
+    public static final String FIND_BY_ID_FETCH_PARTICIPATES =
+            "select distinct i from Post i left join fetch i.participates"
+            + " where i in :fPosts order by i.id";
+    public static final String FIND_BY_ID_FETCH_PHOTO =
+            "select distinct i from Post i left join fetch i.photos"
+            + " where i in :fPosts order by i.id";
+
+    /**
+     * HQL findAllByFilter(PostDto filter)
+     */
+    public static final String FIND_ALL_FILTER_FETCH_PRICE_HISTORIES =
+            "select distinct i from Post i left join fetch i.priceHistories"
+            + " order by i.id";
+    public static final String FIND_ALL_FILTER_FETCH_CAR =
+            "select distinct i from Post i left join fetch i.car c"
+            + " left join fetch c.owners"
+            + " where (i in :fPosts)";
+    public static final String FIND_ALL_FILTER_FETCH_PHOTO =
+            "select distinct i from Post i left join fetch i.photos"
+            + " where i in :fPosts order by i.id";
     private final CrudRepository crudRepository;
 
     /**
@@ -25,23 +70,18 @@ public class PostDtoCrudRepository implements PostDtoAbstractRepository {
     public List<PostDto> findAll() {
         List<PostDto> result = crudRepository.tx(
                 session -> {
-                    List<Post> posts = session.createQuery(
-                            "select distinct i from Post i left join fetch i.car c"
-                                    + " left join fetch c.owners"
-                                    + " order by i.id", Post.class).getResultList();
+                    List<Post> posts = session.createQuery(FIND_ALL_FETCH_CAR, Post.class)
+                            .getResultList();
                     posts = session.createQuery(
-                                    "select distinct i from Post i left join fetch i.priceHistories"
-                                            + " where i in :fPosts order by i.id", Post.class)
+                            FIND_ALL_FETCH_PRICE_HISTORIES, Post.class)
                             .setParameter("fPosts", posts)
                             .getResultList();
                     posts = session.createQuery(
-                                    "select distinct i from Post i left join fetch i.participates"
-                                            + " where i in :fPosts order by i.id", Post.class)
+                            FIND_ALL_FETCH_PARTICIPATES, Post.class)
                             .setParameter("fPosts", posts)
                             .getResultList();
                     posts = (List<Post>) session.createQuery(
-                                    "select distinct i from Post i left join fetch i.photos"
-                                            + " where i in :fPosts order by i.id", Post.class)
+                            FIND_ALL_FETCH_PHOTO, Post.class)
                             .setParameter("fPosts", posts)
                             .getResultList();
                     return posts.stream()
@@ -62,27 +102,22 @@ public class PostDtoCrudRepository implements PostDtoAbstractRepository {
         return crudRepository.tx(
                 session -> {
                             List<Post> posts = session.createQuery(
-                                            "select distinct i from Post i left join fetch i.car c"
-                                                    + " left join fetch c.owners"
-                                                    + " where i.id = :fId", Post.class)
+                                    FIND_BY_ID_FETCH_CAR, Post.class)
                                     .setParameter("fId", id)
                                     .list();
                             if (posts.size() == 0) {
                                 return Optional.empty();
                             }
                             posts = session.createQuery(
-                                  "select distinct i from Post i left join fetch i.priceHistories"
-                                      + " where i in :fPosts order by i.id", Post.class)
+                                    FIND_BY_ID_FETCH_PRICE_HISTORIES, Post.class)
                                     .setParameter("fPosts", posts)
                                     .list();
                             posts = session.createQuery(
-                                    "select distinct i from Post i left join fetch i.participates"
-                                       + " where i in :fPosts order by i.id", Post.class)
+                                    FIND_BY_ID_FETCH_PARTICIPATES, Post.class)
                                     .setParameter("fPosts", posts)
                                     .list();
                             posts = session.createQuery(
-                                    "select distinct i from Post i left join fetch i.photos"
-                                       + " where i in :fPosts order by i.id", Post.class)
+                                    FIND_BY_ID_FETCH_PHOTO, Post.class)
                                     .setParameter("fPosts", posts)
                                     .list();
                             return Optional.ofNullable(
@@ -106,12 +141,9 @@ public class PostDtoCrudRepository implements PostDtoAbstractRepository {
         return crudRepository.tx(
                 session -> {
                     List<Post> posts = session.createQuery(
-                            "select distinct i from Post i left join fetch i.priceHistories"
-                             + " order by i.id", Post.class)
+                            FIND_ALL_FILTER_FETCH_PRICE_HISTORIES, Post.class)
                             .list();
-                    String sql = "select distinct i from Post i left join fetch i.car c"
-                            + " left join fetch c.owners"
-                            + " where (i in :fPosts)";
+                    String sql = FIND_ALL_FILTER_FETCH_CAR;
                     if (filter.getCar() != null) {
                         if (filter.getCar().getMarc() != null
                                 && filter.getCar().getMarc().getId() != 0) {
@@ -166,8 +198,7 @@ public class PostDtoCrudRepository implements PostDtoAbstractRepository {
                     }
                     posts = query.list();
                     posts = session.createQuery(
-                                    "select distinct i from Post i left join fetch i.photos"
-                                            + " where i in :fPosts order by i.id", Post.class)
+                            FIND_ALL_FILTER_FETCH_PHOTO, Post.class)
                             .setParameter("fPosts", posts)
                             .list();
                     List<PostDto> result = new ArrayList<>();

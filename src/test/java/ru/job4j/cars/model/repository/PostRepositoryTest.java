@@ -27,6 +27,7 @@ class PostRepositoryTest {
      */
     @BeforeEach
     public void before() {
+        System.out.println("*********** before start");
         if (postsSize == 0) {
             StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
                     .configure().build();
@@ -37,6 +38,7 @@ class PostRepositoryTest {
                 postsSize = posts.size();
             }
         }
+        System.out.println("*********** before finish");
     }
 
     /**
@@ -44,6 +46,7 @@ class PostRepositoryTest {
      */
     @AfterEach
     public void deleteTestData() {
+        System.out.println("*********** after start");
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .configure().build();
         try (SessionFactory sf = new MetadataSources(registry)
@@ -66,6 +69,7 @@ class PostRepositoryTest {
                     }
             );
         }
+        System.out.println("*********** after finish");
     }
 
     /**

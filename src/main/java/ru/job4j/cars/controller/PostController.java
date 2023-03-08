@@ -31,6 +31,9 @@ public class PostController {
     private final CarModelCrudService models;
     private final CarBodyCrudService bodies;
     private final EngineCrudService engines;
+    private final CarCrudService cars;
+
+    private final DriverCrudService drivers;
     private final PhotoUtil photoUtil;
 
     /**
@@ -90,27 +93,47 @@ public class PostController {
         if (postDto.getText() == null) {
             postDto.setText("");
         }
-        postDto.getCar().setName("");
-        Driver driver = new Driver();
-        driver.setUser(user);
-        driver.setName(user.getLogin());
-        postDto.getCar().setOwners(Set.of(driver));
-        postDto.getCar().setModel(
-                models.findById(postDto.getCar().getModel().getId()).orElse(null)
+        List<Driver> driverList = drivers.findByLikeName(user.getLogin());
+        Driver driver = null;
+        if (driverList.size() > 0) {
+            driver = driverList.stream()
+                .filter(driver1 -> user.getLogin().equals(driver1.getName()))
+                .findFirst()
+                .orElse(drivers.create(new Driver(0, user.getLogin(), user)));
+        }
+        if (driver == null) {
+            return ErrorPage.error(
+                    model, "Объявление не создано! Не сохранён водитель.", "/index");
+        }
+        Car car = postDto.getCar();
+        car.setOwners(Set.of(driver));
+        car.setModel(
+                models.findById(car.getModel().getId()).orElse(null)
         );
-        postDto.getCar().setMarc(
-                marcs.findById(postDto.getCar().getModel().getMarcId()).orElse(null)
+        car.setMarc(
+                marcs.findById(car.getModel().getMarcId()).orElse(null)
         );
+        car.setEngine(engines.findById(car.getEngine().getId()).orElse(null));
+        car.setName(car.getMarc().getName()
+                + "-" + car.getModel().getName()
+                + "[" + cars.findAllOrderById().size()
+                + "]");
+        Car car1 = cars.create(car);
+        if (car1 == null) {
+            return ErrorPage.error(
+                    model, "Объявление не создано! Не сохранён автомобиль.", "/index");
+        }
         Post post = new Post();
         post.setUser(user);
         post.setCreated(LocalDateTime.now());
-        post.setCar(postDto.getCar());
+        post.setCar(car1);
         post.setPriceHistories(List.of());
         post.setParticipates(List.of());
         post.setText(postDto.getText());
         post.setPhotos(List.of());
         post = posts.create(post);
         if (post == null || post.getId() == 0) {
+            cars.delete(car1.getId());
             return ErrorPage.error(
                     model,
                     "Объявление не создано! Не сохранено в списке объявлений.",
@@ -124,8 +147,8 @@ public class PostController {
                 post.getCreated(),
                 post.getId()
         );
-        priceHistory = histories.create(priceHistory);
-        if (priceHistory == null) {
+        PriceHistory priceHistory1 = histories.create(priceHistory);
+        if (priceHistory1 == null) {
             return ErrorPage.error(
                     model,
                     "Объявление создано! Но не сохранена цена.",

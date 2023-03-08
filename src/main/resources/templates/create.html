@@ -226,13 +226,13 @@
 <!--                  <option value="3">Three</option>-->
                 </select>
                 <input type="hidden" name="car.model.name" id="car.model.name" value="">
-                <input type="hidden" name="car.model.marcId" id="car.model.marcId" value="0">
-                <input type="hidden" name="car.model.bodyId" id="car.model.bodyId" value="0">
+<!--                <input type="hidden" name="car.model.marcId" id="car.model.marcId" value="0">-->
+<!--                <input type="hidden" name="car.model.bodyId" id="car.model.bodyId" value="0">-->
               </div>
               <!-- Кузов -->
               <div class="form-group row">
                 <label class="form-label col-md-4 text-muted">Кузов:</label>
-                <select class="form-select col-md-8" name="car.body.id" id="car.body.id"
+                <select class="form-select col-md-8" name="car.model.bodyId" id="car.body.id"
                         onchange="setModel('car.marc', 'car.model', 'car.body')">
                   <option th:if="${bodies!=null}" selected value="0">Любой кузов</option>
                   <option th:if="${bodies!=null}" th:each="body, statBody: ${bodies}" th:selected="${statBody.first}"
@@ -242,7 +242,7 @@
 <!--                  <option value="2">Two</option>-->
 <!--                  <option value="3">Three</option>-->
                 </select>
-                <input type="hidden" name="car.body.name" id="car.body.name" value="">
+<!--                <input type="hidden" name="car.body.name" id="car.body.name" value="">-->
               </div>
               <!-- Двигатель -->
               <div class="form-group row">
@@ -261,7 +261,8 @@
               <!-- Цена -->
               <div class="form-group row">
                 <label class="form-label col-sm-4 col-md-4 text-muted">Цена:</label>
-                <input type="number" class="form-input col-sm-4 col-md-8" name="price" id="price" value="0" oninput="checkFields()">
+                <input type="number" class="form-input col-sm-4 col-md-8" name="price" id="price" value="0"
+                       min="0" max="2147483647" oninput="checkFields()">
               </div>
               <!-- Описание - текст -->
               <div class="form-group row">

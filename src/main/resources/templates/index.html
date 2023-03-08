@@ -122,15 +122,15 @@
                         </select>
                         <!-- Кузов -->
                         <label class="form-label col-md-1 text-white text-center">Кузов:</label>
-                        <select class="form-select-sm col-md-3" name="car.bodyId" id="bodyId" onchange="setFilterModel('marcId', 'modelId', 'bodyId')">
+                        <select class="form-select-sm col-md-3" name="car.model.bodyId" id="bodyId" onchange="setFilterModel('marcId', 'modelId', 'bodyId')">
                             <!-- <option th:value="0" th:text="Кузов"selected></option>
                             <option th:value="1" th:text="One"></option>
                             <option th:value="2" th:text="Two"></option>
                             <option th:value="3" th:text="Three"></option> -->
                             <option th:if="${bodies!=null}" value="0"
-                                    th:selected="${filter==null || filter.car==null || filter.car.bodyId==0}">любой кузов</option>
+                                    th:selected="${filter==null || filter.car==null || filter.car.model==null || filter.car.model.bodyId==0}">любой кузов</option>
                             <option th:if="${bodies!=null}" th:each="body1: ${bodies}" th:value="${body1.id}"
-                                    th:selected="${filter!=null && filter.car!=null && filter.car.bodyId==body1.id}" th:text="${body1.name}"></option>
+                                    th:selected="${filter!=null && filter.car!=null && filter.car.model!=null && filter.car.model.bodyId==body1.id}" th:text="${body1.name}"></option>
                             <option th:if="${bodies==null}" value="0" selected disabled>нет данных</option>
                         </select>
                         <!-- Двигатель -->
